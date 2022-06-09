@@ -12,5 +12,5 @@ public interface TeacherAvailabilityService {
 
     Optional<TeacherAvailability> findTeacherAvailabilityByEmployeeCode(String teacherCode);
 
-    void deleteTeacherAvailability
+    void deleteTeacherAvailabilityByEmployeeCode(String teacherCode);
 }

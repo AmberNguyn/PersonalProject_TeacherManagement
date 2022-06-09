@@ -17,8 +17,6 @@ public class Salary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private double numberOfWorkingHour;
-
     @NotNull
     private Integer payRate;
 

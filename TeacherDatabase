@@ -1,0 +1,24 @@
+INSERT INTO teacher(employee_code, first_name, middle_name, last_name,
+			nationality, date_of_birth, phone_number, address, private_email, school_email,
+			tax_number, status, teacher_Type, teaching_level, gender)
+VALUES
+('ANH.N6', 'Anh', 'Ngoc Truc', 'Nguyen', 'Vietnamese', '1994/06/06', '0903554000', '1A Avenue Binh Tan District', 'anh.nguyen@gmail.com', 'anh.n6@gmail.com', 543069586,'AVAILABLE', 'VIETNAMESE', 'KID', 'FEMALE');
+
+
+
+
+
+INSERT INTO teacher_availability(startDate, workingDay, morningShift, afternoonShift, nightShift, teacher_id)
+VALUES
+('2020-03-05', 'Monday', 0,0,1, 'ANH.N6'),
+('2020-03-05', 'Tuesday', 0,0,1, 'ANH.N6'),
+('2020-03-05', 'Wednesday', 0,0,1, 'ANH.N6'),
+('2020-03-05', 'Thursday', 0,0,0, 'ANH.N6'),
+('2020-03-05', 'Friday', 0,0,0, 'ANH.N6'),
+('2020-03-05', 'Saturday', 1,1,1, 'ANH.N6'),
+('2020-03-05', 'Sunday', 1,1,1, 'ANH.N6'),
+
+INSERT INTO salary(pay_rate, transferred_date, coefficient_multiplier)
+VALUES (160000, '2022-05-31')
+
+

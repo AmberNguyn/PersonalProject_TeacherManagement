@@ -27,13 +27,13 @@ public class AssignmentDetail {
     private WorkingDay workingDay;
 
     @NotNull
-    private boolean shift1;
+    private boolean morningShift;
 
     @NotNull
-    private boolean shift2;
+    private boolean afternoonShift;
 
     @NotNull
-    private boolean shift3;
+    private boolean nightShift;
 
     private boolean teachingStatus; //teacher drops class
 

@@ -10,7 +10,7 @@ public interface TeacherService {
 
     Teacher addTeacher(Teacher teacher);
 
-    Optional<Teacher> findTeacherByEmployeeCode(Integer id);
+    Optional<Teacher> findTeacherByEmployeeCode(String teacherCode);
 
-    void deleteTeacherByEmployeeCode(Integer id);
+    void deleteTeacherByEmployeeCode(String teacherCode);
 }

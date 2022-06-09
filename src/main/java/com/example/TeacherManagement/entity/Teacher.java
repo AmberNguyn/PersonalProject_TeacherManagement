@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +51,7 @@ public class Teacher {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private TeacherType type;
+    private TeacherType teacherType;
 
     @Enumerated(EnumType.STRING)
     @NotNull

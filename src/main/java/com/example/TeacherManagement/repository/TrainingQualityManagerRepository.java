@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TrainingQualityManagerRepository extends JpaRepository<TrainingQualityManager, Integer> {
+    TrainingQualityManager findTrainingQualityManagerByEmployeeCode(String TQMCode);
 }
