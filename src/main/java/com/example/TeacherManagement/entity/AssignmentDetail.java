@@ -50,4 +50,5 @@ public class AssignmentDetail {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
 }

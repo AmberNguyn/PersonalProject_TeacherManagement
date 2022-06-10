@@ -29,12 +29,12 @@ public class TeacherObservationServiceImpl implements TeacherObservationService 
     }
 
     @Override
-    public Optional<TeacherObservation> findTeacherObservationByEmployeeCode(String teacherCode, LocalDate startDate, LocalDate endDate) {
-        return Optional.of(teacherObservationRepository.findTeacherObservationByAssignmentDetailTeacherEmployeeCodeAndObservationDateBetween(teacherCode, startDate, endDate));
+    public Optional<TeacherObservation> findTeacherObservationByEmployeeCodeAndObservationDate(String teacherCode, LocalDate observationDate) {
+        return Optional.of(teacherObservationRepository.findTeacherObservationByAssignmentDetailTeacherEmployeeCodeAndObservationDate(teacherCode, observationDate));
     }
 
     @Override
-    public void deleteTeacherObservationByEmployeeCode(String teacherCode, LocalDate observationDate) {
+    public void deleteTeacherObservationByEmployeeCodeAndObservationDate(String teacherCode, LocalDate observationDate) {
         teacherObservationRepository.delete(teacherObservationRepository.findTeacherObservationByAssignmentDetailTeacherEmployeeCodeAndObservationDate(teacherCode, observationDate));
     }
 }

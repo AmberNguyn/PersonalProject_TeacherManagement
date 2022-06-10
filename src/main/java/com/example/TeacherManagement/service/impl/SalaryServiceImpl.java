@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -29,8 +30,14 @@ public class SalaryServiceImpl implements SalaryService {
 
     @Override
     public List<Salary> findSalaryListByEmployeeCodeAndTransferredDateBetween(String teacherCode, LocalDate firstDate, LocalDate lastDate) {
-        return salaryRepository.findSalaryByTeacherEmployeeCodeAndTransferredDateBetween(teacherCode,firstDate,lastDate);
+        return salaryRepository.findSalaryByTeacherEmployeeCodeAndTransferredDateBetween(teacherCode, firstDate, lastDate);
     }
+
+    @Override
+    public Optional<Salary> findSalaryByEmployeeCodeAndTransferredDate(String teacherCode, LocalDate transferredDate) {
+        return Optional.of(salaryRepository.findSalaryByTeacherEmployeeCodeAndTransferredDate(teacherCode, transferredDate));
+    }
+
 
     @Override
     public void deleteSalaryByEmployeeCode(String teacherCode, LocalDate transferredDate) {
