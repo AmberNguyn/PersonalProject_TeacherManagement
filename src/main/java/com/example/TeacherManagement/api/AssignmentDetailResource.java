@@ -27,4 +27,6 @@ public class AssignmentDetailResource {
     public ResponseEntity<List<AssignmentDetailDto>> getAll() {
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDtos(assignmentDetailService.getAll()));
     }
+
+
 }
