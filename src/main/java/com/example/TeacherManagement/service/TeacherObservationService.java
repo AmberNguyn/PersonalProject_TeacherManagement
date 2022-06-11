@@ -11,7 +11,7 @@ public interface TeacherObservationService {
 
     TeacherObservation addTeacherObservation(TeacherObservation teacherObservation);
 
-    Optional<TeacherObservation> findTeacherObservationByEmployeeCode(String teacherCode, LocalDate startDate, LocalDate endDate);
+    Optional<TeacherObservation> findTeacherObservationByEmployeeCodeAndObservationDate(String teacherCode, LocalDate observationDate);
 
-    void deleteTeacherObservationByEmployeeCode(String teacherCode, LocalDate observationDate);
+    void deleteTeacherObservationByEmployeeCodeAndObservationDate(String teacherCode, LocalDate observationDate);
 }

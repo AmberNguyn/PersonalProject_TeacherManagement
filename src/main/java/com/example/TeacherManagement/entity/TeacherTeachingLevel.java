@@ -8,24 +8,21 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Campus {
+@Entity
+public class TeacherTeachingLevel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @Column(unique = true)
-    private String campusCode;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
-    private String name;
+    private TeachingLevel teachingLevel;
 
-    @NotNull
-    private String address;
 
-    @NotNull
-    private Integer numberOfRooms;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 }

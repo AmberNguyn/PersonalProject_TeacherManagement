@@ -13,5 +13,7 @@ public interface SalaryService {
 
     List<Salary> findSalaryListByEmployeeCodeAndTransferredDateBetween(String teacherCode, LocalDate firstDate, LocalDate lastDate);
 
+    Optional<Salary> findSalaryByEmployeeCodeAndTransferredDate(String teacherCode, LocalDate transferredDate);
+
     void deleteSalaryByEmployeeCode(String teacherCode, LocalDate transferredDate);
 }

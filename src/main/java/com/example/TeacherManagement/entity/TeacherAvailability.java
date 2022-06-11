@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 public class TeacherAvailability {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotNull

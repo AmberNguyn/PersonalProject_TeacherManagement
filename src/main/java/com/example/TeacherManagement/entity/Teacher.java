@@ -53,9 +53,6 @@ public class Teacher {
     @NotNull
     private TeacherType teacherType;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private TeachingLevel teachingLevel;
 
     @Enumerated(EnumType.STRING)
     @NotNull

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @Entity
@@ -30,6 +31,14 @@ public class Class {
     private LocalDate startDate;
 
     private LocalDate endDate;
+
+    @NotNull
+    private LocalTime startTime;
+
+    @NotNull
+    private LocalTime endTime;
+
+    private Integer duration;
 
     private String courseBook;
 

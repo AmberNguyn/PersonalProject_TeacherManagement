@@ -1,54 +1,35 @@
-package com.example.TeacherManagement.entity;
+package com.example.TeacherManagement.api.request;
 
+import com.example.TeacherManagement.entity.*;
+import com.example.TeacherManagement.entity.Class;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssignmentDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class AssignmentDetailRequest {
 
-    @NotNull
     private String lesson;
-
-    @NotNull
     private LocalDate startDate;
-
-    @NotNull
     private WorkingDay workingDay;
-
-    @NotNull
     private boolean morningShift;
-
-    @NotNull
     private boolean afternoonShift;
-
-    @NotNull
     private boolean nightShift;
-
     private boolean teachingStatus; //teacher drops class
     private double activeHours; //for calculating salary
     private boolean observationStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    private String teacher_code;
 
-    @ManyToOne
-    @JoinColumn(name = "clazz_id")
-    private Class clazz;
+    private String clazz_id;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
+    private Integer room_number;
 
 }

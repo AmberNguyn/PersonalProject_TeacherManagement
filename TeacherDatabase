@@ -1,24 +1,104 @@
+** recheck campus API -> find by campus_id, not campus_name
+
+-- CONTRACT TYPE
+0	FULLTIME
+1	PARTTIME
+
+-- GENDER
+0	MALE
+1	FEMALE
+2	OTHER
+
+-- NATIONALITY
+0	VIETNAMESE
+1	CANADIAN
+2 	AMERICAN
+3	BRITISH
+4	SCOTTISH
+5	IRISH
+6	AUSTRALIAN
+
+-- STATUS
+0	AVAILABLE
+1	NOT_AVAILABLE
+2	MATERNATY_LEAVE
+
+-- TEACHER TYPE
+0	VIETNAMESE
+1	EXPATRIATE
+
+-- TEACHING LEVEL
+0	KID
+1	YOUNGLEARNER
+2	IELTS LEARNER
+3	ADULT
+
+-- WORKING DAY
+0	MONDAY
+1	TUESDAY
+2	WEDNESDAY
+3	THURSDAY
+4	FRIDAY
+5	SATURDAY
+6	SUNDAY
+
 INSERT INTO teacher(employee_code, first_name, middle_name, last_name,
 			nationality, date_of_birth, phone_number, address, private_email, school_email,
-			tax_number, status, teacher_Type, teaching_level, gender)
+			status, teacher_Type, gender)
 VALUES
-('ANH.N6', 'Anh', 'Ngoc Truc', 'Nguyen', 'Vietnamese', '1994/06/06', '0903554000', '1A Avenue Binh Tan District', 'anh.nguyen@gmail.com', 'anh.n6@gmail.com', 543069586,'AVAILABLE', 'VIETNAMESE', 'KID', 'FEMALE');
+('ANH.N6', 'Anh', 'Ngoc Truc', 'Nguyen', 0, '1994/06/06', '0903554000', '1A Avenue Binh Tan District', 'anh.nguyen@gmail.com', 'anh.n6@gmail.com', 0, 0, 1);
 
 
 
 
 
-INSERT INTO teacher_availability(startDate, workingDay, morningShift, afternoonShift, nightShift, teacher_id)
+INSERT INTO teacher_availability(start_date, working_day, morning_shift, afternoon_shift, night_shift, teacher_id)
 VALUES
-('2020-03-05', 'Monday', 0,0,1, 'ANH.N6'),
-('2020-03-05', 'Tuesday', 0,0,1, 'ANH.N6'),
-('2020-03-05', 'Wednesday', 0,0,1, 'ANH.N6'),
-('2020-03-05', 'Thursday', 0,0,0, 'ANH.N6'),
-('2020-03-05', 'Friday', 0,0,0, 'ANH.N6'),
-('2020-03-05', 'Saturday', 1,1,1, 'ANH.N6'),
-('2020-03-05', 'Sunday', 1,1,1, 'ANH.N6'),
+		('2020-03-05', 0, false, false , true, 1),
+		('2020-03-05', 1, false, false, true, 1),
+		('2020-03-05', 2, false, false, true, 1),
+		('2020-03-05', 3, false, false, false, 1),
+		('2020-03-05', 4, false, false, false, 1),
+		('2020-03-05', 5, true,true,true, 1),
+		('2020-03-05', 6, true,true,true,1)
 
-INSERT INTO salary(pay_rate, transferred_date, coefficient_multiplier)
-VALUES (160000, '2022-05-31')
+
+INSERT INTO salary(coefficient_multiplier, pay_rate, transferred_date, teacher_id)
+VALUES (1.0 ,160000, '2022-05-31', 1)
+
+INSERT INTO teacher_teaching_level(teaching_level, teacher_id)
+VALUES (0, 1),
+		(1,1)
+		
+		
+INSERT INTO campus(campus_code, name, address, number_of_rooms)
+VALUES ('BH', 'Ba Hom', '61-63 Street 10, D6', 30);
+
+INSERT INTO contract(contract_id, contract_type, start_date, end_date, teacher_id, campus_id)
+VALUES ('VN10010', 1, '2021-12-05', '2022-12-05', 1, 1)
+
+
+INSERT INTO room(room_number, number_of_table, room_size)
+VALUES (101, 18, 15)
+
+INSERT INTO class(class_id, number_of_student, start_date, end_date, start_time, end_time, duration, course_book)
+VALUES ('SKA1-Aa1401', 20, '2022-06-10', '2022-08-10', '7:40:00', '9:40:00', 2, 'LOOK');
+
+
+INSERT INTO assignment_detail(lesson, start_date, working_day, morning_shift, afternoon_shift, night_shift, teaching_status, active_hours, teacher_id, clazz_id, room_id, observation_status)
+VALUES ('Unit 1 Lesson 1', '2022-06-11', 5, TRUE, FALSE, FALSE, TRUE, 2, 1, 1, 1, FALSE)
+
+
+INSERT INTO training_quality_manager(employee_code, first_name, middle_name, last_name, start_date)
+VALUES ('LINH.T1', 'Linh', 'Khanh', 'Tran', '2022-05-19')
+
+
+-- note for maintenance - upgrade: class - assignmentDetail relation: many - many, not one-many
+
+INSERT INTO teacher_observation(observation_date, feedback, score, assignment_detail_id, training_quality_manager_id)
+VALUES ('2022-07-10', ' ', 0.0, 1, 1)
+
+
+
 
 
