@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Class {
+public class Clazz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

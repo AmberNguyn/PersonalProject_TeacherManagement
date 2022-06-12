@@ -45,7 +45,7 @@ public class AssignmentDetail {
 
     @ManyToOne
     @JoinColumn(name = "clazz_id")
-    private Class clazz;
+    private Clazz clazz;
 
     @ManyToOne
     @JoinColumn(name = "room_id")

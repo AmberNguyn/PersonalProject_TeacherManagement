@@ -1,10 +1,10 @@
 package com.example.TeacherManagement.repository;
 
-import com.example.TeacherManagement.entity.Class;
+import com.example.TeacherManagement.entity.Clazz;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClassRepository extends JpaRepository<Class, Integer> {
-    Class findClassByClassId(String classId);
+public interface ClazzRepository extends JpaRepository<Clazz, Integer> {
+    Clazz findClassByClassId(String classId);
 }

@@ -1,14 +1,10 @@
 package com.example.TeacherManagement.api.request;
 
 import com.example.TeacherManagement.entity.*;
-import com.example.TeacherManagement.entity.Class;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data

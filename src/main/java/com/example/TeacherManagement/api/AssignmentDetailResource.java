@@ -2,17 +2,18 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.AssignmentDetailRequest;
 import com.example.TeacherManagement.entity.AssignmentDetail;
-import com.example.TeacherManagement.entity.Class;
+import com.example.TeacherManagement.entity.Clazz;
 import com.example.TeacherManagement.entity.Room;
 import com.example.TeacherManagement.entity.Teacher;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.AssignmentDetailService;
-import com.example.TeacherManagement.service.ClassService;
+import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.RoomService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.AssignmentDetailDto;
 import com.example.TeacherManagement.service.mapper.AssignmentDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class AssignmentDetailResource {
     @Autowired
     private RoomService roomService;
     @Autowired
-    private ClassService classService;
+    private ClazzService clazzService;
 
     public static final String PATH = "/api/assignmentDetail";
 
@@ -56,7 +57,7 @@ public class AssignmentDetailResource {
         Teacher requestTeacher = teacherService.findTeacherByEmployeeCode(assignmentDetailRequest.getTeacher_code())
                 .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getTeacher_code() + " not found"));
 
-        Class requestClass = classService.findClassByClassId(assignmentDetailRequest.getClazz_id())
+        Clazz requestClazz = clazzService.findClassByClassId(assignmentDetailRequest.getClazz_id())
                 .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getClazz_id() + " not found"));
 
         Room requestRoom = roomService.findRoomByRoomNumber(assignmentDetailRequest.getRoom_number())
@@ -75,7 +76,7 @@ public class AssignmentDetailResource {
                         assignmentDetailRequest.getActiveHours(),
                         assignmentDetailRequest.isObservationStatus(),
                         requestTeacher,
-                        requestClass,
+                        requestClazz,
                         requestRoom
                 )
         );
@@ -112,5 +113,6 @@ public class AssignmentDetailResource {
 //        editedAssignmentDetail.setTeacher(newAssignmentDetail.);
 //
 //    }
+
 
 }
