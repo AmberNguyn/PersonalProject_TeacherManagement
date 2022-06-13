@@ -32,7 +32,7 @@ public class CampusServiceImpl implements CampusService {
     }
 
     @Override
-    public void deleteCampusByName(String campusName) {
-        campusRepository.delete(campusRepository.findCampusByCampusCodeIgnoreCase(campusName));
+    public void deleteCampusByCampusCode(String campusCode) {
+        campusRepository.delete(campusRepository.findCampusByCampusCodeIgnoreCase(campusCode));
     }
 }

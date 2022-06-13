@@ -46,7 +46,7 @@ public class AssignmentDetailResource {
     @GetMapping("/{teacherCode}/{startDate}")
     public ResponseEntity<AssignmentDetailDto> getAssignmentDetailByTeacherCode(@PathVariable String teacherCode,
                                                                                 @PathVariable LocalDate startDate)
-        throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByEmployeeCodeAndStartDate(teacherCode, startDate)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s assignment detail not found!")
@@ -56,7 +56,7 @@ public class AssignmentDetailResource {
 
 
     @PostMapping
-    public ResponseEntity<AssignmentDetailDto> create(@RequestBody AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException{
+    public ResponseEntity<AssignmentDetailDto> create(@RequestBody AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException {
         Teacher requestTeacher = teacherService.findTeacherByEmployeeCode(assignmentDetailRequest.getTeacher_code())
                 .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getTeacher_code() + " not found"));
 
@@ -90,10 +90,8 @@ public class AssignmentDetailResource {
     }
 
 
-
     @DeleteMapping("/{teacherCode}/{startDate}")
-    public ResponseEntity<Void> delete(@PathVariable String teacherCode, @PathVariable LocalDate startDate) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Void> delete(@PathVariable String teacherCode, @PathVariable LocalDate startDate) throws ResourceNotFoundException {
         AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByEmployeeCodeAndStartDate(teacherCode, startDate)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s assignment detail not found!")
@@ -102,22 +100,35 @@ public class AssignmentDetailResource {
         return ResponseEntity.noContent().build();
     }
 
-//    @PutMapping("/{teacherCode}/{startDate}")
-//    public ResponseEntity<AssignmentDetailDto> update(@PathVariable String teacherCode,
-//                                                      @PathVariable LocalDate startDate,
-//                                                      @RequestBody AssignmentDetail newAssignmentDetail) throws ResourceNotFoundException {
-//        AssignmentDetail editedAssignmentDetail = assignmentDetailService.findAssignmentDetailByEmployeeCodeAndStartDate(teacherCode, startDate)
-//                .orElseThrow(
-//                        () -> new ResourceNotFoundException(teacherCode + "'s assignment detail not found")
-//                );
-//        editedAssignmentDetail.setLesson(newAssignmentDetail.getLesson());
-//        editedAssignmentDetail.setStartDate(newAssignmentDetail.getStartDate());
-//        editedAssignmentDetail.setWorkingDay(newAssignmentDetail.getWorkingDay());
-//        editedAssignmentDetail.setMorningShift(newAssignmentDetail.isMorningShift());
-//        editedAssignmentDetail.setTeachingStatus(newAssignmentDetail.isTeachingStatus());
-//        editedAssignmentDetail.setTeacher(newAssignmentDetail.);
-//
-//    }
+
+    @PutMapping("/{teacherCode}/{startDate}")
+    public ResponseEntity<AssignmentDetailDto> update(@PathVariable String teacherCode,
+                                                      @PathVariable LocalDate startDate,
+                                                      @RequestBody AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException {
+        AssignmentDetail editedAssignmentDetail = assignmentDetailService.findAssignmentDetailByEmployeeCodeAndStartDate(teacherCode, startDate)
+                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + "'s assignment detail not found"));
+        Teacher teachRequest = teacherService.findTeacherByEmployeeCode(assignmentDetailRequest.getTeacher_code())
+                .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getTeacher_code() + " not found!"));
+
+        Room roomRequest = roomService.findRoomByRoomNumber(assignmentDetailRequest.getRoom_number())
+                        .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getRoom_number() + " not found!"));
+        Clazz classRequest = clazzService.findClassByClassId(assignmentDetailRequest.getClazz_id())
+                        .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getClazz_id() + " not found!"));
+
+
+        editedAssignmentDetail.setLesson(assignmentDetailRequest.getLesson());
+        editedAssignmentDetail.setStartDate(assignmentDetailRequest.getStartDate());
+        editedAssignmentDetail.setWorkingDay(assignmentDetailRequest.getWorkingDay());
+        editedAssignmentDetail.setMorningShift(assignmentDetailRequest.isMorningShift());
+        editedAssignmentDetail.setTeachingStatus(assignmentDetailRequest.isAfternoonShift());
+        editedAssignmentDetail.setNightShift(assignmentDetailRequest.isNightShift());
+        editedAssignmentDetail.setTeachingStatus(assignmentDetailRequest.isTeachingStatus());
+        editedAssignmentDetail.setActiveHours(assignmentDetailRequest.getActiveHours());
+        editedAssignmentDetail.setTeachingStatus(assignmentDetailRequest.isTeachingStatus());
+
+        AssignmentDetail updatedAssignmentDetail = assignmentDetailService.addAssignmentDetail(editedAssignmentDetail);
+        return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDto(updatedAssignmentDetail));
+    }
 
 
 }

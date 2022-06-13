@@ -1,0 +1,7 @@
+assignmentDetail:
+	- postman: getAssignmentDetailByTeacherCodeAndStartDate
+	- delete
+
+salary:
+	- deleteSalaryByTeacherCodeAndTransferredDate
+	- 

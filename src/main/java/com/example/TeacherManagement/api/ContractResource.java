@@ -73,7 +73,7 @@ public class ContractResource {
     }
 
     @DeleteMapping("/{teacherCode}")
-    public ResponseEntity<Void> delete(@PathVariable String teacherCode) throws ResourceNotFoundException {
+    public ResponseEntity<Void> delete(@PathVariable("teacherCode") String teacherCode) throws ResourceNotFoundException {
         Contract contract = contractService.findContractByEmployeeCode(teacherCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s contract not found!")

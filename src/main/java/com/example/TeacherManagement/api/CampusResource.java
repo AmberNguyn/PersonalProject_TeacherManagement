@@ -1,5 +1,6 @@
 package com.example.TeacherManagement.api;
 
+import com.example.TeacherManagement.api.request.CampusRequest;
 import com.example.TeacherManagement.entity.Campus;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.CampusService;
@@ -55,13 +56,30 @@ public class CampusResource {
                 .body(CampusMapper.INSTANCE.toDto(campusService.addCampus(createdCampus)));
     }
 
-    @DeleteMapping("/{campusName}")
-    public ResponseEntity<Void> delete(@PathVariable String campusName) throws ResourceNotFoundException {
+    @DeleteMapping("/{campusCode}")
+    public ResponseEntity<Void> delete(@PathVariable("campusCode") String campusName) throws ResourceNotFoundException {
         Campus campus = campusService.findCampusByCampusCode(campusName)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Campus " + campusName + " not found")
                 );
-        campusService.deleteCampusByName(campusName);
+        campusService.deleteCampusByCampusCode(campusName);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PutMapping("/{campusCode}")
+    public ResponseEntity<CampusDto> update(@PathVariable String campusCode,
+                                            @RequestBody CampusRequest campusRequest) throws ResourceNotFoundException{
+
+        Campus editedCampus = campusService.findCampusByCampusCode(campusRequest.getCampusCode())
+                .orElseThrow(() -> new  ResourceNotFoundException(campusCode + "not found"));
+
+        editedCampus.setCampusCode(campusRequest.getCampusCode());
+        editedCampus.setAddress(campusRequest.getAddress());
+        editedCampus.setName(campusRequest.getName());
+        editedCampus.setNumberOfRooms(campusRequest.getNumberOfRooms());
+
+        Campus updatedCampus = campusService.addCampus(editedCampus);
+        return ResponseEntity.ok(CampusMapper.INSTANCE.toDto(updatedCampus));
     }
 }

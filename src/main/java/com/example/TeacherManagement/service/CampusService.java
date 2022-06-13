@@ -12,5 +12,5 @@ public interface CampusService {
 
     Optional<Campus> findCampusByCampusCode(String campusCode);
 
-    void deleteCampusByName(String campusName);
+    void deleteCampusByCampusCode(String campusCode);
 }
