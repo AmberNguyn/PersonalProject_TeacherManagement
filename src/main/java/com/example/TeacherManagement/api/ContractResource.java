@@ -10,7 +10,6 @@ import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.ContractDto;
 import com.example.TeacherManagement.service.mapper.ContractMapper;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,15 +28,15 @@ public class ContractResource {
     @Autowired
     private CampusService campusService;
 
-    public static final String PATH = "/api/contract";
+    public static final String PATH = "/api/contracts";
 
     @GetMapping
     public ResponseEntity<List<ContractDto>> getAll() {
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDtos(contractService.getAll()));
     }
 
-    @GetMapping("/{teacherCode}")
-    public ResponseEntity<ContractDto> getContractBy(@PathVariable String teacherCode) throws ResourceNotFoundException {
+    @GetMapping("/find")
+    public ResponseEntity<ContractDto> getContractBy(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
         Contract contract = contractService.findContractByEmployeeCode(teacherCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s contract not found!")
@@ -46,14 +45,13 @@ public class ContractResource {
     }
 
 
-
     @PostMapping
     public ResponseEntity<ContractDto> create(@RequestBody ContractRequest contractRequest) throws ResourceNotFoundException {
-        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(contractRequest.getTeacher_code())
-                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getTeacher_code() + " not found!"));
+        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(contractRequest.getTeacherCode())
+                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getTeacherCode() + " not found!"));
 
-        Campus campusRequest = campusService.findCampusByCampusCode(contractRequest.getCampus_code())
-                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getCampus_code() + " not found!"));
+        Campus campusRequest = campusService.findCampusByCampusCode(contractRequest.getCampusCode())
+                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getCampusCode() + " not found!"));
 
         //create contract for old teachers only
         Contract createdContract = contractService.addContract(
@@ -72,14 +70,35 @@ public class ContractResource {
                 .body(ContractMapper.INSTANCE.toDto(contractService.addContract(createdContract)));
     }
 
-    @DeleteMapping("/{teacherCode}")
-    public ResponseEntity<Void> delete(@PathVariable("teacherCode") String teacherCode) throws ResourceNotFoundException {
+    @DeleteMapping("/")
+    public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
         Contract contract = contractService.findContractByEmployeeCode(teacherCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s contract not found!")
                 );
         contractService.deleteContractByEmployeeCode(teacherCode);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<ContractDto> update(@RequestParam("teacherCode") String teacherCode,
+                                              @RequestBody ContractRequest contractRequest) throws ResourceNotFoundException {
+        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(contractRequest.getTeacherCode())
+                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getTeacherCode() + " not found!"));
+        Campus campusRequest = campusService.findCampusByCampusCode(contractRequest.getCampusCode())
+                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getCampusCode() + " not found!"));
+
+        Contract editedContract = contractService.findContractByEmployeeCode(teacherCode)
+                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + " not found!"));
+
+        editedContract.setContractId(contractRequest.getContractId());
+        editedContract.setContractType(contractRequest.getContractType());
+        editedContract.setStartDate(contractRequest.getStartDate());
+        editedContract.setEndDate(contractRequest.getEndDate());
+
+        Contract updatedContract = contractService.addContract(editedContract);
+        return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(updatedContract));
+
     }
 
 }

@@ -15,10 +15,8 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class ClazzRequest {
 
-    @Column(unique = true)
     private String classId;
 
-    @Max(25)
     private Integer numberOfStudent;
 
     private LocalDate startDate;

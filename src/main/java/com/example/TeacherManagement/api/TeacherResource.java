@@ -27,13 +27,9 @@ public class TeacherResource {
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDtos(teacherService.getAll()));
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<Teacher>> getAll() {
-//        return ResponseEntity.ok(teacherService.getAll());
-//    }
 
-    @GetMapping("/{teacherCode}")
-    public ResponseEntity<TeacherDto> getTeacherByTeacherCode(@PathVariable String teacherCode) throws ResourceNotFoundException {
+    @GetMapping("/find")
+    public ResponseEntity<TeacherDto> getTeacherByTeacherCode(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
         Teacher teacher = teacherService.findTeacherByEmployeeCode(teacherCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + " not found!")
@@ -66,14 +62,40 @@ public class TeacherResource {
                 .body(TeacherMapper.INSTANCE.toDto(teacherService.addTeacher(createdTeacher)));
     }
 
-    @DeleteMapping("/{teacherCode}")
-    public ResponseEntity<Void> delete(@PathVariable String teacherCode) throws ResourceNotFoundException {
+    @DeleteMapping("/")
+    public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
         Teacher teacher = teacherService.findTeacherByEmployeeCode(teacherCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + " not found")
                 );
         teacherService.deleteTeacherByEmployeeCode(teacherCode);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PutMapping("/")
+    public ResponseEntity<TeacherDto> update(@RequestParam("teacherCode") String teacherCode,
+                                             @RequestBody TeacherRequest teacherRequest) throws ResourceNotFoundException{
+        Teacher editedTeacher = teacherService.findTeacherByEmployeeCode(teacherCode)
+                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + " not found!"));
+
+        editedTeacher.setEmployeeCode(teacherRequest.getEmployeeCode());
+        editedTeacher.setFirstName(teacherRequest.getFirstName());
+        editedTeacher.setMiddleName(teacherRequest.getMiddleName());
+        editedTeacher.setLastName(teacherRequest.getLastName());
+        editedTeacher.setNationality(teacherRequest.getNationality());
+        editedTeacher.setDateOfBirth(teacherRequest.getDateOfBirth());
+        editedTeacher.setPhoneNumber(teacherRequest.getPhoneNumber());
+        editedTeacher.setAddress(teacherRequest.getAddress());
+        editedTeacher.setPrivateEmail(teacherRequest.getPrivateEmail());
+        editedTeacher.setSchoolEmail(teacherRequest.getSchoolEmail());
+        editedTeacher.setTeacherType(teacherRequest.getTeacherType());
+        editedTeacher.setGender(teacherRequest.getGender());
+        editedTeacher.setStatus(teacherRequest.getStatus());
+
+        Teacher updatedTeacher = teacherService.addTeacher(editedTeacher);
+        return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(updatedTeacher));
+
     }
 
 

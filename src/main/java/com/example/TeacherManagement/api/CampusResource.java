@@ -23,18 +23,18 @@ public class CampusResource {
     CampusMapper campusMapper;
 
 
-    public static final String PATH = "/api/campus";
+    public static final String PATH = "/api/campuses";
 
     @GetMapping
     public ResponseEntity<List<CampusDto>> getAll() {
         return ResponseEntity.ok(campusMapper.toDtos(campusService.getAll()));
     }
 
-    @GetMapping("/{campusName}")
-    public ResponseEntity<CampusDto> getCampusByName(@RequestParam String campusName) throws ResourceNotFoundException {
-        Campus campus = campusService.findCampusByCampusCode(campusName)
+    @GetMapping("/find")
+    public ResponseEntity<CampusDto> getCampusByName(@RequestParam("campusCode") String campusCode) throws ResourceNotFoundException {
+        Campus campus = campusService.findCampusByCampusCode(campusCode)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Campus " + campusName + " not found!")
+                        () -> new ResourceNotFoundException("Campus " + campusCode + " not found!")
                 );
         return ResponseEntity.ok(CampusMapper.INSTANCE.toDto(campus));
     }
@@ -56,19 +56,19 @@ public class CampusResource {
                 .body(CampusMapper.INSTANCE.toDto(campusService.addCampus(createdCampus)));
     }
 
-    @DeleteMapping("/{campusCode}")
-    public ResponseEntity<Void> delete(@PathVariable("campusCode") String campusName) throws ResourceNotFoundException {
-        Campus campus = campusService.findCampusByCampusCode(campusName)
+    @DeleteMapping("/")
+    public ResponseEntity<Void> delete(@RequestParam("campusCode") String campusCode) throws ResourceNotFoundException {
+        Campus campus = campusService.findCampusByCampusCode(campusCode)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Campus " + campusName + " not found")
+                        () -> new ResourceNotFoundException("Campus " + campusCode + " not found")
                 );
-        campusService.deleteCampusByCampusCode(campusName);
+        campusService.deleteCampusByCampusCode(campusCode);
         return ResponseEntity.noContent().build();
     }
 
 
-    @PutMapping("/{campusCode}")
-    public ResponseEntity<CampusDto> update(@PathVariable String campusCode,
+    @PutMapping("/")
+    public ResponseEntity<CampusDto> update(@RequestParam("campusCode") String campusCode,
                                             @RequestBody CampusRequest campusRequest) throws ResourceNotFoundException{
 
         Campus editedCampus = campusService.findCampusByCampusCode(campusRequest.getCampusCode())

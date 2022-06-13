@@ -32,8 +32,9 @@ public class SalaryResource {
         return ResponseEntity.ok(SalaryMapper.INSTANCE.toDtos(salaryService.getAll()));
     }
 
-    @GetMapping("/{teacherCode}/{transferredDate}")
-    public ResponseEntity<SalaryDto> getSalaryBy(@PathVariable String teacherCode, @PathVariable LocalDate transferredDate) throws ResourceNotFoundException {
+    @GetMapping("/find")
+    public ResponseEntity<SalaryDto> getSalaryBy(@RequestParam("teacherCode") String teacherCode,
+                                                 @RequestParam("transferredDate") LocalDate transferredDate) throws ResourceNotFoundException {
         Salary salary = salaryService.findSalaryByEmployeeCodeAndTransferredDate(teacherCode, transferredDate)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s pay slip not found")
@@ -44,13 +45,13 @@ public class SalaryResource {
 
 
     @PostMapping
-    public ResponseEntity<SalaryDto> create(@RequestBody SalaryRequest salaryRequest) throws ResourceNotFoundException{
+    public ResponseEntity<SalaryDto> create(@RequestBody SalaryRequest salaryRequest) throws ResourceNotFoundException {
         Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(salaryRequest.getTeacherCode())
                 .orElseThrow(() -> new ResourceNotFoundException(salaryRequest.getTeacherCode() + " not found!"));
 
 
         Salary createdSalary = salaryService.addSalary(
-                new Salary (
+                new Salary(
                         null,
                         salaryRequest.getPayRate(),
                         salaryRequest.getTransferredDate(),
@@ -63,14 +64,36 @@ public class SalaryResource {
     }
 
 
-    @DeleteMapping("/{teacherCode}/{transferredDate}")
-    public ResponseEntity<Void> delete(@PathVariable String teacherCode, @PathVariable LocalDate transferredDate) throws ResourceNotFoundException {
+    @DeleteMapping("/")
+    public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode,
+                                       @RequestParam("transferredDate") LocalDate transferredDate) throws ResourceNotFoundException {
         Salary salary = salaryService.findSalaryByEmployeeCodeAndTransferredDate(teacherCode, transferredDate)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s pay slip not found!")
                 );
         salaryService.findSalaryByEmployeeCodeAndTransferredDate(teacherCode, transferredDate);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PutMapping("/")
+    public ResponseEntity<SalaryDto> update(@RequestParam("teacherCode") String teacherCode,
+                                            @RequestParam("transferredDate") LocalDate transferredDate,
+                                            @RequestBody SalaryRequest salaryRequest) throws ResourceNotFoundException {
+
+        Salary editedSalary = salaryService.findSalaryByEmployeeCodeAndTransferredDate(teacherCode, transferredDate)
+                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + " not found!"));
+
+        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(salaryRequest.getTeacherCode())
+                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + " not found!"));
+
+        editedSalary.setPayRate(salaryRequest.getPayRate());
+        editedSalary.setTransferredDate(salaryRequest.getTransferredDate());
+        editedSalary.setCoefficientMultiplier(salaryRequest.getCoefficientMultiplier());
+
+        Salary updatedSalary = salaryService.addSalary(editedSalary);
+
+        return ResponseEntity.ok(SalaryMapper.INSTANCE.toDto(updatedSalary));
     }
 
 }

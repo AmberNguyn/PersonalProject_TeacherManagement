@@ -4,4 +4,4 @@ assignmentDetail:
 
 salary:
 	- deleteSalaryByTeacherCodeAndTransferredDate
-	- 
+	- updateAList (-> checkagain)

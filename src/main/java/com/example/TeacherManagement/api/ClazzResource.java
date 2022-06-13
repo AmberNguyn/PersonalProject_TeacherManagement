@@ -1,5 +1,6 @@
 package com.example.TeacherManagement.api;
 
+import com.example.TeacherManagement.api.request.ClazzRequest;
 import com.example.TeacherManagement.entity.Clazz;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.ClazzService;
@@ -20,7 +21,7 @@ public class ClazzResource {
     @Autowired
     private ClazzService clazzService;
 
-    public static final String PATH = "/api/class";
+    public static final String PATH = "/api/classes";
 
     @GetMapping
     public ResponseEntity<List<ClazzDto>> getAll() {
@@ -28,7 +29,7 @@ public class ClazzResource {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<ClazzDto> getClassByClassId(@RequestParam String classId) throws ResourceNotFoundException {
+    public ResponseEntity<ClazzDto> getClassByClassId(@RequestParam("classId") String classId) throws ResourceNotFoundException {
         Clazz clazz = clazzService.findClassByClassId(classId)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(classId + " not found!")
@@ -55,13 +56,33 @@ public class ClazzResource {
                 .body(ClazzMapper.INSTANCE.toDto(clazzService.addClass(createdClazz)));
     }
 
-    @DeleteMapping("/{classId}")
-    public ResponseEntity<Void> delete(@PathVariable String classId) throws ResourceNotFoundException {
+    @DeleteMapping("/")
+    public ResponseEntity<Void> delete(@RequestParam("classId") String classId) throws ResourceNotFoundException {
         Clazz clazz = clazzService.findClassByClassId(classId)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(classId + " not found!")
                 );
         clazzService.deleteClassByClassId(classId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<ClazzDto> update(@RequestParam("classId") String clazzId,
+                                           @RequestBody ClazzRequest clazzRequest) throws ResourceNotFoundException {
+
+        Clazz editedClazz = clazzService.findClassByClassId(clazzId)
+                .orElseThrow(() -> new ResourceNotFoundException(clazzId + " not found!"));
+
+        editedClazz.setClassId(clazzRequest.getClassId());
+        editedClazz.setNumberOfStudent(clazzRequest.getNumberOfStudent());
+        editedClazz.setStartDate(clazzRequest.getStartDate());
+        editedClazz.setEndDate(clazzRequest.getEndDate());
+        editedClazz.setStartTime(clazzRequest.getStartTime());
+        editedClazz.setEndTime(clazzRequest.getEndTime());
+        editedClazz.setDuration(clazzRequest.getDuration());
+        editedClazz.setCourseBook(clazzRequest.getCourseBook());
+
+        Clazz updatedClazz = clazzService.addClass(editedClazz);
+        return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(updatedClazz));
     }
 }

@@ -35,7 +35,7 @@ public class AssignmentDetailResource {
     @Autowired
     private ClazzService clazzService;
 
-    public static final String PATH = "/api/assignmentDetail";
+    public static final String PATH = "/api/assignmentDetails";
 
     @GetMapping
     public ResponseEntity<List<AssignmentDetailDto>> getAll() {
@@ -43,9 +43,9 @@ public class AssignmentDetailResource {
     }
 
     //check how to input in postman
-    @GetMapping("/{teacherCode}/{startDate}")
-    public ResponseEntity<AssignmentDetailDto> getAssignmentDetailByTeacherCode(@PathVariable String teacherCode,
-                                                                                @PathVariable LocalDate startDate)
+    @GetMapping("/find")
+    public ResponseEntity<AssignmentDetailDto> getAssignmentDetailByTeacherCode(@RequestParam("teacherCode") String teacherCode,
+                                                                                @RequestParam("startDate") LocalDate startDate)
             throws ResourceNotFoundException {
         AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByEmployeeCodeAndStartDate(teacherCode, startDate)
                 .orElseThrow(
@@ -90,8 +90,9 @@ public class AssignmentDetailResource {
     }
 
 
-    @DeleteMapping("/{teacherCode}/{startDate}")
-    public ResponseEntity<Void> delete(@PathVariable String teacherCode, @PathVariable LocalDate startDate) throws ResourceNotFoundException {
+    @DeleteMapping("/")
+    public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode,
+                                       @RequestParam("startDate") LocalDate startDate) throws ResourceNotFoundException {
         AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByEmployeeCodeAndStartDate(teacherCode, startDate)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s assignment detail not found!")
@@ -101,9 +102,9 @@ public class AssignmentDetailResource {
     }
 
 
-    @PutMapping("/{teacherCode}/{startDate}")
-    public ResponseEntity<AssignmentDetailDto> update(@PathVariable String teacherCode,
-                                                      @PathVariable LocalDate startDate,
+    @PutMapping("/")
+    public ResponseEntity<AssignmentDetailDto> update(@RequestParam("teacherCode") String teacherCode,
+                                                      @RequestParam("startDate") LocalDate startDate,
                                                       @RequestBody AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException {
         AssignmentDetail editedAssignmentDetail = assignmentDetailService.findAssignmentDetailByEmployeeCodeAndStartDate(teacherCode, startDate)
                 .orElseThrow(() -> new ResourceNotFoundException(teacherCode + "'s assignment detail not found"));

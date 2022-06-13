@@ -1,5 +1,6 @@
 package com.example.TeacherManagement.api;
 
+import com.example.TeacherManagement.api.request.RoomRequest;
 import com.example.TeacherManagement.entity.Room;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.RoomService;
@@ -19,7 +20,7 @@ public class RoomResource {
     @Autowired
     private RoomService roomService;
 
-    public static final String PATH = "/api/room";
+    public static final String PATH = "/api/rooms";
 
     @GetMapping
     public ResponseEntity<List<RoomDto>> getAll() {
@@ -60,4 +61,20 @@ public class RoomResource {
         roomService.deleteRoomByRoomNumber(roomNumber);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{roomNumber}")
+    public ResponseEntity<RoomDto> update(@PathVariable Integer roomNumber,
+                                          @RequestBody RoomRequest roomRequest) throws ResourceNotFoundException {
+
+        Room editedRoom = roomService.findRoomByRoomNumber(roomNumber)
+                .orElseThrow(() -> new ResourceNotFoundException(roomNumber + " not found!"));
+
+        editedRoom.setRoomNumber(roomRequest.getRoomNumber());
+        editedRoom.setNumberOfTable(roomRequest.getNumberOfTable());
+        editedRoom.setRoomSize(roomRequest.getRoomSize());
+
+        Room updatedRoom = roomService.addRoom(editedRoom);
+        return ResponseEntity.ok(RoomMapper.INSTANCE.toDto(updatedRoom));
+    }
+
 }

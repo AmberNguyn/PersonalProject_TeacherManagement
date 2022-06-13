@@ -3,6 +3,7 @@ package com.example.TeacherManagement.api;
 import com.example.TeacherManagement.api.request.TeacherAvailabilityRequest;
 import com.example.TeacherManagement.entity.Teacher;
 import com.example.TeacherManagement.entity.TeacherAvailability;
+import com.example.TeacherManagement.entity.WorkingDay;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.TeacherAvailabilityService;
 import com.example.TeacherManagement.service.TeacherService;
@@ -24,15 +25,15 @@ public class TeacherAvailabilityResource {
     @Autowired
     private TeacherService teacherService;
 
-    public static final String PATH = "/api/teacherAvailability";
+    public static final String PATH = "/api/teacherAvailabilities";
 
     @GetMapping
     public ResponseEntity<List<TeacherAvailabilityDto>> getAll() {
         return ResponseEntity.ok(TeacherAvailabilityMapper.INSTANCE.toDtos(teacherAvailabilityService.getAll()));
     }
 
-    @GetMapping("/{teacherCode}")
-    public ResponseEntity<List<TeacherAvailabilityDto>> getTeacherAvailabilityByTeacherCode(@PathVariable String teacherCode) throws ResourceNotFoundException {
+    @GetMapping("/find")
+    public ResponseEntity<List<TeacherAvailabilityDto>> getTeacherAvailabilityByTeacherCode(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
         List<TeacherAvailability> teacherAvailability = teacherAvailabilityService.findTeacherAvailabilityByEmployeeCode(teacherCode);
         if (teacherAvailability.size() == 0) throw new ResourceNotFoundException(teacherCode + " not found");
         else {
@@ -63,14 +64,36 @@ public class TeacherAvailabilityResource {
                 .body(TeacherAvailabilityMapper.INSTANCE.toDto(teacherAvailabilityService.addTeacherAvailability(createTeacherAvailability)));
     }
 
-    @DeleteMapping("/{teacherCode}")
-    public ResponseEntity<Void> deleteAll(@PathVariable String teacherCode) throws ResourceNotFoundException {
+    @DeleteMapping("/")
+    public ResponseEntity<Void> deleteAll(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
         List<TeacherAvailability> teacherAvailability = teacherAvailabilityService.findTeacherAvailabilityByEmployeeCode(teacherCode);
         if (teacherAvailability.size() == 0) throw new ResourceNotFoundException(teacherCode + " not found");
         else {
             teacherAvailabilityService.deleteTeacherAvailabilityListByEmployeeCode(teacherCode);
             return ResponseEntity.noContent().build();
         }
+
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<TeacherAvailabilityDto> update(@RequestParam("teacherCode") String teacherCode,
+                                                         @RequestParam("workingDay") WorkingDay workingDay,
+                                                         @RequestBody TeacherAvailabilityRequest teacherAvailabilityRequest) throws ResourceNotFoundException {
+
+            TeacherAvailability editedTeacherAvailability = teacherAvailabilityService.findTeacherAvailabilityByEmployeeCodeAndWorkingDay(teacherCode, workingDay);
+
+            Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(teacherAvailabilityRequest.getTeacherCode())
+                            .orElseThrow(() -> new ResourceNotFoundException(teacherAvailabilityRequest.getTeacherCode() + " not found!"));
+
+
+            editedTeacherAvailability.setStartDate(teacherAvailabilityRequest.getStartDate());
+            editedTeacherAvailability.setWorkingDay(teacherAvailabilityRequest.getWorkingDay());
+            editedTeacherAvailability.setMorningShift(teacherAvailabilityRequest.isMorningShift());
+            editedTeacherAvailability.setAfternoonShift(teacherAvailabilityRequest.isAfternoonShift());
+            editedTeacherAvailability.setNightShift(teacherAvailabilityRequest.isNightShift());
+
+            TeacherAvailability updatedTeacherAvailability = teacherAvailabilityService.addTeacherAvailability(editedTeacherAvailability);
+            return ResponseEntity.ok(TeacherAvailabilityMapper.INSTANCE.toDto(editedTeacherAvailability));
 
     }
 }

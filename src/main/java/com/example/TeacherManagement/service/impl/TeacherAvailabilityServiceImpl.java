@@ -1,6 +1,7 @@
 package com.example.TeacherManagement.service.impl;
 
 import com.example.TeacherManagement.entity.TeacherAvailability;
+import com.example.TeacherManagement.entity.WorkingDay;
 import com.example.TeacherManagement.repository.TeacherAvailabilityRepository;
 import com.example.TeacherManagement.service.TeacherAvailabilityService;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,10 @@ public class TeacherAvailabilityServiceImpl implements TeacherAvailabilityServic
     @Override
     public void deleteTeacherAvailabilityListByEmployeeCode(String teacherCode) {
         teacherAvailabilityRepository.deleteAll(teacherAvailabilityRepository.findTeacherAvailabilityByTeacherEmployeeCodeContaining(teacherCode));
+    }
+
+    @Override
+    public TeacherAvailability findTeacherAvailabilityByEmployeeCodeAndWorkingDay(String teacherCode, WorkingDay workingDay) {
+        return teacherAvailabilityRepository.findTeacherAvailabilityByTeacherEmployeeCodeContainingAndWorkingDay(teacherCode, workingDay);
     }
 }
