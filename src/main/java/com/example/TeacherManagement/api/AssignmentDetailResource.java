@@ -42,8 +42,10 @@ public class AssignmentDetailResource {
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDtos(assignmentDetailService.getAll()));
     }
 
+    //check how to input in postman
     @GetMapping("/{teacherCode}/{startDate}")
-    public ResponseEntity<AssignmentDetailDto> getAssignmentDetailByTeacherCode(@PathVariable String teacherCode, @PathVariable LocalDate startDate)
+    public ResponseEntity<AssignmentDetailDto> getAssignmentDetailByTeacherCode(@PathVariable String teacherCode,
+                                                                                @PathVariable LocalDate startDate)
         throws ResourceNotFoundException {
         AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByEmployeeCodeAndStartDate(teacherCode, startDate)
                 .orElseThrow(
@@ -51,6 +53,7 @@ public class AssignmentDetailResource {
                 );
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDto(assignmentDetail));
     }
+
 
     @PostMapping
     public ResponseEntity<AssignmentDetailDto> create(@RequestBody AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException{
@@ -83,8 +86,10 @@ public class AssignmentDetailResource {
 
 
         return ResponseEntity.created(URI.create(AssignmentDetailResource.PATH + "/" + createdAssignmentDetail.getId()))
-                .body(AssignmentDetailMapper.INSTANCE.toDto(createdAssignmentDetail));
+                .body(AssignmentDetailMapper.INSTANCE.toDto(assignmentDetailService.addAssignmentDetail(createdAssignmentDetail)));
     }
+
+
 
     @DeleteMapping("/{teacherCode}/{startDate}")
     public ResponseEntity<Void> delete(@PathVariable String teacherCode, @PathVariable LocalDate startDate) throws ResourceNotFoundException

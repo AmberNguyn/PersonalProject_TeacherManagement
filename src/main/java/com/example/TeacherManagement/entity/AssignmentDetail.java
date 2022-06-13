@@ -24,6 +24,7 @@ public class AssignmentDetail {
     private LocalDate startDate;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private WorkingDay workingDay;
 
     @NotNull

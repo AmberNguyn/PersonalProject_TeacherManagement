@@ -1,10 +1,10 @@
 package com.example.TeacherManagement.api;
 
+import com.example.TeacherManagement.api.request.TeacherRequest;
 import com.example.TeacherManagement.entity.Teacher;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.TeacherDto;
-import com.example.TeacherManagement.service.mapper.TeacherAvailabilityMapper;
 import com.example.TeacherManagement.service.mapper.TeacherMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +22,15 @@ public class TeacherResource {
 
     public static final String PATH = "/api/teacher";
 
-//    @GetMapping
-//    public ResponseEntity<List<TeacherDto>> getAll() {
-//        return ResponseEntity.ok(TeacherMapper.INSTANCE.toDtos(teacherService.getAll()));
-//    }
-
     @GetMapping
-    public ResponseEntity<List<Teacher>> getAll() {
-        return ResponseEntity.ok(teacherService.getAll());
+    public ResponseEntity<List<TeacherDto>> getAll() {
+        return ResponseEntity.ok(TeacherMapper.INSTANCE.toDtos(teacherService.getAll()));
     }
+
+//    @GetMapping
+//    public ResponseEntity<List<Teacher>> getAll() {
+//        return ResponseEntity.ok(teacherService.getAll());
+//    }
 
     @GetMapping("/{teacherCode}")
     public ResponseEntity<TeacherDto> getTeacherByTeacherCode(@PathVariable String teacherCode) throws ResourceNotFoundException {
@@ -41,11 +41,29 @@ public class TeacherResource {
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(teacher));
     }
 
+
     @PostMapping
-    public ResponseEntity<TeacherDto> create(@RequestBody Teacher teacher) {
-        Teacher createdTeacher = teacherService.addTeacher(teacher);
-        return ResponseEntity.created(URI.create(TeacherResource.PATH + "/" + createdTeacher.getEmployeeCode()))
-                .body(TeacherMapper.INSTANCE.toDto(createdTeacher));
+    public ResponseEntity<TeacherDto> create(@RequestBody TeacherRequest teacherRequest) {
+        Teacher createdTeacher = teacherService.addTeacher(
+                new Teacher(
+                        null,
+                        teacherRequest.getEmployeeCode(),
+                        teacherRequest.getFirstName(),
+                        teacherRequest.getMiddleName(),
+                        teacherRequest.getLastName(),
+                        teacherRequest.getNationality(),
+                        teacherRequest.getDateOfBirth(),
+                        teacherRequest.getPhoneNumber(),
+                        teacherRequest.getAddress(),
+                        teacherRequest.getPrivateEmail(),
+                        teacherRequest.getSchoolEmail(),
+                        teacherRequest.getTeacherType(),
+                        teacherRequest.getGender(),
+                        teacherRequest.getStatus()
+                )
+        );
+        return ResponseEntity.created(URI.create(TeacherResource.PATH + "/" + createdTeacher.getId()))
+                .body(TeacherMapper.INSTANCE.toDto(teacherService.addTeacher(createdTeacher)));
     }
 
     @DeleteMapping("/{teacherCode}")

@@ -1,5 +1,6 @@
 package com.example.TeacherManagement.entity;
 
+import com.example.TeacherManagement.service.converter.GenderAttributeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,12 +55,12 @@ public class Teacher {
     private TeacherType teacherType;
 
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
+    @Convert(converter = GenderAttributeConverter.class)
     private Gender gender;
+
+
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
 
 }

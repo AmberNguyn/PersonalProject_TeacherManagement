@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ContractRepository extends JpaRepository<Contract, Integer> {
-    Contract findContractsByTeacherEmployeeCode(String employeeCode);
+    Contract findContractByTeacherEmployeeCodeContaining(String employeeCode);
 }

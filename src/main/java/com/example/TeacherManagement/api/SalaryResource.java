@@ -1,8 +1,11 @@
 package com.example.TeacherManagement.api;
 
+import com.example.TeacherManagement.api.request.SalaryRequest;
 import com.example.TeacherManagement.entity.Salary;
+import com.example.TeacherManagement.entity.Teacher;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.SalaryService;
+import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.SalaryDto;
 import com.example.TeacherManagement.service.mapper.SalaryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import java.util.List;
 public class SalaryResource {
     @Autowired
     private SalaryService salaryService;
+    @Autowired
+    private TeacherService teacherService;
 
     public static final String PATH = "/api/salary";
 
@@ -37,12 +42,26 @@ public class SalaryResource {
 
     }
 
+
     @PostMapping
-    public ResponseEntity<SalaryDto> create(@RequestBody Salary salary) {
-        Salary createdSalary = salaryService.addSalary(salary);
-        return ResponseEntity.created(URI.create(SalaryResource.PATH + "/" + createdSalary.getTeacher().getEmployeeCode()))
-                .body(SalaryMapper.INSTANCE.toDto(createdSalary));
+    public ResponseEntity<SalaryDto> create(@RequestBody SalaryRequest salaryRequest) throws ResourceNotFoundException{
+        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(salaryRequest.getTeacherCode())
+                .orElseThrow(() -> new ResourceNotFoundException(salaryRequest.getTeacherCode() + " not found!"));
+
+
+        Salary createdSalary = salaryService.addSalary(
+                new Salary (
+                        null,
+                        salaryRequest.getPayRate(),
+                        salaryRequest.getTransferredDate(),
+                        salaryRequest.getCoefficientMultiplier(),
+                        teacherRequest
+                )
+        );
+        return ResponseEntity.created(URI.create(SalaryResource.PATH + "/" + createdSalary.getId()))
+                .body(SalaryMapper.INSTANCE.toDto(salaryService.addSalary(createdSalary)));
     }
+
 
     @DeleteMapping("/{teacherCode}/{transferredDate}")
     public ResponseEntity<Void> delete(@PathVariable String teacherCode, @PathVariable LocalDate transferredDate) throws ResourceNotFoundException {

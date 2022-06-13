@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CampusRepository extends JpaRepository<Campus, Integer> {
-    Campus findCampusByName(String campusName);
+    Campus findCampusByCampusCodeIgnoreCase(String campusCode);
 
 }

@@ -27,12 +27,12 @@ public class CampusServiceImpl implements CampusService {
     }
 
     @Override
-    public Optional<Campus> findCampusByName(String campusName) {
-        return Optional.of(campusRepository.findCampusByName(campusName));
+    public Optional<Campus> findCampusByCampusCode(String campusCode) {
+        return Optional.of(campusRepository.findCampusByCampusCodeIgnoreCase(campusCode));
     }
 
     @Override
     public void deleteCampusByName(String campusName) {
-        campusRepository.delete(campusRepository.findCampusByName(campusName));
+        campusRepository.delete(campusRepository.findCampusByCampusCodeIgnoreCase(campusName));
     }
 }

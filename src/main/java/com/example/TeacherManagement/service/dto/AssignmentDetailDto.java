@@ -25,7 +25,7 @@ public class AssignmentDetailDto {
     private boolean morningShift;
     private boolean afternoonShift;
     private boolean nightShift;
-    private WorkingDay weekday;
+    private WorkingDay workingDay;
 
     //from Room
     private Integer roomNumber;

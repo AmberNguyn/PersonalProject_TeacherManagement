@@ -27,12 +27,12 @@ public class TeacherAvailabilityServiceImpl implements TeacherAvailabilityServic
     }
 
     @Override
-    public Optional<TeacherAvailability> findTeacherAvailabilityByEmployeeCode(String teacherCode) {
-        return Optional.of(teacherAvailabilityRepository.findTeacherAvailabilityByTeacherEmployeeCode(teacherCode));
+    public List<TeacherAvailability> findTeacherAvailabilityByEmployeeCode(String teacherCode) {
+        return teacherAvailabilityRepository.findTeacherAvailabilityByTeacherEmployeeCodeContaining(teacherCode);
     }
 
     @Override
-    public void deleteTeacherAvailabilityByEmployeeCode(String teacherCode) {
-        teacherAvailabilityRepository.delete(teacherAvailabilityRepository.findTeacherAvailabilityByTeacherEmployeeCode(teacherCode));
+    public void deleteTeacherAvailabilityListByEmployeeCode(String teacherCode) {
+        teacherAvailabilityRepository.deleteAll(teacherAvailabilityRepository.findTeacherAvailabilityByTeacherEmployeeCodeContaining(teacherCode));
     }
 }

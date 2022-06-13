@@ -18,6 +18,8 @@ public interface AssignmentDetailMapper {
     @Mapping(source = "teacher.teacherType", target = "teacherType")
     @Mapping(source = "teacher.phoneNumber", target = "phoneNumber")
 
+    @Mapping(source = "assignmentDetail.workingDay", target = "workingDay")
+
     @Mapping(source = "room.roomNumber", target = "roomNumber")
 
     @Mapping(source = "clazz.classId", target = "classId")

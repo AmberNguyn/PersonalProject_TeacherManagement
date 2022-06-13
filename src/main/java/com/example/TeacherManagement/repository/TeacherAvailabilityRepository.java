@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TeacherAvailabilityRepository extends JpaRepository<TeacherAvailability, Integer> {
-    TeacherAvailability findTeacherAvailabilityByTeacherEmployeeCode(String teacherCode);
+    List<TeacherAvailability> findTeacherAvailabilityByTeacherEmployeeCodeContaining(String teacherCode);
 }

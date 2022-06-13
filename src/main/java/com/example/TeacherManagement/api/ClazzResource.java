@@ -27,8 +27,8 @@ public class ClazzResource {
         return ResponseEntity.ok(ClazzMapper.INSTANCE.toDtos(clazzService.getAll()));
     }
 
-    @GetMapping("/{classId}")
-    public ResponseEntity<ClazzDto> getClassByClassId(@PathVariable String classId) throws ResourceNotFoundException {
+    @GetMapping("/find")
+    public ResponseEntity<ClazzDto> getClassByClassId(@RequestParam String classId) throws ResourceNotFoundException {
         Clazz clazz = clazzService.findClassByClassId(classId)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(classId + " not found!")
@@ -37,10 +37,22 @@ public class ClazzResource {
     }
 
     @PostMapping
-    public ResponseEntity<ClazzDto> create(@RequestBody Clazz clazz) {
-        Clazz createdClazz = clazzService.addClass(clazz);
-        return ResponseEntity.created(URI.create(ClazzResource.PATH + "/" + createdClazz.getClassId()))
-                .body(ClazzMapper.INSTANCE.toDto(createdClazz));
+    public ResponseEntity<ClazzDto> create(@RequestBody Clazz clazzRequest) {
+        Clazz createdClazz = clazzService.addClass(
+                new Clazz(
+                        null,
+                        clazzRequest.getClassId(),
+                        clazzRequest.getNumberOfStudent(),
+                        clazzRequest.getStartDate(),
+                        clazzRequest.getEndDate(),
+                        clazzRequest.getStartTime(),
+                        clazzRequest.getEndTime(),
+                        clazzRequest.getDuration(),
+                        clazzRequest.getCourseBook()
+                )
+        );
+        return ResponseEntity.created(URI.create(ClazzResource.PATH + "/" + createdClazz.getId()))
+                .body(ClazzMapper.INSTANCE.toDto(clazzService.addClass(createdClazz)));
     }
 
     @DeleteMapping("/{classId}")

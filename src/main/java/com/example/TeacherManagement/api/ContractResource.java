@@ -1,8 +1,13 @@
 package com.example.TeacherManagement.api;
 
+import com.example.TeacherManagement.api.request.ContractRequest;
+import com.example.TeacherManagement.entity.Campus;
 import com.example.TeacherManagement.entity.Contract;
+import com.example.TeacherManagement.entity.Teacher;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
+import com.example.TeacherManagement.service.CampusService;
 import com.example.TeacherManagement.service.ContractService;
+import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.ContractDto;
 import com.example.TeacherManagement.service.mapper.ContractMapper;
 import org.apache.coyote.Response;
@@ -19,6 +24,10 @@ import java.util.List;
 public class ContractResource {
     @Autowired
     private ContractService contractService;
+    @Autowired
+    private TeacherService teacherService;
+    @Autowired
+    private CampusService campusService;
 
     public static final String PATH = "/api/contract";
 
@@ -36,11 +45,31 @@ public class ContractResource {
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(contract));
     }
 
+
+
     @PostMapping
-    public ResponseEntity<ContractDto> create(@RequestBody Contract contract) {
-        Contract createdContract = contractService.addContract(contract);
-        return ResponseEntity.created(URI.create(ContractResource.PATH + "/" + createdContract.getContractId()))
-                .body(ContractMapper.INSTANCE.toDto(createdContract));
+    public ResponseEntity<ContractDto> create(@RequestBody ContractRequest contractRequest) throws ResourceNotFoundException {
+        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(contractRequest.getTeacher_code())
+                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getTeacher_code() + " not found!"));
+
+        Campus campusRequest = campusService.findCampusByCampusCode(contractRequest.getCampus_code())
+                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getCampus_code() + " not found!"));
+
+        //create contract for old teachers only
+        Contract createdContract = contractService.addContract(
+                new Contract(
+                        null,
+                        contractRequest.getContractId(),
+                        contractRequest.getContractType(),
+                        contractRequest.getStartDate(),
+                        contractRequest.getEndDate(),
+                        teacherRequest,
+                        campusRequest
+                )
+        );
+
+        return ResponseEntity.created(URI.create(ContractResource.PATH + "/" + createdContract.getId()))
+                .body(ContractMapper.INSTANCE.toDto(contractService.addContract(createdContract)));
     }
 
     @DeleteMapping("/{teacherCode}")

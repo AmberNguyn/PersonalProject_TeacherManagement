@@ -35,11 +35,20 @@ public class RoomResource {
         return ResponseEntity.ok(RoomMapper.INSTANCE.toDto(room));
     }
 
+
+
     @PostMapping
-    public ResponseEntity<RoomDto> create(@RequestBody Room room) {
-        Room createdRoom = roomService.addRoom(room);
-        return ResponseEntity.created(URI.create(RoomResource.PATH + "/" + createdRoom.getRoomNumber()))
-                .body(RoomMapper.INSTANCE.toDto(createdRoom));
+    public ResponseEntity<RoomDto> create(@RequestBody Room roomRequest) {
+        Room createdRoom = roomService.addRoom(
+                new Room(
+                        null,
+                        roomRequest.getRoomNumber(),
+                        roomRequest.getNumberOfTable(),
+                        roomRequest.getRoomSize()
+                )
+        );
+        return ResponseEntity.created(URI.create(RoomResource.PATH + "/" + createdRoom.getId()))
+                .body(RoomMapper.INSTANCE.toDto(roomService.addRoom(createdRoom)));
     }
 
     @DeleteMapping("/{roomNumber}")

@@ -10,7 +10,7 @@ public interface CampusService {
 
     Campus addCampus(Campus campus);
 
-    Optional<Campus> findCampusByName(String campusName);
+    Optional<Campus> findCampusByCampusCode(String campusCode);
 
     void deleteCampusByName(String campusName);
 }

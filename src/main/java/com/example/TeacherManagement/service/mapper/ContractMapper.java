@@ -19,6 +19,8 @@ public interface ContractMapper {
     @Mapping(source = "teacher.dateOfBirth", target = "dateOfBirth")
     @Mapping(source = "teacher.address", target = "address")
     @Mapping(source = "teacher.teacherType", target = "teacherType")
+    @Mapping(source = "teacher.phoneNumber", target = "phoneNumber")
+
     @Mapping(source = "campus.name", target = "campusName")
     @Mapping(source = "campus.address", target = "campusAddress")
 

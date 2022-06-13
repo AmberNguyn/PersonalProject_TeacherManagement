@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CampusDto {
     //from Campus
+    private String campusCode;
+
     private String name;
 
     private String address;

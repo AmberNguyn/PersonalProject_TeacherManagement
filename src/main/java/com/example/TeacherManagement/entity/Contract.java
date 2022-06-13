@@ -22,6 +22,7 @@ public class Contract {
     private String contractId;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private ContractType contractType;
 
     @NotNull
