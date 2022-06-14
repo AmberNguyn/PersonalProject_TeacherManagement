@@ -23,11 +23,7 @@ public class ClazzRequest {
 
     private LocalDate endDate;
 
-    private LocalTime startTime;
-
-    private LocalTime endTime;
-
-    private Integer duration;
+    private Integer totalCourseHours;
 
     private String courseBook;
 }

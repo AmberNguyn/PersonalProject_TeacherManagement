@@ -12,6 +12,7 @@ import java.util.List;
 public interface ContractMapper {
     ContractMapper INSTANCE = Mappers.getMapper(ContractMapper.class);
 
+    @Mapping(source = "teacher.employeeCode", target = "employeeCode")
     @Mapping(source = "teacher.firstName", target = "firstName")
     @Mapping(source = "teacher.lastName", target = "lastName")
     @Mapping(source = "teacher.gender", target = "gender")
@@ -20,9 +21,6 @@ public interface ContractMapper {
     @Mapping(source = "teacher.address", target = "address")
     @Mapping(source = "teacher.teacherType", target = "teacherType")
     @Mapping(source = "teacher.phoneNumber", target = "phoneNumber")
-
-    @Mapping(source = "campus.name", target = "campusName")
-    @Mapping(source = "campus.address", target = "campusAddress")
 
 
     ContractDto toDto(Contract contract);

@@ -12,18 +12,18 @@ import java.util.List;
 public interface AssignmentDetailMapper {
     AssignmentDetailMapper INSTANCE = Mappers.getMapper(AssignmentDetailMapper.class);
 
-    @Mapping(source = "teacher.employeeCode", target = "teacherCode")
-    @Mapping(source = "teacher.firstName", target = "firstName")
-    @Mapping(source = "teacher.lastName", target = "lastName")
-    @Mapping(source = "teacher.teacherType", target = "teacherType")
-    @Mapping(source = "teacher.phoneNumber", target = "phoneNumber")
+    @Mapping(source = "contract.teacher.employeeCode", target = "teacherCode")
+    @Mapping(source = "contract.teacher.firstName", target = "firstName")
+    @Mapping(source = "contract.teacher.lastName", target = "lastName")
+    @Mapping(source = "contract.teacher.teacherType", target = "teacherType")
+    @Mapping(source = "contract.teacher.phoneNumber", target = "phoneNumber")
 
-    @Mapping(source = "assignmentDetail.workingDay", target = "workingDay")
-
-    @Mapping(source = "room.roomNumber", target = "roomNumber")
 
     @Mapping(source = "clazz.classId", target = "classId")
-    @Mapping(source = "clazz.courseBook", target = "courseBook")
+    @Mapping(source = "clazz.startDate", target = "startDate")
+    @Mapping(source = "clazz.endDate", target = "endDate")
+    @Mapping(source = "clazz.totalCourseHours", target = "totalCourseHours")
+
 
     AssignmentDetailDto toDto(AssignmentDetail assignmentDetail);
     List<AssignmentDetailDto> toDtos(List<AssignmentDetail> assignmentDetails);

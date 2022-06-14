@@ -8,5 +8,5 @@ import java.time.LocalDate;
 
 @Repository
 public interface AssignmentDetailRepository extends JpaRepository<AssignmentDetail, Integer> {
-    AssignmentDetail findAssignmentDetailByTeacherEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate);
+    AssignmentDetail findAssignmentDetailByStartDateAndContractTeacherEmployeeCodeContaining(String teacherCode, LocalDate startDate);
 }

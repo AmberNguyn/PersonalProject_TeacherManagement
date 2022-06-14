@@ -32,21 +32,14 @@ public class Teacher {
     @NotNull
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Nationality nationality;
-
     private LocalDate dateOfBirth;
 
-    @NotNull
     private String phoneNumber;
 
-    @NotNull
     private String address;
 
     private String privateEmail;
 
-    @NotNull
     private String schoolEmail;
 
     @Enumerated(EnumType.STRING)
@@ -56,7 +49,10 @@ public class Teacher {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    private String degree; //for highest degree
+
+    @ManyToOne
+    @JoinColumn(name = "nationality_id")
+    private Nationality nationality;
 
 }

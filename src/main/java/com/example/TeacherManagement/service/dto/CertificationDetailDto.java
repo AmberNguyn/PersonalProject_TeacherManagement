@@ -9,10 +9,9 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClazzDto {
-    private String classId;
-    private Integer numberOfStudent;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String courseBook;
+public class CertificationDetailDto {
+    //from certificationDetail
+    private double score;
+    private LocalDate issuedDate;
+    private LocalDate expiredDate;
 }

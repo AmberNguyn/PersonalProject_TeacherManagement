@@ -28,12 +28,12 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     }
 
     @Override
-    public Optional<AssignmentDetail> findAssignmentDetailByEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate) {
-        return Optional.of(assignmentDetailRepository.findAssignmentDetailByTeacherEmployeeCodeAndStartDate(teacherCode, startDate));
+    public Optional<AssignmentDetail> findAssignmentDetailByStartDateAndEmployeeCode(String teacherCode, LocalDate startDate) {
+        return Optional.of(assignmentDetailRepository.findAssignmentDetailByStartDateAndContractTeacherEmployeeCodeContaining(teacherCode, startDate));
     }
 
     @Override
     public void deleteAssignmentDetailByEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate) {
-            assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByTeacherEmployeeCodeAndStartDate(teacherCode, startDate));
+            assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByStartDateAndContractTeacherEmployeeCodeContaining(teacherCode, startDate));
     }
 }

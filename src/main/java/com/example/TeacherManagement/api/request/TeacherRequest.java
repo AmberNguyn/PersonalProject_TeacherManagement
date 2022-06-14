@@ -2,16 +2,11 @@ package com.example.TeacherManagement.api.request;
 
 import com.example.TeacherManagement.entity.Gender;
 import com.example.TeacherManagement.entity.Nationality;
-import com.example.TeacherManagement.entity.Status;
 import com.example.TeacherManagement.entity.TeacherType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data

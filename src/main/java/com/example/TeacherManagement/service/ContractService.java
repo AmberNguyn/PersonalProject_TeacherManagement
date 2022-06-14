@@ -12,5 +12,9 @@ public interface ContractService {
 
     Optional<Contract> findContractByEmployeeCode(String teacherCode);
 
+    Optional<Contract> findContractByContractId(String contractId);
+
+    void deleteContractByContractId(String teacherCode);
+
     void deleteContractByEmployeeCode(String teacherCode);
 }

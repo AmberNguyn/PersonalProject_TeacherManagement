@@ -1,5 +1,6 @@
 package com.example.TeacherManagement.service;
 
+import com.example.TeacherManagement.entity.CertificationDetail;
 import com.example.TeacherManagement.entity.Teacher;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface TeacherService {
     Optional<Teacher> findTeacherByEmployeeCode(String teacherCode);
 
     void deleteTeacherByEmployeeCode(String teacherCode);
+
 }

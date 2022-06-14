@@ -14,31 +14,23 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ContractDto {
     //from Teacher
+    private String employeeCode;
     private String firstName;
-
     private String lastName;
-
     private Gender gender;
-
     private String phoneNumber;
-
     private Nationality nationality;
-
     private LocalDate dateOfBirth;
-
     private String address;
-
     private TeacherType teacherType;
 
-    //from Campus
-    private String campusName;
-
-    private String campusAddress;
-
     //from Contract
-    private String contractType;
-
+    private String contractId;
     private LocalDate startDate;
-
     private LocalDate endDate;
+    private Integer payRate;
+    private String bankAccount;
+    private String bank;
+    private String accountName;
+    private boolean isSigned;
 }

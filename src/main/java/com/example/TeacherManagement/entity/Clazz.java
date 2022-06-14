@@ -27,18 +27,11 @@ public class Clazz {
     @Max(25)
     private Integer numberOfStudent;
 
-    @NotNull
     private LocalDate startDate;
 
     private LocalDate endDate;
 
-    @NotNull
-    private LocalTime startTime;
-
-    @NotNull
-    private LocalTime endTime;
-
-    private Integer duration;
+    private Integer totalCourseHours;
 
     private String courseBook;
 

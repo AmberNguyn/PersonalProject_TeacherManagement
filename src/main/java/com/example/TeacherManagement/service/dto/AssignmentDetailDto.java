@@ -1,7 +1,6 @@
 package com.example.TeacherManagement.service.dto;
 
 import com.example.TeacherManagement.entity.TeacherType;
-import com.example.TeacherManagement.entity.WorkingDay;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AssignmentDetailDto {
+    //from assignmentDetail
+    private LocalDate courseStartDate;
+    private LocalDate courseEndDate;
+    private double expectedHours;
+    private double activeHours;
+
     //from Teacher
     private String teacherCode;
     private String firstName;
@@ -19,18 +24,10 @@ public class AssignmentDetailDto {
     private TeacherType teacherType;
     private String phoneNumber;
 
-    //from assignmentDetail
-    private String lesson;
-    private LocalDate startDate;
-    private boolean morningShift;
-    private boolean afternoonShift;
-    private boolean nightShift;
-    private WorkingDay workingDay;
-
-    //from Room
-    private Integer roomNumber;
 
     //From class
     private String classId;
-    private String courseBook;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private double totalCourseHours;
 }

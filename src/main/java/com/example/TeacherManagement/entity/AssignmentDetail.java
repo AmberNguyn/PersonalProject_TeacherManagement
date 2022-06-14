@@ -18,38 +18,25 @@ public class AssignmentDetail {
     private Integer id;
 
     @NotNull
-    private String lesson;
+    private LocalDate courseStartDate;
 
-    @NotNull
-    private LocalDate startDate;
+    private LocalDate courseEndDate;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private WorkingDay workingDay;
+    private double expectedHours;
 
-    @NotNull
-    private boolean morningShift;
+    private double activeHours;
 
-    @NotNull
-    private boolean afternoonShift;
+    private String leaveNote;
 
-    @NotNull
-    private boolean nightShift;
-
-    private boolean teachingStatus; //teacher drops class
-    private double activeHours; //for calculating salary
-    private boolean observationStatus;
+    private Integer payRate;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
 
     @ManyToOne
     @JoinColumn(name = "clazz_id")
     private Clazz clazz;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
 
 }

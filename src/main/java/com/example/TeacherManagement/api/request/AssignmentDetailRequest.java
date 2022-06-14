@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -12,20 +15,20 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AssignmentDetailRequest {
 
-    private String lesson;
-    private LocalDate startDate;
-    private WorkingDay workingDay;
-    private boolean morningShift;
-    private boolean afternoonShift;
-    private boolean nightShift;
-    private boolean teachingStatus; //teacher drops class
-    private double activeHours; //for calculating salary
-    private boolean observationStatus;
+    private LocalDate courseStartDate;
 
-    private String teacher_code;
+    private LocalDate courseEndDate;
 
-    private String clazz_id;
+    private double expectedHours;
 
-    private Integer room_number;
+    private double activeHours;
+
+    private String leaveNote;
+
+    private Integer payRate;
+
+    private String contractId;
+
+    private String classId;
 
 }

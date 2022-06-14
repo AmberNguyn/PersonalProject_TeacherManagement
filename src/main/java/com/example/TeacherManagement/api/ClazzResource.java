@@ -31,9 +31,7 @@ public class ClazzResource {
     @GetMapping("/find")
     public ResponseEntity<ClazzDto> getClassByClassId(@RequestParam("classId") String classId) throws ResourceNotFoundException {
         Clazz clazz = clazzService.findClassByClassId(classId)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(classId + " not found!")
-                );
+                .orElseThrow(() -> new ResourceNotFoundException(classId + " not found!"));
         return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(clazz));
     }
 
@@ -46,9 +44,7 @@ public class ClazzResource {
                         clazzRequest.getNumberOfStudent(),
                         clazzRequest.getStartDate(),
                         clazzRequest.getEndDate(),
-                        clazzRequest.getStartTime(),
-                        clazzRequest.getEndTime(),
-                        clazzRequest.getDuration(),
+                        clazzRequest.getTotalCourseHours(),
                         clazzRequest.getCourseBook()
                 )
         );
@@ -77,9 +73,7 @@ public class ClazzResource {
         editedClazz.setNumberOfStudent(clazzRequest.getNumberOfStudent());
         editedClazz.setStartDate(clazzRequest.getStartDate());
         editedClazz.setEndDate(clazzRequest.getEndDate());
-        editedClazz.setStartTime(clazzRequest.getStartTime());
-        editedClazz.setEndTime(clazzRequest.getEndTime());
-        editedClazz.setDuration(clazzRequest.getDuration());
+        editedClazz.setTotalCourseHours(clazzRequest.getTotalCourseHours());
         editedClazz.setCourseBook(clazzRequest.getCourseBook());
 
         Clazz updatedClazz = clazzService.addClass(editedClazz);
