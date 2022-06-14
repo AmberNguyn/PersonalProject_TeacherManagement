@@ -60,8 +60,10 @@ public class TeacherAvailabilityResource {
                         teacherRequest
                 )
         );
+
+        TeacherAvailability newTeacherAvailability = teacherAvailabilityService.addTeacherAvailability(createTeacherAvailability);
         return ResponseEntity.created(URI.create(TeacherAvailabilityResource.PATH + "/" + createTeacherAvailability.getId()))
-                .body(TeacherAvailabilityMapper.INSTANCE.toDto(teacherAvailabilityService.addTeacherAvailability(createTeacherAvailability)));
+                .body(TeacherAvailabilityMapper.INSTANCE.toDto(newTeacherAvailability));
     }
 
     @DeleteMapping("/")

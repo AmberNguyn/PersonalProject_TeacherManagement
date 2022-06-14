@@ -1,0 +1,11 @@
+1) salary:
+	normal teacher = payrate * number of working hours
+	teacher who can teach ielts = (payrate * no of working hours) + (payrate * no of working hours) * coefficient salary
+	--> need to check the class level assigned to that teacher
+2) assignment:
+	- need to check the teacher availability before assigning classes to teachers
+
+3) class assignment:
+	- one class = 2 teachers
+	- make sure in one course, there are enough sessions for both vnese and expat (12 weeks -> 24 sections -> 10 for expats and 14 for vietnamese)
+

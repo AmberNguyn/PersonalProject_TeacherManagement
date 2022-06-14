@@ -5,3 +5,8 @@ assignmentDetail:
 salary:
 	- deleteSalaryByTeacherCodeAndTransferredDate
 	- updateAList (-> checkagain)
+
+contracts 
+	- getByTeacherCode
+	- update
+	-delete

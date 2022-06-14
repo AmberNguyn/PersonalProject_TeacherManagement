@@ -25,7 +25,7 @@ public class SalaryResource {
     @Autowired
     private TeacherService teacherService;
 
-    public static final String PATH = "/api/salary";
+    public static final String PATH = "/api/salaries";
 
     @GetMapping
     public ResponseEntity<List<SalaryDto>> getAll() {

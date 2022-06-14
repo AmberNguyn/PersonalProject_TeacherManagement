@@ -76,7 +76,7 @@ public class ContractResource {
                 .orElseThrow(
                         () -> new ResourceNotFoundException(teacherCode + "'s contract not found!")
                 );
-        contractService.deleteContractByEmployeeCode(teacherCode);
+        contractService.deleteContractByEmployeeCode(contract.getTeacher().getEmployeeCode());
         return ResponseEntity.noContent().build();
     }
 

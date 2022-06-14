@@ -28,11 +28,11 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public Optional<Contract> findContractByEmployeeCode(String teacherCode) {
-        return Optional.of(contractRepository.findContractByTeacherEmployeeCodeContaining(teacherCode));
+        return Optional.of(contractRepository.findContractByTeacherEmployeeCodeIgnoreCase(teacherCode));
     }
 
     @Override
     public void deleteContractByEmployeeCode(String teacherCode) {
-            contractRepository.delete(contractRepository.findContractByTeacherEmployeeCodeContaining(teacherCode));
+            contractRepository.delete(contractRepository.findContractByTeacherEmployeeCodeIgnoreCase(teacherCode));
     }
 }

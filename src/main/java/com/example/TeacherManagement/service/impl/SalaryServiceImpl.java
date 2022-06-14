@@ -18,6 +18,7 @@ public class SalaryServiceImpl implements SalaryService {
     @Autowired
     private final SalaryRepository salaryRepository;
 
+
     @Override
     public List<Salary> getAll() {
         return salaryRepository.findAll();
@@ -35,12 +36,12 @@ public class SalaryServiceImpl implements SalaryService {
 
     @Override
     public Optional<Salary> findSalaryByEmployeeCodeAndTransferredDate(String teacherCode, LocalDate transferredDate) {
-        return Optional.of(salaryRepository.findSalaryByTeacherEmployeeCodeAndTransferredDate(teacherCode, transferredDate));
+        return Optional.of(salaryRepository.findSalaryByTeacherEmployeeCodeContainingAndTransferredDateIs(teacherCode, transferredDate));
     }
 
 
     @Override
     public void deleteSalaryByEmployeeCode(String teacherCode, LocalDate transferredDate) {
-        salaryRepository.delete(salaryRepository.findSalaryByTeacherEmployeeCodeAndTransferredDate(teacherCode, transferredDate));
+        salaryRepository.delete(salaryRepository.findSalaryByTeacherEmployeeCodeContainingAndTransferredDateIs(teacherCode, transferredDate));
     }
 }
