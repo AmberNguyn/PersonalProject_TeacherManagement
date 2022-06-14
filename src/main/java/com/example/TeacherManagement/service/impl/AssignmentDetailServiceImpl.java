@@ -33,6 +33,11 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     }
 
     @Override
+    public Optional<AssignmentDetail> findAssignmentDetailById(Integer id) {
+        return assignmentDetailRepository.findById(id);
+    }
+
+    @Override
     public void deleteAssignmentDetailByEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate) {
             assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByStartDateAndContractTeacherEmployeeCodeContaining(teacherCode, startDate));
     }

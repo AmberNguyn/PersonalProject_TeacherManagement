@@ -13,5 +13,6 @@ public interface AssignmentDetailService {
 
     Optional<AssignmentDetail> findAssignmentDetailByStartDateAndEmployeeCode(String teacherCode, LocalDate startDate);
 
+    Optional<AssignmentDetail> findAssignmentDetailById(Integer id);
     public void deleteAssignmentDetailByEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate);
 }

@@ -20,5 +20,5 @@ public class PaymentRequest {
 
     private PaymentType paymentType;
 
-    private Integer assignmentDetail;
+    private Integer assignmentDetailId;
 }
