@@ -27,12 +27,23 @@ public class CertificationDetailServiceImpl implements CertificationDetailServic
     }
 
     @Override
-    public Optional<CertificationDetail> findCertificationDetailByTeacherCode(String teacherCode) {
-        return Optional.of(certificationDetailRepository.findCertificationDetailByTeacherEmployeeCodeContaining(teacherCode));
+    public List<CertificationDetail> findCertificationDetailListByTeacherCode(String teacherCode) {
+        return certificationDetailRepository.findCertificationDetailListByTeacherEmployeeCodeContaining(teacherCode);
     }
 
     @Override
-    public void deleteCertificationDetailByTeacherCode(String teacherCode) {
-        certificationDetailRepository.delete(certificationDetailRepository.findCertificationDetailByTeacherEmployeeCodeContaining(teacherCode));
+    public Optional<CertificationDetail> findCertificationDetailById(Integer id) {
+        return certificationDetailRepository.findById(id);
+    }
+
+    @Override
+    public void deleteCertificationDetailById(Integer id) {
+        certificationDetailRepository.deleteById(id);
+    }
+
+    // find a list of teachers who have a certain type of certificate
+    @Override
+    public List<CertificationDetail> findTeachersListWhoHaveCertificate(String certificationName) {
+        return certificationDetailRepository.findByCertificationName(certificationName);
     }
 }

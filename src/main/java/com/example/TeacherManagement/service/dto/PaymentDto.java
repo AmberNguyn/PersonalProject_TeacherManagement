@@ -18,7 +18,7 @@ public class PaymentDto {
     private String lastName;
 
     //from Contract
-    private String bankAccount;
+    private String accountNumber;
     private String bank;
     private String accountName;
 

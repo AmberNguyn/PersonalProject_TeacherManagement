@@ -19,7 +19,6 @@ public class ContractDto {
     private String lastName;
     private Gender gender;
     private String phoneNumber;
-    private Nationality nationality;
     private LocalDate dateOfBirth;
     private String address;
     private TeacherType teacherType;
@@ -29,8 +28,11 @@ public class ContractDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private Integer payRate;
-    private String bankAccount;
+    private String accountNumber;
     private String bank;
     private String accountName;
     private boolean isSigned;
+
+    //from nationality
+    private String nationality;
 }

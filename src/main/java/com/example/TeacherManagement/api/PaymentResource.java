@@ -84,6 +84,7 @@ public class PaymentResource {
         editPayment.setTransferredAmount(paymentRequest.getTransferredAmount());
         editPayment.setTransferredDate(paymentRequest.getTransferredDate());
         editPayment.setPaymentType(paymentRequest.getPaymentType());
+        editPayment.setAssignmentDetail(assignmentDetailRequest);
 
         Payment updatedPayment = paymentService.addPayment(editPayment);
         return ResponseEntity.ok(PaymentMapper.INSTANCE.toDto(updatedPayment));

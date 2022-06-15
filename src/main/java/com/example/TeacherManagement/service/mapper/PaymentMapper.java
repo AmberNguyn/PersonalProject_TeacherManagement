@@ -16,7 +16,7 @@ public interface PaymentMapper {
     @Mapping(source = "assignmentDetail.contract.teacher.firstName", target = "firstName")
     @Mapping(source = "assignmentDetail.contract.teacher.lastName", target = "lastName")
 
-    @Mapping(source = "assignmentDetail.contract.bankAccount", target = "bankAccount")
+    @Mapping(source = "assignmentDetail.contract.accountNumber", target = "accountNumber")
     @Mapping(source = "assignmentDetail.contract.bank", target = "bank")
     @Mapping(source = "assignmentDetail.contract.accountName", target = "accountName")
 

@@ -20,6 +20,7 @@ public class Payment {
 
     private double transferredAmount;
 
+    @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
     @ManyToOne

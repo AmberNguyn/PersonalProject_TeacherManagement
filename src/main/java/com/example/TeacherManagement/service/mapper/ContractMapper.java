@@ -16,11 +16,13 @@ public interface ContractMapper {
     @Mapping(source = "teacher.firstName", target = "firstName")
     @Mapping(source = "teacher.lastName", target = "lastName")
     @Mapping(source = "teacher.gender", target = "gender")
-    @Mapping(source = "teacher.nationality", target = "nationality")
+//    @Mapping(source = "teacher.nationality", target = "nationality")
     @Mapping(source = "teacher.dateOfBirth", target = "dateOfBirth")
     @Mapping(source = "teacher.address", target = "address")
     @Mapping(source = "teacher.teacherType", target = "teacherType")
     @Mapping(source = "teacher.phoneNumber", target = "phoneNumber")
+
+    @Mapping(source = "teacher.nationality.nationality", target = "nationality")
 
 
     ContractDto toDto(Contract contract);

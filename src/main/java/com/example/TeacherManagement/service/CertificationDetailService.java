@@ -10,7 +10,12 @@ public interface CertificationDetailService {
 
     CertificationDetail addCertificationDetail(CertificationDetail certificationDetail);
 
-    Optional<CertificationDetail> findCertificationDetailByTeacherCode(String teacherCode);
+    List<CertificationDetail> findCertificationDetailListByTeacherCode(String teacherCode);
 
-    void deleteCertificationDetailByTeacherCode(String teacherCode);
+    Optional<CertificationDetail> findCertificationDetailById(Integer id);
+
+    void deleteCertificationDetailById(Integer id);
+
+    // find a list of teachers who have a certain type of certificate
+    List<CertificationDetail> findTeachersListWhoHaveCertificate(String certificationName);
 }

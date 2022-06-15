@@ -39,7 +39,8 @@ public class NationalityResource {
                 new Nationality(
                         null,
                         nationalityRequest.getCountry(),
-                        nationalityRequest.getCountryCode()
+                        nationalityRequest.getCountryCode(),
+                        nationalityRequest.getNationality()
                 )
         );
 
@@ -64,6 +65,7 @@ public class NationalityResource {
 
         editedNationality.setCountryCode(nationalityRequest.getCountryCode());
         editedNationality.setCountry(nationalityRequest.getCountry());
+        editedNationality.setNationality(nationalityRequest.getNationality());
 
         Nationality updatedNationality = nationalityService.addNationality(editedNationality);
 

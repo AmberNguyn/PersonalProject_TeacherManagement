@@ -1,6 +1,7 @@
 package com.example.TeacherManagement.service.impl;
 
 import com.example.TeacherManagement.entity.Teacher;
+import com.example.TeacherManagement.entity.TeacherType;
 import com.example.TeacherManagement.repository.TeacherRepository;
 import com.example.TeacherManagement.service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public void deleteTeacherByEmployeeCode(String teacherCode) {
         teacherRepository.delete(teacherRepository.findTeacherByEmployeeCode(teacherCode));
+    }
+
+    //find a list of teachers based on teacher type: vietnamese or expatriate
+    @Override
+    public List<Teacher> findTeacherByTeacherType(TeacherType teacherType) {
+        return teacherRepository.findTeacherByTeacherType(teacherType);
     }
 }

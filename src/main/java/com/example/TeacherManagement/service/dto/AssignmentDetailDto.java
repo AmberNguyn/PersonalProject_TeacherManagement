@@ -11,18 +11,19 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AssignmentDetailDto {
+
+
+    //from Teacher
+    private String teacherCode;
+    private String fullName;
+    private TeacherType teacherType;
+    private String phoneNumber;
+
     //from assignmentDetail
     private LocalDate courseStartDate;
     private LocalDate courseEndDate;
     private double expectedHours;
     private double activeHours;
-
-    //from Teacher
-    private String teacherCode;
-    private String firstName;
-    private String lastName;
-    private TeacherType teacherType;
-    private String phoneNumber;
 
 
     //From class

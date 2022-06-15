@@ -36,10 +36,17 @@ public class CertificationDetailResource {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<CertificationDetailDto> getCertificationDetailByTeacherCode(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
-        CertificationDetail certificationDetail = certificationDetailService.findCertificationDetailByTeacherCode(teacherCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher code: " + teacherCode + " not found. Certification not found!"));
+    public ResponseEntity<List<CertificationDetailDto>> getCertificationDetailListByTeacherCode(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
+        List<CertificationDetail> certificationDetails = certificationDetailService.findCertificationDetailListByTeacherCode(teacherCode);
+        if (certificationDetails.size() == 0) throw new ResourceNotFoundException("Certification detail of teacher code: " + teacherCode + " not found!");
 
+        return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDtos(certificationDetails));
+    }
+
+    @GetMapping("/findCertificationDetails/{id}")
+    public ResponseEntity<CertificationDetailDto> getCertificationDetailById(@PathVariable("id") Integer id) throws ResourceNotFoundException{
+        CertificationDetail certificationDetail = certificationDetailService.findCertificationDetailById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Certification detail id: " + id + " not found"));
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDto(certificationDetail));
     }
 
@@ -69,17 +76,17 @@ public class CertificationDetailResource {
     }
 
 
-    @DeleteMapping
-    public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException{
-        CertificationDetail certificationDetail = certificationDetailService.findCertificationDetailByTeacherCode(teacherCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher code: " + teacherCode + " for certification detail not found!"));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException{
+        CertificationDetail certificationDetail = certificationDetailService.findCertificationDetailById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Certification detail id: " + id + " not found!"));
 
-        certificationDetailService.deleteCertificationDetailByTeacherCode(teacherCode);
+        certificationDetailService.deleteCertificationDetailById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/")
-    public ResponseEntity<CertificationDetailDto> update(@RequestParam("teacherCode") String teacherCode,
+    @PutMapping("/{id}")
+    public ResponseEntity<CertificationDetailDto> update(@PathVariable("id") Integer id,
                                                          @RequestBody CertificationDetailRequest certificationDetailRequest) throws ResourceNotFoundException {
         Certification certificationRequest = certificationService.findCertificationById(certificationDetailRequest.getCertificationId())
                 .orElseThrow(() -> new ResourceNotFoundException("Certification id: " + certificationDetailRequest.getCertificationId() + " not found"));
@@ -88,13 +95,15 @@ public class CertificationDetailResource {
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher code: " + certificationDetailRequest.getTeacherCode() + " not found!"));
 
 
-        CertificationDetail editedCertificationDetail = certificationDetailService.findCertificationDetailByTeacherCode(teacherCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher code: " + teacherCode + " for certification detail not found!"));
+        CertificationDetail editedCertificationDetail = certificationDetailService.findCertificationDetailById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Certification detail id: " + id + " not found"));
 
         editedCertificationDetail.setScore(certificationDetailRequest.getScore());
         editedCertificationDetail.setIssuedDate(certificationDetailRequest.getIssuedDate());
         editedCertificationDetail.setExpiredDate(certificationDetailRequest.getExpiredDate());
         editedCertificationDetail.setDescription(certificationDetailRequest.getDescription());
+        editedCertificationDetail.setCertification(certificationRequest);
+        editedCertificationDetail.setTeacher(teacherRequest);
 
         CertificationDetail updatedCertificationDetail = certificationDetailService.addCertificationDetail(editedCertificationDetail);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDto(updatedCertificationDetail));

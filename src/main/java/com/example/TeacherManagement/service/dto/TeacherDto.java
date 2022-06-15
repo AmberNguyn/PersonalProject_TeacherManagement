@@ -14,14 +14,12 @@ import java.time.LocalDate;
 public class TeacherDto {
 
     private String employeeCode;
+    private String fullName;
     private String firstName;
-    private String middleName;
-    private String lastName;
     private Gender gender;
     private LocalDate dateOfBirth;
     private String phoneNumber;
     private String privateEmail;
-    private String teachingLevel;
 
     // from nationality
     private String nationality;

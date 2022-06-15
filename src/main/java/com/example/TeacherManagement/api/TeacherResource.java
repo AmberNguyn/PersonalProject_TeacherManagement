@@ -104,6 +104,7 @@ public class TeacherResource {
         editedTeacher.setTeacherType(teacherRequest.getTeacherType());
         editedTeacher.setGender(teacherRequest.getGender());
         editedTeacher.setDegree(teacherRequest.getDegree());
+        editedTeacher.setNationality(nationalityRequest);
 
         Teacher updatedTeacher = teacherService.addTeacher(editedTeacher);
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(updatedTeacher));

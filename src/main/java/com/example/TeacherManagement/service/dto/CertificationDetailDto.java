@@ -10,6 +10,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CertificationDetailDto {
+    //from teacher
+    private String teacherCode;
+    private String fullName;
+
+    //from Certification
+    private String name;
+
+
     //from certificationDetail
     private double score;
     private LocalDate issuedDate;

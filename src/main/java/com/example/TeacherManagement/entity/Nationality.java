@@ -19,4 +19,6 @@ public class Nationality {
     private String countryCode;
 
     private String country;
+
+    private String nationality;
 }

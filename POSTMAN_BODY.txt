@@ -1,0 +1,72 @@
+---------- TEACHER REQUEST - CREATE -------------
+       { "employeeCode" : "AN.B2",
+        "firstName": "An",
+        "middleName": "Hong",
+        "lastName": "Bui",
+        "gender": "MALE",
+        "dateOfBirth": "1994-05-06",
+        "phoneNumber": "0903354124",
+        "privateEmail": "an.bui@gmail.com",
+        "schoolEmail" : "an.b2@gmail.com",
+        "status": "AVAILABLE",
+        "teacherType": "VIETNAMESE",
+        "address" : "123 QL1A, BT district",
+        "degree" : "Bachelor of Art - Language Teaching",
+        "nationalityId" : 1
+        }
+
+---------- CONTRACT REQUEST - CREATE -----------
+        {
+        "contractId": "VN1104A",
+        "startDate": "2022-04-04",
+        "endDate": "2023-04-04",
+        "payRate": 170000,
+        "accountNumber": "10004342905",
+        "bank": "Vietcombank",
+        "branch" : "HCM",
+        "accountName": "Bui Hong An",
+        "description" : null,
+        "nationality": 2,
+        "signed": true,
+        "teacherCode" : "AN.B2"
+    }
+------------ CLASS REQUEST - CREATE ------------
+{
+        "classId": "SKC4-Ab1409",
+        "numberOfStudent": 12,
+        "startDate": "2022-07-11",
+        "endDate" :  "2022-10-11",
+        "courseBook": "LOOK 6",
+        "totalCourseHours" : 48
+    }
+
+-------------- ASSIGNMENT DETAIL - CREATE ----------
+{
+        "courseStartDate": "2022-04-16",
+        "courseEndDate": "2022-07-16",
+        "expectedHours": 30.0,
+        "activeHours": 30.0,
+        "teacherCode": "GARLEN.S1",
+        "leaveNote" : null,
+        "payRate" : 500000,
+        "contractId" : "FR1201A",
+        "classId": "SKC1-D1407"
+    }
+
+-------------- PAYMENT REQUEST - CREATE ---------
+    {
+        "assignmentDetailId" : 5,
+        "transferredDate": "2022-07-15",
+        "transferredAmount": 1.0E7,
+        "paymentType": "CREDITCARD"
+    }
+
+----------- CERTIFICATION DETAILS - CREATE ---------
+{
+        "score": 6.5,
+        "issuedDate": "2021-03-21",
+        "expiredDate": "2023-03-21",
+        "description" : null,
+        "teacherCode" : "ANH.N6",
+        "certificationId" : 3
+    }

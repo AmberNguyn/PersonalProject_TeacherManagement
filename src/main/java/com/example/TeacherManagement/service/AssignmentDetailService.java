@@ -11,8 +11,17 @@ public interface AssignmentDetailService {
 
     AssignmentDetail addAssignmentDetail(AssignmentDetail assignmentDetail);
 
-    Optional<AssignmentDetail> findAssignmentDetailByStartDateAndEmployeeCode(String teacherCode, LocalDate startDate);
 
     Optional<AssignmentDetail> findAssignmentDetailById(Integer id);
-    public void deleteAssignmentDetailByEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate);
+
+//    public void deleteAssignmentDetailByEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate);
+
+
+    //find list of teacher assignment detail and classes that they have before a specific time
+    List<AssignmentDetail> findAssignmentDetailListByStartDateAfterAndEmployeeCode(LocalDate startDate, String teacherCode);
+
+    //find teacher assignment detail by code and the class they are in charge - for deleting and updating
+    Optional<AssignmentDetail> findAssignmentDetailByTeacherCodeAndClassId(String teacherCode, String classId);
+
+    void deleteAssignmentDetailByEmployeeCodeAndClassId(String teacherCode, String classId);
 }

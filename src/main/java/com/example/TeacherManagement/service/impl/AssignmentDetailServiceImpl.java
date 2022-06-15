@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -28,8 +29,13 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     }
 
     @Override
-    public Optional<AssignmentDetail> findAssignmentDetailByStartDateAndEmployeeCode(String teacherCode, LocalDate startDate) {
-        return Optional.of(assignmentDetailRepository.findAssignmentDetailByStartDateAndContractTeacherEmployeeCodeContaining(teacherCode, startDate));
+    public List<AssignmentDetail> findAssignmentDetailListByStartDateAfterAndEmployeeCode(LocalDate startDate, String teacherCode) {
+        return assignmentDetailRepository.findAssignmentDetailByCourseStartDateAfterAndContractTeacherEmployeeCodeContaining(startDate, teacherCode);
+    }
+
+    @Override
+    public Optional<AssignmentDetail> findAssignmentDetailByTeacherCodeAndClassId(String teacherCode, String classId) {
+        return Optional.of(assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId));
     }
 
     @Override
@@ -38,7 +44,8 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     }
 
     @Override
-    public void deleteAssignmentDetailByEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate) {
-            assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByStartDateAndContractTeacherEmployeeCodeContaining(teacherCode, startDate));
+    public void deleteAssignmentDetailByEmployeeCodeAndClassId(String teacherCode, String classId) {
+            assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId));
     }
+
 }

@@ -2,6 +2,8 @@ package com.example.TeacherManagement.service.mapper;
 
 import com.example.TeacherManagement.entity.AssignmentDetail;
 import com.example.TeacherManagement.service.dto.AssignmentDetailDto;
+import org.aspectj.lang.annotation.After;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -13,8 +15,7 @@ public interface AssignmentDetailMapper {
     AssignmentDetailMapper INSTANCE = Mappers.getMapper(AssignmentDetailMapper.class);
 
     @Mapping(source = "contract.teacher.employeeCode", target = "teacherCode")
-    @Mapping(source = "contract.teacher.firstName", target = "firstName")
-    @Mapping(source = "contract.teacher.lastName", target = "lastName")
+    @Mapping(target = "fullName", expression = "java(assignmentDetail.getContract().getTeacher().getFirstName() + \" \" + assignmentDetail.getContract().getTeacher().getMiddleName() + \" \" + assignmentDetail.getContract().getTeacher().getLastName())")
     @Mapping(source = "contract.teacher.teacherType", target = "teacherType")
     @Mapping(source = "contract.teacher.phoneNumber", target = "phoneNumber")
 
@@ -27,4 +28,5 @@ public interface AssignmentDetailMapper {
 
     AssignmentDetailDto toDto(AssignmentDetail assignmentDetail);
     List<AssignmentDetailDto> toDtos(List<AssignmentDetail> assignmentDetails);
+
 }
