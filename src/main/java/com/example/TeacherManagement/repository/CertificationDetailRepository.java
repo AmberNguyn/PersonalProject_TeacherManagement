@@ -13,4 +13,7 @@ public interface CertificationDetailRepository extends JpaRepository<Certificati
 
     // find a list of teachers who have a certain type of certificate
     List<CertificationDetail> findByCertificationName(String certificationName);
+
+    //find a list of teachers who can teach IELTS class (= have IELTS > 7.0)
+    List<CertificationDetail> findIELTSTeacherListByCertificationNameAndScoreGreaterThan(String certificationName, double score);
 }

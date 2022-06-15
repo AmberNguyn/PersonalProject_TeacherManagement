@@ -46,4 +46,10 @@ public class CertificationDetailServiceImpl implements CertificationDetailServic
     public List<CertificationDetail> findTeachersListWhoHaveCertificate(String certificationName) {
         return certificationDetailRepository.findByCertificationName(certificationName);
     }
+
+    //find a list of teachers who can teach IELTS
+    @Override
+    public List<CertificationDetail> findIELTSTeacherListByCertificationNameAndScoreGreaterThan(String certificationName, double score) {
+        return certificationDetailRepository.findIELTSTeacherListByCertificationNameAndScoreGreaterThan(certificationName, score);
+    }
 }

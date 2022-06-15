@@ -18,4 +18,7 @@ public interface CertificationDetailService {
 
     // find a list of teachers who have a certain type of certificate
     List<CertificationDetail> findTeachersListWhoHaveCertificate(String certificationName);
+
+    //find a list of teachers who can teach IELTS
+    List<CertificationDetail> findIELTSTeacherListByCertificationNameAndScoreGreaterThan(String certificationName, double score);
 }

@@ -1,7 +1,9 @@
 package com.example.TeacherManagement.repository;
 
 import com.example.TeacherManagement.entity.AssignmentDetail;
+import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -16,4 +18,6 @@ public interface AssignmentDetailRepository extends JpaRepository<AssignmentDeta
     //find teacher assignment detail by code and the class they are in charge - for deleting and updating
     AssignmentDetail findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(String teacherCode, String classId);
 
-}
+    //find a list of teachers with their leave not and active hours
+
+    List<TeacherLeaveNoteAndActiveHoursDto> findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours();
