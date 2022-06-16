@@ -14,11 +14,7 @@ public interface AssignmentDetailService {
 
     AssignmentDetail addAssignmentDetail(AssignmentDetail assignmentDetail);
 
-
     Optional<AssignmentDetail> findAssignmentDetailById(Integer id);
-
-//    public void deleteAssignmentDetailByEmployeeCodeAndStartDate(String teacherCode, LocalDate startDate);
-
 
     //find list of teacher assignment detail and classes that they have before a specific time
     List<AssignmentDetail> findAssignmentDetailListByStartDateAfterAndEmployeeCode(LocalDate startDate, String teacherCode);
@@ -28,12 +24,13 @@ public interface AssignmentDetailService {
 
     void deleteAssignmentDetailByEmployeeCodeAndClassId(String teacherCode, String classId);
 
+
     List<TeacherLeaveNoteAndActiveHoursDto> findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours();
 
     List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month);
 
     List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month);
 
-
+    List<String> findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(String isPaid, Integer month);
 
 }

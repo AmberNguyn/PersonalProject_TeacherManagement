@@ -10,6 +10,7 @@ import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.AssignmentDetailDto;
+import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
 import com.example.TeacherManagement.service.mapper.AssignmentDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,12 +44,13 @@ public class AssignmentDetailResource {
     //find list of assignment detail
     @GetMapping("/find")
     public ResponseEntity<List<AssignmentDetailDto>> getAssignmentDetailByTeacherCode(@RequestParam("teacherCode") String teacherCode,
-                                                                                @RequestParam("startDate") String startDate)
+                                                                                      @RequestParam("startDate") String startDate)
             throws ResourceNotFoundException {
         List<AssignmentDetail> assignmentDetails = assignmentDetailService.findAssignmentDetailListByStartDateAfterAndEmployeeCode(LocalDate.parse(startDate), teacherCode);
-        if (assignmentDetails.size() == 0 ) throw new ResourceNotFoundException("No assignment detail of " + teacherCode + " found");
+        if (assignmentDetails.size() == 0)
+            throw new ResourceNotFoundException("No assignment detail of " + teacherCode + " found");
 
-            return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDtos(assignmentDetails));
+        return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDtos(assignmentDetails));
 
 
     }
@@ -97,7 +99,7 @@ public class AssignmentDetailResource {
     @DeleteMapping("/")
     public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode,
                                        @RequestParam("classId") String classId) throws ResourceNotFoundException {
-        AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByTeacherCodeAndClassId(teacherCode,classId)
+        AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByTeacherCodeAndClassId(teacherCode, classId)
                 .orElseThrow(() -> new ResourceNotFoundException("Assignment detail of " + teacherCode + " and " + classId + " not found!"));
 
         assignmentDetailService.deleteAssignmentDetailByEmployeeCodeAndClassId(teacherCode, classId);
@@ -134,4 +136,14 @@ public class AssignmentDetailResource {
     }
 
 
+    // ------------ TEST POSTMAN------------
+    @GetMapping("/activeHours")
+    public ResponseEntity<List<TeacherLeaveNoteAndActiveHoursDto>> findTeachersWhoDoNotMeetTheRequiredHours() throws ResourceNotFoundException {
+        List<TeacherLeaveNoteAndActiveHoursDto> teachers = assignmentDetailService.findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours();
+        if (teachers.size() == 0)
+            throw new ResourceNotFoundException("Teachers who do not meet the required hours not found");
+
+        return ResponseEntity.ok(teachers);
+
+    }
 }

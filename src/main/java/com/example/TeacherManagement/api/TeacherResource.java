@@ -7,6 +7,7 @@ import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.NationalityService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.TeacherDto;
+import com.example.TeacherManagement.service.dto.TeacherSignedContractDto;
 import com.example.TeacherManagement.service.mapper.TeacherMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -112,4 +113,23 @@ public class TeacherResource {
     }
 
 
+    // ------------ TEST POSTMAN------------
+    @GetMapping("/teacherType/")
+    public ResponseEntity<List<TeacherDto>> findTeacherByTeacherType(@RequestParam("teacherType") String teacherType) throws ResourceNotFoundException {
+        List<Teacher> teachers = teacherService.findTeacherByTeacherType(teacherType);
+        if (teachers.size() == 0) throw new ResourceNotFoundException(teacherType + " teachers not found");
+
+        return ResponseEntity.ok(TeacherMapper.INSTANCE.toDtos(teachers));
+    }
+
+    // ------------ TEST POSTMAN------------
+    @GetMapping("/signed/")
+    public ResponseEntity<List<TeacherSignedContractDto>> findTeachersWhoSignedOrNotSignedContract(@RequestParam("isSigned") String isSigned) throws ResourceNotFoundException {
+        List<TeacherSignedContractDto> teachersSignedContract = teacherService.findTeachersWhoSignedOrHaveNotSignedContract(isSigned);
+        if (teachersSignedContract.size() == 0) throw new ResourceNotFoundException("Teacher list not found");
+
+        return ResponseEntity.ok(teachersSignedContract);
+
+
+    }
 }

@@ -109,4 +109,23 @@ public class CertificationDetailResource {
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDto(updatedCertificationDetail));
     }
 
+
+    // ------------ TEST POSTMAN------------
+    @GetMapping("/certificate/")
+    public ResponseEntity<List<CertificationDetailDto>> findTeachersWhoHaveCertificate(@RequestParam String certificate) throws ResourceNotFoundException {
+        List<CertificationDetail> teachersWithCertification = certificationDetailService.findTeachersListWhoHaveCertificate(certificate);
+        if (teachersWithCertification.size() == 0 ) throw new ResourceNotFoundException("There is no teacher with " + certificate);
+        return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDtos(teachersWithCertification));
+    }
+
+    // ------------ TEST POSTMAN------------
+    @GetMapping("/certification/score")
+    public ResponseEntity<List<CertificationDetailDto>> findTeachersWhoCanTeachIELTS(@RequestParam String certificate,
+                                                                                     @RequestParam double score) throws ResourceNotFoundException {
+        List<CertificationDetail> teachersWithIELTS = certificationDetailService.findIELTSTeacherListByCertificationNameAndScoreGreaterThan("IELTS", 6.0);
+        if (teachersWithIELTS.size() == 0) throw new ResourceNotFoundException("There is no teacher with " + certificate + " greater than " + score);
+
+        return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDtos(teachersWithIELTS));
+
+    }
 }

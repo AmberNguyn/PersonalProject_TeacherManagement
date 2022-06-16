@@ -67,4 +67,9 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
         return assignmentDetailRepository.findTeachersAndTheirTotalActiveHoursInAMonth(month);
     }
 
+    @Override
+    public List<String> findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(String isPaid, Integer month) {
+        return assignmentDetailRepository.findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(Boolean.parseBoolean(isPaid), month);
+    }
+
 }

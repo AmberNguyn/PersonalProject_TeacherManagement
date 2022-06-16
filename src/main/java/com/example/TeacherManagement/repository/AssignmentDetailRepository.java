@@ -19,7 +19,7 @@ public interface AssignmentDetailRepository extends JpaRepository<AssignmentDeta
     //find teacher assignment detail by code and the class they are in charge - for deleting and updating
     AssignmentDetail findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(String teacherCode, String classId);
 
-    //find a list of teachers with their leave not and active hours
+    //find a list of teachers with their leave note and active hours
     @Query(value = "SELECT new com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto(tc.employeeCode, tc.firstName, tc.lastName, ad.leaveNote, ad.activeHours, ad.expectedHours) " +
             "FROM AssignmentDetail ad " +
             "JOIN Contract ct ON ad.contract.id = ct.id " +
@@ -44,13 +44,21 @@ public interface AssignmentDetailRepository extends JpaRepository<AssignmentDeta
             "GROUP BY tc.employeeCode")
     List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month);
 
-    // list of teachers who are paid / haven;t been paid in a month ============
+    // list of teachers who are paid / haven't been paid in a month ============
 //    SELECT tc.employee_code, ad.clazz_id
 //    FROM assignment_detail ad JOIN contract ct ON ad.contract_id = ct.id
 //    JOIN teacher tc ON ct.teacher_id = tc.id
 //    JOIN payment pm ON pm.assignment_detail_id = ad.id
 //    WHERE pm.is_paid = 'false' AND (EXTRACT (MONTH FROM ad.course_start_date) = 6 )
 //    GROUP BY tc.employee_code, ad.clazz_id
+
+    @Query(value = "SELECT tc.employeeCode " +
+            "FROM AssignmentDetail ad JOIN Contract ct ON ad.contract.id = ct.id " +
+            "JOIN Teacher tc ON ct.teacher.id = tc.id " +
+            "JOIN Payment pm ON pm.assignmentDetail.id = ad.id " +
+            "WHERE pm.isPaid = ?1 AND (EXTRACT (MONTH FROM ad.course_start_date) = ?2 )" +
+            "GROUP BY tc.employeeCode, ad.clazz.id")
+    List<String> findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(Boolean isPaid, Integer month);
 
 
 
