@@ -19,9 +19,21 @@ class TeacherServiceImplTest {
     private TeacherService teacherService;
 
     @Test
-    void fsd()
+    void findTeacherByTeacherType_shouldReturnAListOf6Teachers_whenFound()
     {
-        assertEquals(2, teacherService.findTeacherByTeacherType(TeacherType.VIETNAMESE));
+        assertEquals(6, teacherService.findTeacherByTeacherType("VIETNAMESE").size());
+    }
+
+    @Test
+    void findListOfTeachersWhoHaveNotSignedTheContract_shouldReturnAListOf3Teachers_whenFound()
+    {
+        assertEquals(3, teacherService.findTeachersWhoSignedOrHaveNotSignedContract("false").size());
+    }
+
+    @Test
+    void findListOfTeachersWhoHaveSignedTheContract_shouldReturnAListOf14Teachers_whenFound()
+    {
+        assertEquals(14, teacherService.findTeachersWhoSignedOrHaveNotSignedContract("true").size());
     }
 
 }

@@ -7,12 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeacherLeaveNoteAndActiveHoursDto {
+public class TeacherAndTheirNumberOfClassesDto {
     private String teacherCode;
-    private String firstName;
-    private String lastName;
 
-    private String leaveNote;
-    private double expectedHours;
-    private double activeHours;
+    private Long numberOfClasses;
 }

@@ -1,6 +1,9 @@
 package com.example.TeacherManagement.service;
 
 import com.example.TeacherManagement.entity.AssignmentDetail;
+import com.example.TeacherManagement.service.dto.TeacherAndTheirNumberOfClassesDto;
+import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHours;
+import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,4 +27,13 @@ public interface AssignmentDetailService {
     Optional<AssignmentDetail> findAssignmentDetailByTeacherCodeAndClassId(String teacherCode, String classId);
 
     void deleteAssignmentDetailByEmployeeCodeAndClassId(String teacherCode, String classId);
+
+    List<TeacherLeaveNoteAndActiveHoursDto> findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours();
+
+    List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month);
+
+    List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month);
+
+
+
 }

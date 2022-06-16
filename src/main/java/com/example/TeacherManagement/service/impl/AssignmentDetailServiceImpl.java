@@ -1,8 +1,12 @@
 package com.example.TeacherManagement.service.impl;
 
 import com.example.TeacherManagement.entity.AssignmentDetail;
+import com.example.TeacherManagement.exception.InvalidMonth;
 import com.example.TeacherManagement.repository.AssignmentDetailRepository;
 import com.example.TeacherManagement.service.AssignmentDetailService;
+import com.example.TeacherManagement.service.dto.TeacherAndTheirNumberOfClassesDto;
+import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHours;
+import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +50,21 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     @Override
     public void deleteAssignmentDetailByEmployeeCodeAndClassId(String teacherCode, String classId) {
             assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId));
+    }
+
+    @Override
+    public List<TeacherLeaveNoteAndActiveHoursDto> findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours() {
+        return assignmentDetailRepository.findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours();
+    }
+
+    @Override //check interger between 1-12
+    public List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month) {
+        return assignmentDetailRepository.findTeacherAndTheirNumberOfClass(month);
+    }
+
+    @Override
+    public List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month) {
+        return assignmentDetailRepository.findTeachersAndTheirTotalActiveHoursInAMonth(month);
     }
 
 }

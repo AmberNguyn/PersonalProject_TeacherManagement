@@ -18,7 +18,14 @@ public class PaymentRequest {
 
     private double transferredAmount;
 
+    private double incomeTax;
+
+    private double incomeBeforeTax;
+
     private PaymentType paymentType;
 
+    private Boolean isPaid;
+
     private Integer assignmentDetailId;
+
 }

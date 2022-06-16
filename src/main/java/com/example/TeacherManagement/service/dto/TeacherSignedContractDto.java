@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeacherLeaveNoteAndActiveHoursDto {
+public class TeacherSignedContractDto {
     private String teacherCode;
     private String firstName;
     private String lastName;
 
-    private String leaveNote;
-    private double expectedHours;
-    private double activeHours;
+    private Boolean isSigned;
 }

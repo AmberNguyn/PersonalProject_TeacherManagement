@@ -20,8 +20,15 @@ public class Payment {
 
     private double transferredAmount;
 
+    private double incomeTax;
+
+    private double incomeBeforeTax;
+
+    private Boolean isPaid;
+
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
+
 
     @ManyToOne
     @JoinColumn(name = "assignment_detail_id")

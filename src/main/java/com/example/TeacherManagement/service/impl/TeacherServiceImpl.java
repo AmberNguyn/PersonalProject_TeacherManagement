@@ -4,6 +4,7 @@ import com.example.TeacherManagement.entity.Teacher;
 import com.example.TeacherManagement.entity.TeacherType;
 import com.example.TeacherManagement.repository.TeacherRepository;
 import com.example.TeacherManagement.service.TeacherService;
+import com.example.TeacherManagement.service.dto.TeacherSignedContractDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,13 @@ public class TeacherServiceImpl implements TeacherService {
 
     //find a list of teachers based on teacher type: vietnamese or expatriate
     @Override
-    public List<Teacher> findTeacherByTeacherType(TeacherType teacherType) {
-        return teacherRepository.findTeacherByTeacherType(teacherType);
+    public List<Teacher> findTeacherByTeacherType(String teacherType) {
+        return teacherRepository.findTeacherByTeacherType(TeacherType.valueOf(teacherType));
+    }
+
+    //find list of teachers who signed / haven't signed the contract
+    @Override
+    public List<TeacherSignedContractDto> findTeachersWhoSignedOrHaveNotSignedContract(String isSigned) {
+        return teacherRepository.findTeacherListWhoSignedContract(Boolean.parseBoolean(isSigned));
     }
 }

@@ -28,5 +28,7 @@ public class PaymentDto {
     //from payment
     private LocalDate transferredDate;
     private double transferredAmount;
+    private double incomeTax;
+    private double incomeBeforeTax;
     private PaymentType paymentType;
 }

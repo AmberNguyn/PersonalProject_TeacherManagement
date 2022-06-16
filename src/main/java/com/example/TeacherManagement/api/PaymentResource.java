@@ -51,6 +51,9 @@ public class PaymentResource {
                         null,
                         paymentRequest.getTransferredDate(),
                         paymentRequest.getTransferredAmount(),
+                        paymentRequest.getIncomeTax(),
+                        paymentRequest.getIncomeBeforeTax(),
+                        paymentRequest.getIsPaid(),
                         paymentRequest.getPaymentType(),
                         assignmentDetailRequest
                 )
@@ -84,6 +87,8 @@ public class PaymentResource {
         editPayment.setTransferredAmount(paymentRequest.getTransferredAmount());
         editPayment.setTransferredDate(paymentRequest.getTransferredDate());
         editPayment.setPaymentType(paymentRequest.getPaymentType());
+        editPayment.setIncomeTax(paymentRequest.getIncomeTax());
+        editPayment.setIncomeBeforeTax(paymentRequest.getIncomeBeforeTax());
         editPayment.setAssignmentDetail(assignmentDetailRequest);
 
         Payment updatedPayment = paymentService.addPayment(editPayment);

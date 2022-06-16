@@ -23,5 +23,10 @@ class CertificationDetailServiceImplTest {
         assertEquals(2, certificationDetailService.findTeachersListWhoHaveCertificate("IELTS").size());
     }
 
+    @Test
+    void fas(){
+        assertEquals(2, certificationDetailService.findIELTSTeacherListByCertificationNameAndScoreGreaterThan("IELTS", 7.0).size());
+    }
+
 
 }
