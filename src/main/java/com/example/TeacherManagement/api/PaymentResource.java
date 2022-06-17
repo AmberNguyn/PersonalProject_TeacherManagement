@@ -8,7 +8,6 @@ import com.example.TeacherManagement.service.AssignmentDetailService;
 import com.example.TeacherManagement.service.PaymentService;
 import com.example.TeacherManagement.service.dto.PaymentDto;
 import com.example.TeacherManagement.service.mapper.PaymentMapper;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +42,7 @@ public class PaymentResource {
 
     @PostMapping
     public ResponseEntity<PaymentDto> create(@RequestBody PaymentRequest paymentRequest) throws ResourceNotFoundException{
-        AssignmentDetail assignmentDetailRequest = assignmentDetailService.findAssignmentDetailById(paymentRequest.getAssignmentDetailId())
+        AssignmentDetail assignmentDetailRequest = assignmentDetailService.findById(paymentRequest.getAssignmentDetailId())
                 .orElseThrow(() -> new ResourceNotFoundException("Assignment detail id: " + paymentRequest.getAssignmentDetailId() + " not found!"));
 
         Payment createdPayment = paymentService.addPayment(
@@ -78,7 +77,7 @@ public class PaymentResource {
     public ResponseEntity<PaymentDto> update(@PathVariable("id") Integer id,
                                              @RequestBody PaymentRequest paymentRequest) throws ResourceNotFoundException {
 
-        AssignmentDetail assignmentDetailRequest = assignmentDetailService.findAssignmentDetailById(paymentRequest.getAssignmentDetailId())
+        AssignmentDetail assignmentDetailRequest = assignmentDetailService.findById(paymentRequest.getAssignmentDetailId())
                 .orElseThrow(() -> new ResourceNotFoundException("Assignment detail id: " + paymentRequest.getAssignmentDetailId() + " not found!"));
 
         Payment editPayment = paymentService.findPaymentById(id)

@@ -33,9 +33,15 @@ public class ContractResource {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<ContractDto> getContractBy(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
-        Contract contract = contractService.findContractByEmployeeCode(teacherCode)
-                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + "'s contract not found!"));
+    public ResponseEntity<List<ContractDto>> getContractBy(@RequestParam("teacherCode") String teacherCode) {
+        List<Contract> contract = contractService.findContractByEmployeeCode(teacherCode);
+        return ResponseEntity.ok(ContractMapper.INSTANCE.toDtos(contract));
+    }
+
+    @GetMapping("/findcontract")
+    public ResponseEntity<ContractDto> getContractById(@RequestParam("contractId") String contractId) throws ResourceNotFoundException{
+        Contract contract = contractService.findContractByContractId(contractId)
+                .orElseThrow(() -> new ResourceNotFoundException(contractId + " not found"));
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(contract));
     }
 
@@ -70,35 +76,42 @@ public class ContractResource {
 
 
     @DeleteMapping("/")
-    public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
-        Contract contract = contractService.findContractByEmployeeCode(teacherCode)
-                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + "'s contract not found!"));
-        contractService.deleteContractByEmployeeCode(teacherCode);
+    public ResponseEntity<Void> delete(@RequestParam(value = "contractId") String contractId ) throws ResourceNotFoundException {
+        Contract contract = contractService.findContractByContractId(contractId)
+                .orElseThrow(() -> new ResourceNotFoundException(contractId + " not found"));
+        contractService.deleteContractByContractId(contractId);
         return ResponseEntity.noContent().build();
+
     }
 
+
+
     @PutMapping("/")
-    public ResponseEntity<ContractDto> update(@RequestParam("teacherCode") String teacherCode,
+    public ResponseEntity<?> update(@RequestParam("contractId") String contractId,
                                               @RequestBody ContractRequest contractRequest) throws ResourceNotFoundException {
         Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(contractRequest.getTeacherCode())
                 .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getTeacherCode() + " not found!"));
 
-        Contract editedContract = contractService.findContractByEmployeeCode(teacherCode)
-                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + " not found!"));
+        Contract editedContract = contractService.findContractByContractId(contractId)
+                .orElseThrow(() -> new ResourceNotFoundException(contractId + " not found!"));
 
-        editedContract.setContractId(contractRequest.getContractId());
-        editedContract.setStartDate(contractRequest.getStartDate());
-        editedContract.setEndDate(contractRequest.getEndDate());
-        editedContract.setPayRate(contractRequest.getPayRate());
-        editedContract.setBank(contractRequest.getBank());
-        editedContract.setAccountNumber(contractRequest.getAccountNumber());
-        editedContract.setBranch(contractRequest.getBranch());
-        editedContract.setAccountName(contractRequest.getAccountName());
-        editedContract.setDescription(contractRequest.getDescription());
-        editedContract.setSigned(contractRequest.isSigned());
+        if (!editedContract.isSigned()) {
+            editedContract.setContractId(contractRequest.getContractId());
+            editedContract.setStartDate(contractRequest.getStartDate());
+            editedContract.setEndDate(contractRequest.getEndDate());
+            editedContract.setPayRate(contractRequest.getPayRate());
+            editedContract.setBank(contractRequest.getBank());
+            editedContract.setAccountNumber(contractRequest.getAccountNumber());
+            editedContract.setBranch(contractRequest.getBranch());
+            editedContract.setAccountName(contractRequest.getAccountName());
+            editedContract.setDescription(contractRequest.getDescription());
+            editedContract.setSigned(contractRequest.isSigned());
 
-        Contract updatedContract = contractService.addContract(editedContract);
-        return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(updatedContract));
+            Contract updatedContract = contractService.addContract(editedContract);
+            return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(updatedContract));
+        }
+
+        return ResponseEntity.ok("Contract was signed. Cannot update contract " + contractId);
 
     }
 

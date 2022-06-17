@@ -24,8 +24,8 @@ class CertificationDetailServiceImplTest {
     }
 
     @Test
-    void fas(){
-        assertEquals(2, certificationDetailService.findIELTSTeacherListByCertificationNameAndScoreGreaterThan("IELTS", 7.0).size());
+    void findTeachersWhoCanTeacherIELTS_shouldReturnAListOf2Teachers_whenFound(){
+        assertEquals(2, certificationDetailService.findIELTSTeacherListByCertificationNameAndScoreGreaterThan("IELTS", 7.5).size());
     }
 
 

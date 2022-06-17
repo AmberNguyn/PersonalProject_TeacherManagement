@@ -16,6 +16,7 @@ public class AssignmentDetailDto {
     //from Teacher
     private String teacherCode;
     private String fullName;
+
     private TeacherType teacherType;
     private String phoneNumber;
 

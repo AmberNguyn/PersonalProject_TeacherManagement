@@ -1,6 +1,7 @@
 package com.example.TeacherManagement.service.impl;
 
 import com.example.TeacherManagement.entity.Contract;
+import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.repository.ContractRepository;
 import com.example.TeacherManagement.service.ContractService;
 import lombok.RequiredArgsConstructor;
@@ -27,24 +28,22 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Optional<Contract> findContractByEmployeeCode(String teacherCode) {
-        return Optional.of(contractRepository.findContractByTeacherEmployeeCodeIgnoreCase(teacherCode));
+    public List<Contract> findContractByEmployeeCode(String teacherCode) {
+        return contractRepository.findContractByTeacherEmployeeCodeIgnoreCase(teacherCode);
     }
 
     @Override
     public Optional<Contract> findContractByContractId(String contractId) {
-        return Optional.of(contractRepository.findContractByContractIdContaining(contractId));
+        return Optional.of(contractRepository.findContractByContractId(contractId));
     }
 
     @Override
-    public void deleteContractByContractId(String contractId) {
-            contractRepository.delete(contractRepository.findContractByContractIdContaining(contractId));
+    public void deleteContractByContractId(String contractId){
+            contractRepository.delete(contractRepository.findContractByContractId(contractId));
     }
 
-    @Override
-    public void deleteContractByEmployeeCode(String teacherCode) {
-            contractRepository.delete(contractRepository.findContractByTeacherEmployeeCodeIgnoreCase(teacherCode));
-    }
+
+
 
 
 }

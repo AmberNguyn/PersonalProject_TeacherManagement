@@ -14,7 +14,33 @@ import java.time.LocalTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+
+@SqlResultSetMapping(
+        name = "ClassesThatHaveNotBeenAssigned",
+        classes = {
+                @ConstructorResult(
+                        targetClass = com.example.TeacherManagement.service.dto.ClazzHaveNotBeenAssignedDto.class,
+                        columns = {
+                                @ColumnResult(name = "classId", type = String.class),
+                                @ColumnResult(name = "startDate", type = LocalDate.class)
+                        }
+                )
+        }
+)
+
+@NamedNativeQuery(
+        name = Clazz.FIND_CLASSES_THAT_HAVE_NOT_BEEN_ASSIGNED,
+        query = "SELECT c.class_id as classId, c.start_date as startDate FROM Clazz c " +
+                "WHERE c.id NOT IN " +
+                "(SELECT clazz_id FROM assignment_detail)",
+        resultSetMapping = "ClassesThatHaveNotBeenAssigned"
+)
+
+
 public class Clazz {
+    public static final String FIND_CLASSES_THAT_HAVE_NOT_BEEN_ASSIGNED = "Clazz.findClassesThatHaveNotBeenAssigned";
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -1,9 +1,15 @@
 package com.example.TeacherManagement.service.impl;
 
+import com.example.TeacherManagement.api.request.AssignmentDetailRequest;
 import com.example.TeacherManagement.entity.AssignmentDetail;
+import com.example.TeacherManagement.entity.Clazz;
+import com.example.TeacherManagement.entity.Contract;
 import com.example.TeacherManagement.exception.InvalidMonth;
+import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.repository.AssignmentDetailRepository;
 import com.example.TeacherManagement.service.AssignmentDetailService;
+import com.example.TeacherManagement.service.ClazzService;
+import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.dto.TeacherAndTheirNumberOfClassesDto;
 import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHours;
 import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
@@ -21,6 +27,13 @@ import java.util.Optional;
 public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     @Autowired
     public final AssignmentDetailRepository assignmentDetailRepository;
+    @Autowired
+    public final ClazzService clazzService;
+    @Autowired
+    public final ContractService contractService;
+    @Autowired
+    public final AssignmentDetailService assignmentDetailService;
+
 
     @Override
     public List<AssignmentDetail> getAll() {
@@ -28,8 +41,36 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     }
 
     @Override
-    public AssignmentDetail addAssignmentDetail(AssignmentDetail assignmentDetail) {
+    public Optional<AssignmentDetail> getById(Integer id) {
+        return assignmentDetailRepository.findById(id);
+    }
+
+    @Override
+    public AssignmentDetail create(AssignmentDetail assignmentDetail) {
         return assignmentDetailRepository.save(assignmentDetail);
+    }
+
+    @Override
+    public AssignmentDetail create(AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException {
+        Clazz requestClazz = clazzService.findClassByClassId(assignmentDetailRequest.getClassId())
+                .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getClassId() + " not found"));
+
+        Contract requestContract = contractService.findContractByContractId(assignmentDetailRequest.getContractId())
+                .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getContractId() + " not found!"));
+
+        return assignmentDetailService.create(
+                new AssignmentDetail(
+                        null,
+                        assignmentDetailRequest.getCourseStartDate(),
+                        assignmentDetailRequest.getCourseStartDate(),
+                        assignmentDetailRequest.getExpectedHours(),
+                        assignmentDetailRequest.getActiveHours(),
+                        assignmentDetailRequest.getLeaveNote(),
+                        assignmentDetailRequest.getPayRate(),
+                        requestContract,
+                        requestClazz
+                )
+        );
     }
 
     @Override
@@ -43,8 +84,13 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     }
 
     @Override
-    public Optional<AssignmentDetail> findAssignmentDetailById(Integer id) {
+    public Optional<AssignmentDetail> findById(Integer id) {
         return assignmentDetailRepository.findById(id);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        assignmentDetailRepository.deleteById(id);
     }
 
     @Override
@@ -57,19 +103,25 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
         return assignmentDetailRepository.findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours();
     }
 
-    @Override //check interger between 1-12
-    public List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month) {
+
+    @Override //check integer between 1-12
+    public List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month) throws InvalidMonth{
+        if (month < 0 || month > 12) throw new InvalidMonth("Invalid month. Month should be from 1-12");
         return assignmentDetailRepository.findTeacherAndTheirNumberOfClass(month);
     }
 
-    @Override
-    public List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month) {
+    @Override //check integer between 1-12
+    public List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month) throws InvalidMonth{
+        if (month < 0 || month > 12) throw new InvalidMonth("Invalid month. Month should be from 1-12");
         return assignmentDetailRepository.findTeachersAndTheirTotalActiveHoursInAMonth(month);
     }
 
     @Override
-    public List<String> findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(String isPaid, Integer month) {
+    public List<String> findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth(String isPaid, Integer month) throws InvalidMonth{
+        if (month < 0 || month > 12) throw new InvalidMonth("Invalid month. Month should be from 1-12");
         return assignmentDetailRepository.findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(Boolean.parseBoolean(isPaid), month);
     }
+
+
 
 }

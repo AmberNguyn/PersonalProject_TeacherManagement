@@ -50,6 +50,8 @@ public class CertificationDetailResource {
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDto(certificationDetail));
     }
 
+
+
     @PostMapping
     public ResponseEntity<CertificationDetailDto> create(@RequestBody CertificationDetailRequest certificationDetailRequest) throws ResourceNotFoundException{
         Certification certificationRequest = certificationService.findCertificationById(certificationDetailRequest.getCertificationId())
@@ -110,21 +112,17 @@ public class CertificationDetailResource {
     }
 
 
-    // ------------ TEST POSTMAN------------
-    @GetMapping("/certificate/")
+    @GetMapping("/certificate")
     public ResponseEntity<List<CertificationDetailDto>> findTeachersWhoHaveCertificate(@RequestParam String certificate) throws ResourceNotFoundException {
         List<CertificationDetail> teachersWithCertification = certificationDetailService.findTeachersListWhoHaveCertificate(certificate);
-        if (teachersWithCertification.size() == 0 ) throw new ResourceNotFoundException("There is no teacher with " + certificate);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDtos(teachersWithCertification));
     }
 
     // ------------ TEST POSTMAN------------
     @GetMapping("/certification/score")
-    public ResponseEntity<List<CertificationDetailDto>> findTeachersWhoCanTeachIELTS(@RequestParam String certificate,
-                                                                                     @RequestParam double score) throws ResourceNotFoundException {
-        List<CertificationDetail> teachersWithIELTS = certificationDetailService.findIELTSTeacherListByCertificationNameAndScoreGreaterThan("IELTS", 6.0);
-        if (teachersWithIELTS.size() == 0) throw new ResourceNotFoundException("There is no teacher with " + certificate + " greater than " + score);
-
+    public ResponseEntity<List<CertificationDetailDto>> findTeachersWhoCanTeachIELTS(@RequestParam("certificate") String certificate,
+                                                                                     @RequestParam("score") double score) throws ResourceNotFoundException {
+        List<CertificationDetail> teachersWithIELTS = certificationDetailService.findIELTSTeacherListByCertificationNameAndScoreGreaterThan(certificate, score);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDtos(teachersWithIELTS));
 
     }

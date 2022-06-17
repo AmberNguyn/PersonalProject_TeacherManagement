@@ -1,6 +1,9 @@
 package com.example.TeacherManagement.service;
 
+import com.example.TeacherManagement.api.request.AssignmentDetailRequest;
 import com.example.TeacherManagement.entity.AssignmentDetail;
+import com.example.TeacherManagement.exception.InvalidMonth;
+import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.dto.TeacherAndTheirNumberOfClassesDto;
 import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHours;
 import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
@@ -12,9 +15,18 @@ import java.util.Optional;
 public interface AssignmentDetailService {
     List<AssignmentDetail> getAll();
 
-    AssignmentDetail addAssignmentDetail(AssignmentDetail assignmentDetail);
+    Optional<AssignmentDetail> getById(Integer id);
 
-    Optional<AssignmentDetail> findAssignmentDetailById(Integer id);
+    AssignmentDetail create(AssignmentDetail assignmentDetail);
+    AssignmentDetail create(AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException;
+
+    Optional<AssignmentDetail> findById(Integer id);
+
+    void deleteById(Integer id);
+
+
+
+
 
     //find list of teacher assignment detail and classes that they have before a specific time
     List<AssignmentDetail> findAssignmentDetailListByStartDateAfterAndEmployeeCode(LocalDate startDate, String teacherCode);
@@ -27,10 +39,11 @@ public interface AssignmentDetailService {
 
     List<TeacherLeaveNoteAndActiveHoursDto> findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours();
 
-    List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month);
+    List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month) throws InvalidMonth;
 
-    List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month);
+    List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month) throws InvalidMonth;
 
-    List<String> findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(String isPaid, Integer month);
+    List<String> findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth(String isPaid, Integer month) throws InvalidMonth;
+
 
 }

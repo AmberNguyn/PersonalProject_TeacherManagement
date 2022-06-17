@@ -5,7 +5,9 @@ import com.example.TeacherManagement.entity.Clazz;
 import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.dto.ClazzDto;
+import com.example.TeacherManagement.service.dto.ClazzHaveNotBeenAssignedDto;
 import com.example.TeacherManagement.service.mapper.ClazzMapper;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,21 @@ public class ClazzResource {
                 .orElseThrow(() -> new ResourceNotFoundException(classId + " not found!"));
         return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(clazz));
     }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<ClazzDto> getClassById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        Clazz clazz = clazzService.findClassById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id + " not found"));
+        return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(clazz));
+    }
+
+    @GetMapping("/classeshavenotbeenassigned")
+    public ResponseEntity<List<ClazzHaveNotBeenAssignedDto>> findClassesHaveNotBeenAssigned()
+    {
+        return ResponseEntity.ok(clazzService.findClassesThatHaveNotBeenAssigned());
+    }
+
+
 
     @PostMapping
     public ResponseEntity<ClazzDto> create(@RequestBody Clazz clazzRequest) {

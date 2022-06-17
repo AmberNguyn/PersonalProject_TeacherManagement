@@ -1,5 +1,6 @@
 package com.example.TeacherManagement.service.impl;
 
+import com.example.TeacherManagement.exception.InvalidMonth;
 import com.example.TeacherManagement.service.AssignmentDetailService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,14 +26,18 @@ class AssignmentDetailServiceImplTest {
     }
 
     @Test
-    void findTeacherListAndTheirNumberOfClassWithinAMonth_shouldReturnAListOf6Teachers_whenFound()
-    {
+    void findTeacherListAndTheirNumberOfClassWithinAMonth_shouldReturnAListOf6Teachers_whenFound() throws InvalidMonth {
         assertEquals(6, assignmentDetailService.findTeacherAndTheirNumberOfClassInAMonth(6).size());
     }
 
     @Test
-    void findTeachersAndTotalActiveHours_shouldReturnAListOf6Teachers_whenFound()
-    {
+    void findTeachersAndTotalActiveHours_shouldReturnAListOf6Teachers_whenFound() throws InvalidMonth {
         assertEquals(6, assignmentDetailService.findTeachersAndTheirTotalActiveHoursInAMonth(6).size());
     }
+
+    @Test
+    void findTeachersWhoHaveBeenPaidOrHaveNotBeenPaidInMonth_shouldReturnAListOf6Teachers_whenFound() throws InvalidMonth {
+        assertEquals(6, assignmentDetailService.findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth("true", 7).size());
+    }
+
 }

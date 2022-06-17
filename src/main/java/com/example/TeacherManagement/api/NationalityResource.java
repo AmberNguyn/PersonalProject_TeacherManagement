@@ -33,6 +33,14 @@ public class NationalityResource {
         return ResponseEntity.ok(NationalityMapper.INSTANCE.toDto(nationality));
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NationalityDto> getNationalityById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
+        Nationality nationality = nationalityService.findNationalityById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id + " not found!"));
+        return ResponseEntity.ok(NationalityMapper.INSTANCE.toDto(nationality));
+    }
+
     @PostMapping
     public ResponseEntity<NationalityDto> create(@RequestBody NationalityRequest nationalityRequest) {
         Nationality createdNationality = nationalityService.addNationality(

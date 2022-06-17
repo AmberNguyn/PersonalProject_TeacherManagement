@@ -1,6 +1,7 @@
 package com.example.TeacherManagement.service;
 
 import com.example.TeacherManagement.entity.Contract;
+import com.example.TeacherManagement.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +11,11 @@ public interface ContractService {
 
     Contract addContract(Contract contract);
 
-    Optional<Contract> findContractByEmployeeCode(String teacherCode);
+    List<Contract> findContractByEmployeeCode(String teacherCode);
 
     Optional<Contract> findContractByContractId(String contractId);
 
-    void deleteContractByContractId(String teacherCode);
+    void deleteContractByContractId(String contractId);
 
-    void deleteContractByEmployeeCode(String teacherCode);
+
 }

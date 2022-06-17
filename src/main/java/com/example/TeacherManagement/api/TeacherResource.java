@@ -113,23 +113,19 @@ public class TeacherResource {
     }
 
 
-    // ------------ TEST POSTMAN------------
-    @GetMapping("/teacherType/")
+    @GetMapping("/teachertype")
     public ResponseEntity<List<TeacherDto>> findTeacherByTeacherType(@RequestParam("teacherType") String teacherType) throws ResourceNotFoundException {
         List<Teacher> teachers = teacherService.findTeacherByTeacherType(teacherType);
-        if (teachers.size() == 0) throw new ResourceNotFoundException(teacherType + " teachers not found");
-
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDtos(teachers));
     }
 
-    // ------------ TEST POSTMAN------------
-    @GetMapping("/signed/")
+
+    @GetMapping("/signed")
     public ResponseEntity<List<TeacherSignedContractDto>> findTeachersWhoSignedOrNotSignedContract(@RequestParam("isSigned") String isSigned) throws ResourceNotFoundException {
         List<TeacherSignedContractDto> teachersSignedContract = teacherService.findTeachersWhoSignedOrHaveNotSignedContract(isSigned);
-        if (teachersSignedContract.size() == 0) throw new ResourceNotFoundException("Teacher list not found");
-
         return ResponseEntity.ok(teachersSignedContract);
-
-
     }
+
+
+
 }

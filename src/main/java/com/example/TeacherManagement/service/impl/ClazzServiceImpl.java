@@ -3,6 +3,7 @@ package com.example.TeacherManagement.service.impl;
 import com.example.TeacherManagement.entity.Clazz;
 import com.example.TeacherManagement.repository.ClazzRepository;
 import com.example.TeacherManagement.service.ClazzService;
+import com.example.TeacherManagement.service.dto.ClazzHaveNotBeenAssignedDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,17 @@ public class ClazzServiceImpl implements ClazzService {
     }
 
     @Override
+    public Optional<Clazz> findClassById(Integer id) {
+        return clazzRepository.findById(id);
+    }
+
+    @Override
     public void deleteClassByClassId(String classId) {
         clazzRepository.delete(clazzRepository.findClassByClassId(classId));
+    }
+
+    @Override
+    public List<ClazzHaveNotBeenAssignedDto> findClassesThatHaveNotBeenAssigned() {
+        return clazzRepository.findClassesThatHaveNotBeenAssigned();
     }
 }
