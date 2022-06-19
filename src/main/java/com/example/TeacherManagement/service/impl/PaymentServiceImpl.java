@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,16 +38,23 @@ public class PaymentServiceImpl implements PaymentService {
         AssignmentDetail assignmentDetailRequest = assignmentDetailService.findById(paymentRequest.getAssignmentDetailId())
                 .orElseThrow(MyException::AssignmentDetailIdNotFound);
 
-        Payment createdPayment = new Payment();
-        createdPayment.setPaymentType(paymentRequest.getPaymentType());
-        createdPayment.setTransferredDate(paymentRequest.getTransferredDate());
-        createdPayment.setTransferredAmount(paymentRequest.getTransferredAmount());
-        createdPayment.setIncomeTax(paymentRequest.getIncomeTax());
-        createdPayment.setIncomeBeforeTax(paymentRequest.getIncomeBeforeTax());
-        createdPayment.setIsPaid(paymentRequest.getIsPaid());
-        createdPayment.setAssignmentDetail(assignmentDetailRequest);
+        if (assignmentDetailRequest.getCourseEndDate().isBefore(LocalDate.now()))
+        {
+            throw MyException.badRequest("InvalidDayForPayment", "Invalid day for payment");
+        }
+        else {
+            Payment createdPayment = new Payment();
+            createdPayment.setPaymentType(paymentRequest.getPaymentType());
+            createdPayment.setTransferredDate(paymentRequest.getTransferredDate());
+            createdPayment.setTransferredAmount(paymentRequest.getTransferredAmount());
+            createdPayment.setIncomeTax(paymentRequest.getIncomeTax());
+            createdPayment.setIncomeBeforeTax(paymentRequest.getIncomeBeforeTax());
+            createdPayment.setIsPaid(paymentRequest.getIsPaid());
+            createdPayment.setAssignmentDetail(assignmentDetailRequest);
 
-        return paymentRepository.save(createdPayment);
+            return paymentRepository.save(createdPayment);
+        }
+
     }
 
     @Override

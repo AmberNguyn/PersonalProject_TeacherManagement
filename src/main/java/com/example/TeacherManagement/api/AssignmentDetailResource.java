@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -44,12 +45,17 @@ public class AssignmentDetailResource {
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDtos(assignmentDetailService.getAll()));
     }
 
+    // try -> catch: -> bad request / internal server error
     @GetMapping("/{id}")
     public ResponseEntity<AssignmentDetailDto> getById(@PathVariable("id") Integer id) {
         log.info("Searched id: {}", id);
+
         AssignmentDetail assignmentDetail = assignmentDetailService.findById(id)
                 .orElseThrow(() -> MyException.notFound("AssignmentDetailIdNotFound", "Assignment Detail Id Not Found"));
+
+
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDto(assignmentDetail));
+
     }
 
 

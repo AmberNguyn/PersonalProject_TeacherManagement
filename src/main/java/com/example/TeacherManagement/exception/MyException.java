@@ -2,7 +2,7 @@ package com.example.TeacherManagement.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class MyException {
+public class MyException extends Throwable {
     private static final String CERTIFICATE_DETAIL_NOT_FOUND_MSG_KEY = "CertificateDetailNotFound";
     private static final String CERTIFICATE_DETAIL_NOT_FOUND_MSG = "Certificate Detail Not Found";
 

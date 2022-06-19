@@ -43,7 +43,7 @@ public class ContractResource {
     }
 
     // ----CHANGE POSTMAN PATH ----
-    @GetMapping("/find-by-contract-id")
+    @GetMapping("/get-by-contract-id")
     public ResponseEntity<ContractDto> getByContractId(@RequestParam("contractId") String contractCode){
         log.info("Searching contract code: {}", contractCode);
         Contract contract = contractService.findByContractId(contractCode)
@@ -51,7 +51,7 @@ public class ContractResource {
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(contract));
     }
 
-    @GetMapping("/find-by-teacher-code")
+    @GetMapping("/get-by-teacher-code")
     public ResponseEntity<List<ContractDto>> getContractByTeacherCode(@RequestParam("teacherCode") String teacherCode) {
         List<Contract> contract = contractService.findByEmployeeCode(teacherCode);
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDtos(contract));

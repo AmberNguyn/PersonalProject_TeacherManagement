@@ -1,0 +1,16 @@
+1) AGENDA 
+2) Background information (requirement? reason?) (Scope of the app)
+3) (Scope of the app) function? what is your tool is for? -> managing payment
+4) ERD, structure? Based on what technology?
+5) features? support-> how many users? can it scale up? for app or web only? (in the future, what features will I develop?)
+6) database -> mySQL or postGres?
+	database structure and relationship? 
+		how many tables -> (one to many...)
+7) demo
+8) Q&A session
+
+
+
+
+
+internal server error: server down, wrong query, ...
