@@ -1,7 +1,7 @@
 package com.example.TeacherManagement.service;
 
+import com.example.TeacherManagement.api.request.TeacherRequest;
 import com.example.TeacherManagement.entity.Teacher;
-import com.example.TeacherManagement.entity.TeacherType;
 import com.example.TeacherManagement.service.dto.TeacherSignedContractDto;
 
 import java.util.List;
@@ -10,11 +10,16 @@ import java.util.Optional;
 public interface TeacherService {
     List<Teacher> getAll();
 
-    Teacher addTeacher(Teacher teacher);
+    Teacher create(Teacher teacher);
+    Teacher create(TeacherRequest teacherRequest);
 
-    Optional<Teacher> findTeacherByEmployeeCode(String teacherCode);
+    Teacher update(TeacherRequest teacherRequest, Integer id);
 
-    void deleteTeacherByEmployeeCode(String teacherCode);
+    Optional<Teacher> findByEmployeeCode(String teacherCode);
+    Optional<Teacher> findById(Integer id);
+
+    void deleteById(Integer id);
+    void deleteByEmployeeCode(String teacherCode);
 
 
     //find a list of teachers based on teacher type: vietnamese or expatriate

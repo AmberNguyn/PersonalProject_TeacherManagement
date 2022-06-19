@@ -1,14 +1,14 @@
 package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.TeacherRequest;
-import com.example.TeacherManagement.entity.Nationality;
 import com.example.TeacherManagement.entity.Teacher;
-import com.example.TeacherManagement.exception.ResourceNotFoundException;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.service.NationalityService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.TeacherDto;
 import com.example.TeacherManagement.service.dto.TeacherSignedContractDto;
 import com.example.TeacherManagement.service.mapper.TeacherMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(TeacherResource.PATH)
 public class TeacherResource {
@@ -32,100 +33,67 @@ public class TeacherResource {
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDtos(teacherService.getAll()));
     }
 
-
-    @GetMapping("/find")
-    public ResponseEntity<TeacherDto> getTeacherByTeacherCode(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
-        Teacher teacher = teacherService.findTeacherByEmployeeCode(teacherCode)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(teacherCode + " not found!")
-                );
+    // ------ CHECK POSTMAN ------
+    @GetMapping("/{id}")
+    public ResponseEntity<TeacherDto> getById(@PathVariable("id") Integer id) {
+        log.info("Searching id: {}", id);
+        Teacher teacher = teacherService.findById(id)
+                .orElseThrow(MyException::TeacherIdNotFound);
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(teacher));
     }
 
 
+    @GetMapping("/find")
+    public ResponseEntity<TeacherDto> getTeacherByTeacherCode(@RequestParam("teacherCode") String teacherCode) {
+        log.info("Searching teacher code: {}", teacherCode);
+        Teacher teacher = teacherService.findByEmployeeCode(teacherCode)
+                .orElseThrow(MyException::TeacherCodeNotFound);
+        return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(teacher));
+    }
+
+
+    // ---- check postman ----
     @PostMapping
-    public ResponseEntity<TeacherDto> create(@RequestBody TeacherRequest teacherRequest) throws ResourceNotFoundException {
+    public ResponseEntity<TeacherDto> create(@RequestBody TeacherRequest teacherRequest){
+        Teacher createdTeacher = teacherService.create(teacherRequest);
 
-        Nationality nationalityRequest = nationalityService.findNationalityById(teacherRequest.getNationalityId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nationality id: " + teacherRequest.getNationalityId() + " not found!"));
-
-        Teacher createdTeacher = teacherService.addTeacher(
-                new Teacher(
-                        null,
-                        teacherRequest.getEmployeeCode(),
-                        teacherRequest.getFirstName(),
-                        teacherRequest.getMiddleName(),
-                        teacherRequest.getLastName(),
-                        teacherRequest.getDateOfBirth(),
-                        teacherRequest.getPhoneNumber(),
-                        teacherRequest.getAddress(),
-                        teacherRequest.getPrivateEmail(),
-                        teacherRequest.getSchoolEmail(),
-                        teacherRequest.getTeacherType(),
-                        teacherRequest.getGender(),
-                        teacherRequest.getDegree(),
-                        nationalityRequest
-                )
-        );
         return ResponseEntity.created(URI.create(TeacherResource.PATH + "/" + createdTeacher.getId()))
-                .body(TeacherMapper.INSTANCE.toDto(teacherService.addTeacher(createdTeacher)));
+                .body(TeacherMapper.INSTANCE.toDto(teacherService.create(createdTeacher)));
     }
 
 
     @DeleteMapping("/")
-    public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
-        Teacher teacher = teacherService.findTeacherByEmployeeCode(teacherCode)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(teacherCode + " not found")
-                );
-        teacherService.deleteTeacherByEmployeeCode(teacherCode);
+    public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode) {
+        log.info("Searching teacher code: {}", teacherCode);
+        Teacher teacher = teacherService.findByEmployeeCode(teacherCode)
+                .orElseThrow(MyException::TeacherCodeNotFound);
+        teacherService.deleteByEmployeeCode(teacherCode);
         return ResponseEntity.noContent().build();
     }
 
 
-    @PutMapping("/")
-    public ResponseEntity<TeacherDto> update(@RequestParam("teacherCode") String teacherCode,
-                                             @RequestBody TeacherRequest teacherRequest) throws ResourceNotFoundException{
-        Nationality nationalityRequest = nationalityService.findNationalityById(teacherRequest.getNationalityId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nationality id: " + teacherRequest.getNationalityId() + " not found!"));
-
-
-        Teacher editedTeacher = teacherService.findTeacherByEmployeeCode(teacherCode)
-                .orElseThrow(() -> new ResourceNotFoundException(teacherCode + " not found!"));
-
-        editedTeacher.setEmployeeCode(teacherRequest.getEmployeeCode());
-        editedTeacher.setFirstName(teacherRequest.getFirstName());
-        editedTeacher.setMiddleName(teacherRequest.getMiddleName());
-        editedTeacher.setLastName(teacherRequest.getLastName());
-        editedTeacher.setDateOfBirth(teacherRequest.getDateOfBirth());
-        editedTeacher.setPhoneNumber(teacherRequest.getPhoneNumber());
-        editedTeacher.setAddress(teacherRequest.getAddress());
-        editedTeacher.setPrivateEmail(teacherRequest.getPrivateEmail());
-        editedTeacher.setSchoolEmail(teacherRequest.getSchoolEmail());
-        editedTeacher.setTeacherType(teacherRequest.getTeacherType());
-        editedTeacher.setGender(teacherRequest.getGender());
-        editedTeacher.setDegree(teacherRequest.getDegree());
-        editedTeacher.setNationality(nationalityRequest);
-
-        Teacher updatedTeacher = teacherService.addTeacher(editedTeacher);
+    // ---- check postman ---
+    @PutMapping("/{id}")
+    public ResponseEntity<TeacherDto> update(@PathVariable("id") Integer id,
+                                             @RequestBody TeacherRequest teacherRequest) {
+        Teacher updatedTeacher = teacherService.update(teacherRequest, id);
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(updatedTeacher));
 
     }
 
 
-    @GetMapping("/teachertype")
-    public ResponseEntity<List<TeacherDto>> findTeacherByTeacherType(@RequestParam("teacherType") String teacherType) throws ResourceNotFoundException {
+    @GetMapping("/find-by-teacher-type")
+    public ResponseEntity<List<TeacherDto>> findTeacherByTeacherType(@RequestParam("teacherType") String teacherType){
         List<Teacher> teachers = teacherService.findTeacherByTeacherType(teacherType);
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDtos(teachers));
     }
 
 
-    @GetMapping("/signed")
-    public ResponseEntity<List<TeacherSignedContractDto>> findTeachersWhoSignedOrNotSignedContract(@RequestParam("isSigned") String isSigned) throws ResourceNotFoundException {
+    @GetMapping("/find-who-signed")
+    public ResponseEntity<List<TeacherSignedContractDto>> findTeachersWhoSignedOrNotSignedContract(@RequestParam("isSigned") String isSigned){
         List<TeacherSignedContractDto> teachersSignedContract = teacherService.findTeachersWhoSignedOrHaveNotSignedContract(isSigned);
         return ResponseEntity.ok(teachersSignedContract);
     }
-
 
 
 }

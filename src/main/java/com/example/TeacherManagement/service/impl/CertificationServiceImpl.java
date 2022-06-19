@@ -1,6 +1,8 @@
 package com.example.TeacherManagement.service.impl;
 
+import com.example.TeacherManagement.api.request.CertificationRequest;
 import com.example.TeacherManagement.entity.Certification;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.repository.CertificationRepository;
 import com.example.TeacherManagement.service.CertificationService;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +24,35 @@ public class CertificationServiceImpl implements CertificationService {
     }
 
     @Override
-    public Certification addCertification(Certification certification) {
+    public Certification create(Certification certification) {
         return certificationRepository.save(certification);
     }
 
     @Override
-    public Optional<Certification> findCertificationById(Integer id) {
+    public Certification create(CertificationRequest certificationRequest) {
+        Certification createdCertification = new Certification();
+
+        createdCertification.setName(certificationRequest.getName());
+
+        return certificationRepository.save(createdCertification);
+    }
+
+    @Override
+    public Optional<Certification> findById(Integer id) {
         return certificationRepository.findById(id);
     }
 
     @Override
-    public void deleteCertificationById(Integer id) {
+    public Certification update(CertificationRequest certificationRequest, Integer id){
+        Certification editedCertification = certificationRepository.findById(id)
+                .orElseThrow(MyException::CertificateIdNotFound);
+
+        editedCertification.setName(certificationRequest.getName());
+        return certificationRepository.save(editedCertification);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
         certificationRepository.deleteById(id);
     }
 }

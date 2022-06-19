@@ -2,7 +2,7 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.CertificationRequest;
 import com.example.TeacherManagement.entity.Certification;
-import com.example.TeacherManagement.exception.ResourceNotFoundException;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.service.CertificationService;
 import com.example.TeacherManagement.service.dto.CertificationDto;
 import com.example.TeacherManagement.service.mapper.CertificationMapper;
@@ -28,42 +28,35 @@ public class CertificationResource {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<CertificationDto> getCertificateById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        Certification certification = certificationService.findCertificationById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Certification id: " + id + " not found!"));
+    public ResponseEntity<CertificationDto> getCertificateById(@PathVariable("id") Integer id){
+        Certification certification = certificationService.findById(id)
+                .orElseThrow(MyException::CertificateIdNotFound);
         return ResponseEntity.ok(CertificationMapper.INSTANCE.toDto(certification));
     }
 
+    // -------- CHECK POSTMAN -----------
     @PostMapping
     public ResponseEntity<CertificationDto> create(@RequestBody CertificationRequest certificationRequest) {
-        Certification createdCertification = certificationService.addCertification(
-                new Certification(
-                        null,
-                        certificationRequest.getName()
-                )
-        );
+        Certification createdCertification = certificationService.create(certificationRequest);
+
           return ResponseEntity.created(URI.create(CertificationResource.PATH + "/" + createdCertification.getId()))
-                  .body(CertificationMapper.INSTANCE.toDto(certificationService.addCertification(createdCertification)));
+                  .body(CertificationMapper.INSTANCE.toDto(certificationService.create(createdCertification)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        Certification certification = certificationService.findCertificationById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Certification id: " + id + " not found!"));
-        certificationService.deleteCertificationById(id);
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
+        Certification certification = certificationService.findById(id)
+                .orElseThrow(MyException::CertificateIdNotFound);
+        certificationService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
+    // -------- CHECK POSTMAN ----------
     @PutMapping("/{id}")
     public ResponseEntity<CertificationDto> update(@PathVariable("id") Integer id,
-                                                   @RequestBody CertificationRequest certificationRequest) throws ResourceNotFoundException {
+                                                   @RequestBody CertificationRequest certificationRequest) {
 
-        Certification editedCertification = certificationService.findCertificationById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Certification id: " + id + " not found!"));
-
-        editedCertification.setName(certificationRequest.getName());
-
-        Certification updatedCertification = certificationService.addCertification(editedCertification);
+        Certification updatedCertification = certificationService.update(certificationRequest, id);
         return ResponseEntity.ok(CertificationMapper.INSTANCE.toDto(updatedCertification));
 
 

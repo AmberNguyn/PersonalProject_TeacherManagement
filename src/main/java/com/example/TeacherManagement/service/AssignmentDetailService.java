@@ -2,8 +2,6 @@ package com.example.TeacherManagement.service;
 
 import com.example.TeacherManagement.api.request.AssignmentDetailRequest;
 import com.example.TeacherManagement.entity.AssignmentDetail;
-import com.example.TeacherManagement.exception.InvalidMonth;
-import com.example.TeacherManagement.exception.ResourceNotFoundException;
 import com.example.TeacherManagement.service.dto.TeacherAndTheirNumberOfClassesDto;
 import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHours;
 import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
@@ -18,9 +16,11 @@ public interface AssignmentDetailService {
     Optional<AssignmentDetail> getById(Integer id);
 
     AssignmentDetail create(AssignmentDetail assignmentDetail);
-    AssignmentDetail create(AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException;
+    AssignmentDetail create(AssignmentDetailRequest assignmentDetailRequest);
 
     Optional<AssignmentDetail> findById(Integer id);
+
+    AssignmentDetail update(AssignmentDetailRequest assignmentDetailRequest, Integer id);
 
     void deleteById(Integer id);
 
@@ -39,11 +39,11 @@ public interface AssignmentDetailService {
 
     List<TeacherLeaveNoteAndActiveHoursDto> findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours();
 
-    List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month) throws InvalidMonth;
+    List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month);
 
-    List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month) throws InvalidMonth;
+    List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month);
 
-    List<String> findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth(String isPaid, Integer month) throws InvalidMonth;
+    List<String> findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth(String isPaid, Integer month);
 
 
 }

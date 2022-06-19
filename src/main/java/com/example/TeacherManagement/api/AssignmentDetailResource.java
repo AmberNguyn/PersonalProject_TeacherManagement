@@ -2,10 +2,7 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.AssignmentDetailRequest;
 import com.example.TeacherManagement.entity.AssignmentDetail;
-import com.example.TeacherManagement.entity.Clazz;
-import com.example.TeacherManagement.entity.Contract;
-import com.example.TeacherManagement.exception.InvalidMonth;
-import com.example.TeacherManagement.exception.ResourceNotFoundException;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.service.AssignmentDetailService;
 import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.ContractService;
@@ -15,6 +12,8 @@ import com.example.TeacherManagement.service.dto.TeacherAndTheirNumberOfClassesD
 import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHours;
 import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
 import com.example.TeacherManagement.service.mapper.AssignmentDetailMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +22,10 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(AssignmentDetailResource.PATH)
-
+@RequiredArgsConstructor
 public class AssignmentDetailResource {
 
     @Autowired
@@ -45,17 +45,18 @@ public class AssignmentDetailResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AssignmentDetailDto> getById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<AssignmentDetailDto> getById(@PathVariable("id") Integer id) {
+        log.info("Searched id: {}", id);
         AssignmentDetail assignmentDetail = assignmentDetailService.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id + " not found!"));
+                .orElseThrow(() -> MyException.notFound("AssignmentDetailIdNotFound", "Assignment Detail Id Not Found"));
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDto(assignmentDetail));
     }
 
 
     @GetMapping("/find")
-    public ResponseEntity<List<AssignmentDetailDto>> getAssignmentDetailByTeacherCode(@RequestParam("teacherCode") String teacherCode,
-                                                                                      @RequestParam("startDate") String startDate)
-            throws ResourceNotFoundException {
+    public ResponseEntity<List<AssignmentDetailDto>> getAssignmentDetailByTeacherCodeAndStartDate(@RequestParam("teacherCode") String teacherCode,
+                                                                                                  @RequestParam("startDate") String startDate)
+            {
         List<AssignmentDetail> assignmentDetails = assignmentDetailService.findAssignmentDetailListByStartDateAfterAndEmployeeCode(LocalDate.parse(startDate), teacherCode);
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDtos(assignmentDetails));
     }
@@ -63,28 +64,31 @@ public class AssignmentDetailResource {
 
     @GetMapping("/find-class")
     public ResponseEntity<AssignmentDetailDto> getAssignmentDetailByTeacherCodeAndClassId(@RequestParam("teacherCode") String teacherCode,
-                                                                                          @RequestParam("classId") String classId) throws ResourceNotFoundException {
+                                                                                          @RequestParam("classId") String classId) {
 
+        log.info("Searched teacher code: {}", teacherCode);
         AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByTeacherCodeAndClassId(teacherCode, classId)
-                .orElseThrow(() -> new ResourceNotFoundException("Assignment detail of " + teacherCode + " and " + classId + " not found!"));
+                .orElseThrow(() -> MyException.notFound("TeacherCodeOrClassIdNotFound", "Teacher Code or Class Id Not Found"));
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDto(assignmentDetail));
     }
 
-
+    // ----------- CHECK POSTMAN ---------
     @PostMapping
-    public ResponseEntity<AssignmentDetailDto> create(@RequestBody AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException {
+    public ResponseEntity<AssignmentDetailDto> create(@RequestBody AssignmentDetailRequest assignmentDetailRequest) {
             AssignmentDetail assignmentDetail = assignmentDetailService.create(assignmentDetailRequest);
 
-        return ResponseEntity.created(URI.create(AssignmentDetailResource.PATH + "/" + assignmentDetail.getId()))
+        return ResponseEntity
+                .created(URI.create(AssignmentDetailResource.PATH + "/" + assignmentDetail.getId()))
                 .body(AssignmentDetailMapper.INSTANCE.toDto(assignmentDetailService.create(assignmentDetail)));
     }
 
 
-    @DeleteMapping("/")
+    @DeleteMapping
     public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode,
-                                       @RequestParam("classId") String classId) throws ResourceNotFoundException {
+                                       @RequestParam("classId") String classId) {
+        log.info("Searched teacher code: {}", teacherCode);
         AssignmentDetail assignmentDetail = assignmentDetailService.findAssignmentDetailByTeacherCodeAndClassId(teacherCode, classId)
-                .orElseThrow(() -> new ResourceNotFoundException("Assignment detail of " + teacherCode + " and " + classId + " not found!"));
+                .orElseThrow(() -> MyException.notFound("TeacherCodeOrClassIdNotFound", "Teacher Code: " + teacherCode + " And Class Id" + classId + " Not Found"));
 
         assignmentDetailService.deleteAssignmentDetailByEmployeeCodeAndClassId(teacherCode, classId);
         return ResponseEntity.noContent().build();
@@ -92,60 +96,44 @@ public class AssignmentDetailResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id) {
+        log.info("Searched id: {}", id);
         AssignmentDetail assignmentDetail = assignmentDetailService.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id + " not found!"));
+                .orElseThrow(() -> MyException.notFound("AssignmentDetailIdNotFound", "Assignment Detail Id (" + id + ") Not Found"));
         assignmentDetailService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
 
-    @PutMapping("/")
-    public ResponseEntity<AssignmentDetailDto> update(@RequestParam("teacherCode") String teacherCode,
-                                                      @RequestParam("classId") String classId,
-                                                      @RequestBody AssignmentDetailRequest assignmentDetailRequest) throws ResourceNotFoundException {
-        AssignmentDetail editedAssignmentDetail = assignmentDetailService.findAssignmentDetailByTeacherCodeAndClassId(teacherCode, classId)
-                .orElseThrow(() -> new ResourceNotFoundException("Assignment detail of " + teacherCode + " and " + classId + " not found!"));
 
-        Clazz requestClazz = clazzService.findClassByClassId(assignmentDetailRequest.getClassId())
-                .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getClassId() + " not found"));
+    //------------ CHANGE POSTMAN PATH ---------
+    @PutMapping("/{id}")
+    public ResponseEntity<AssignmentDetailDto> update(@PathVariable("id") Integer id,
+                                                      @RequestBody AssignmentDetailRequest assignmentDetailRequest) {
 
-        Contract requestContract = contractService.findContractByContractId(assignmentDetailRequest.getContractId())
-                .orElseThrow(() -> new ResourceNotFoundException(assignmentDetailRequest.getContractId() + " not found!"));
-
-
-        editedAssignmentDetail.setCourseStartDate(assignmentDetailRequest.getCourseStartDate());
-        editedAssignmentDetail.setCourseEndDate(assignmentDetailRequest.getCourseEndDate());
-        editedAssignmentDetail.setExpectedHours(assignmentDetailRequest.getExpectedHours());
-        editedAssignmentDetail.setActiveHours(assignmentDetailRequest.getActiveHours());
-        editedAssignmentDetail.setLeaveNote(assignmentDetailRequest.getLeaveNote());
-        editedAssignmentDetail.setPayRate(assignmentDetailRequest.getPayRate());
-        editedAssignmentDetail.setClazz(requestClazz);
-        editedAssignmentDetail.setContract(requestContract);
-
-        AssignmentDetail updatedAssignmentDetail = assignmentDetailService.create(editedAssignmentDetail);
+        AssignmentDetail updatedAssignmentDetail = assignmentDetailService.update(assignmentDetailRequest,id);
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDto(updatedAssignmentDetail));
     }
 
 
-    @GetMapping("/active-hours")
+    @GetMapping("/find-teachers-not-meet-active-hours")
     public ResponseEntity<List<TeacherLeaveNoteAndActiveHoursDto>> findTeachersWhoDoNotMeetTheRequiredHours() {
         return ResponseEntity.ok(assignmentDetailService.findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours());
     }
 
     @GetMapping("/number-of-classes-in-month/{month}")
-    public ResponseEntity<List<TeacherAndTheirNumberOfClassesDto>> findTeacherAndTheirNumberOfClassInAMonth(@PathVariable("month") Integer month) throws InvalidMonth {
+    public ResponseEntity<List<TeacherAndTheirNumberOfClassesDto>> findTeacherAndTheirNumberOfClassInAMonth(@PathVariable("month") Integer month) {
         return ResponseEntity.ok(assignmentDetailService.findTeacherAndTheirNumberOfClassInAMonth(month));
     }
 
     @GetMapping("/total-active-hours-in-month/{month}")
-    public ResponseEntity<List<TeacherAndTotalActiveHours>> findTeachersAndTotalActiveHoursInMonth(@PathVariable("month") Integer month) throws InvalidMonth {
+    public ResponseEntity<List<TeacherAndTotalActiveHours>> findTeachersAndTotalActiveHoursInMonth(@PathVariable("month") Integer month) {
         return ResponseEntity.ok(assignmentDetailService.findTeachersAndTheirTotalActiveHoursInAMonth(month));
     }
 
     @GetMapping("/paid-or-not-paid/{month}")
     public ResponseEntity<List<String>> findTeacherCodesWhoHaveOrHaveNotBeenPaidInMonth(@PathVariable("month") Integer month,
-                                                                                        @RequestParam("isPaid") String isPaid) throws InvalidMonth {
+                                                                                        @RequestParam("isPaid") String isPaid) {
         return ResponseEntity.ok(assignmentDetailService.findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth(isPaid, month));
     }
 

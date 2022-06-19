@@ -1,5 +1,6 @@
 package com.example.TeacherManagement.service;
 
+import com.example.TeacherManagement.api.request.CertificationDetailRequest;
 import com.example.TeacherManagement.entity.CertificationDetail;
 
 import java.util.List;
@@ -8,13 +9,16 @@ import java.util.Optional;
 public interface CertificationDetailService {
     List<CertificationDetail> getAll();
 
-    CertificationDetail addCertificationDetail(CertificationDetail certificationDetail);
+    CertificationDetail create(CertificationDetail certificationDetail);
+    CertificationDetail create(CertificationDetailRequest certificationDetailRequest);
 
-    List<CertificationDetail> findCertificationDetailListByTeacherCode(String teacherCode);
+    List<CertificationDetail> findListByTeacherCode(String teacherCode);
 
-    Optional<CertificationDetail> findCertificationDetailById(Integer id);
+    Optional<CertificationDetail> findById(Integer id);
 
-    void deleteCertificationDetailById(Integer id);
+    CertificationDetail update(CertificationDetailRequest certificationDetailRequest, Integer id);
+
+    void deleteById(Integer id);
 
     // find a list of teachers who have a certain type of certificate
     List<CertificationDetail> findTeachersListWhoHaveCertificate(String certificationName);

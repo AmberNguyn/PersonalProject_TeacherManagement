@@ -3,17 +3,17 @@ VALUES
 ('US', 'United States', 'American'),
 ('VN', 'Vietnam', 'Vietnamese'),
 ('CA', 'Canada', 'Canadian'),
-('UK-SC', 'United Kingdom', 'Scottish'),
-('UK-BR', 'United Kingdom', 'British'),
-('UK-IR', 'United Kingdom', 'Irish'),
-('UK-W', 'United Kingdom', 'Welsh');
+('UK-SC', 'United Kingdom - Scotland', 'Scottish'),
+('UK-BR', 'United Kingdom - Britain', 'British'),
+('UK-IR', 'United Kingdom - Ireland', 'Irish'),
+('UK-W', 'United Kingdom - Wales', 'Welsh');
 
 
 INSERT INTO teacher(	employee_code, first_name, middle_name, last_name, 
 						date_of_birth, phone_number, address, private_email,
 						school_email, teacher_type, gender, degree, nationality_id)
 VALUES 
-('ANH.N6', 'Anh', 'Ngoc Truc', 'Nguyen', '1994-06-06', '0903553257', '1A Avenue Binh Tan district', 'anh.nguyen@gmail.com', 'anh.n6@gmail.com', 'VIETNAMESE', 'FEMALE', 'Bachelor of Art - English Teaching', 2),
+('ANH.N6', 'Anh', 'Ngoc Truc', 'Nguyen', '1994-0s6-06', '0903553257', '1A Avenue Binh Tan district', 'anh.nguyen@gmail.com', 'anh.n6@gmail.com', 'VIETNAMESE', 'FEMALE', 'Bachelor of Art - English Teaching', 2),
 ('KHANH.T2', 'Khanh', 'Ngoc', 'Tran', '1997/04/30', '0815488295', '132/2 Nguyen Trai Street, D1', 'ngockhanh23@gmail.com', 'khanh.t2@gmail.com', 'VIETNAMESE', 'FEMALE', 'Bachelor of Art - Language Teaching', 2),
 ('GARLEN.S1', 'Garlen', 'John', 'Smith', '1990/06/14', '0905443867', 'Moonlight Apartment', 'garlen234@gmail.com', 'garlen.s1@gmail.com', 'EXPATRIATE', 'MALE', 'Bachelor of Art', 1),
 ('JOANNA.P3', 'Joanna', 'Lina', 'Potts', '1990/07/18', '0903451123', 'Moonlight Apartment', 'joanna.teaching@gmail.com', 'joanna.p3@gmail.com', 'EXPATRIATE', 'FEMALE', 'Bachelor of Art', 4),

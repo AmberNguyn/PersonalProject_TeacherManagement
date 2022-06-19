@@ -2,12 +2,12 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.ClazzRequest;
 import com.example.TeacherManagement.entity.Clazz;
-import com.example.TeacherManagement.exception.ResourceNotFoundException;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.dto.ClazzDto;
 import com.example.TeacherManagement.service.dto.ClazzHaveNotBeenAssignedDto;
 import com.example.TeacherManagement.service.mapper.ClazzMapper;
-import org.apache.coyote.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @CrossOrigin(maxAge = 3600)
 @RequestMapping(ClazzResource.PATH)
@@ -31,69 +32,60 @@ public class ClazzResource {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<ClazzDto> getClassByClassId(@RequestParam("classId") String classId) throws ResourceNotFoundException {
-        Clazz clazz = clazzService.findClassByClassId(classId)
-                .orElseThrow(() -> new ResourceNotFoundException(classId + " not found!"));
+    public ResponseEntity<ClazzDto> getClassByClassId(@RequestParam("classId") String classId) {
+
+        Clazz clazz = clazzService.findByClassId(classId)
+                .orElseThrow(() -> MyException.notFound("ClassCodeNotFound", "Class Code: " + classId + " not found"));
         return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(clazz));
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<ClazzDto> getClassById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        Clazz clazz = clazzService.findClassById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id + " not found"));
+    public ResponseEntity<ClazzDto> getClassById(@PathVariable("id") Integer id) {
+        Clazz clazz = clazzService.findById(id)
+                .orElseThrow(MyException::ClassIdNotFound);
         return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(clazz));
     }
 
-    @GetMapping("/classeshavenotbeenassigned")
-    public ResponseEntity<List<ClazzHaveNotBeenAssignedDto>> findClassesHaveNotBeenAssigned()
-    {
+    @GetMapping("/classes-have-not-been-assigned")
+    public ResponseEntity<List<ClazzHaveNotBeenAssignedDto>> findClassesHaveNotBeenAssigned() {
         return ResponseEntity.ok(clazzService.findClassesThatHaveNotBeenAssigned());
     }
 
 
-
+    // ---------- CHECK POSTMAN ---------
     @PostMapping
     public ResponseEntity<ClazzDto> create(@RequestBody Clazz clazzRequest) {
-        Clazz createdClazz = clazzService.addClass(
-                new Clazz(
-                        null,
-                        clazzRequest.getClassId(),
-                        clazzRequest.getNumberOfStudent(),
-                        clazzRequest.getStartDate(),
-                        clazzRequest.getEndDate(),
-                        clazzRequest.getTotalCourseHours(),
-                        clazzRequest.getCourseBook()
-                )
-        );
-        return ResponseEntity.created(URI.create(ClazzResource.PATH + "/" + createdClazz.getId()))
-                .body(ClazzMapper.INSTANCE.toDto(clazzService.addClass(createdClazz)));
+        Clazz createdClazz = clazzService.create(clazzRequest);
+
+        return ResponseEntity
+                .created(URI.create(ClazzResource.PATH + "/" + createdClazz.getId()))
+                .body(ClazzMapper.INSTANCE.toDto(clazzService.create(createdClazz)));
     }
 
-    @DeleteMapping("/")
-    public ResponseEntity<Void> delete(@RequestParam("classId") String classId) throws ResourceNotFoundException {
-        Clazz clazz = clazzService.findClassByClassId(classId)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(classId + " not found!")
-                );
-        clazzService.deleteClassByClassId(classId);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteByClassCode(@RequestParam("classId") String classCode) {
+        Clazz clazz = clazzService.findByClassId(classCode)
+                .orElseThrow(() -> MyException.notFound("ClassCodeNotFound", "Class Code " + classCode + " not found"));
+        clazzService.deleteByClassId(classCode);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/")
-    public ResponseEntity<ClazzDto> update(@RequestParam("classId") String clazzId,
-                                           @RequestBody ClazzRequest clazzRequest) throws ResourceNotFoundException {
+    //--------- CHECK POSTMAN -----------
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id) {
+        Clazz clazz = clazzService.findById(id)
+                .orElseThrow(MyException::ClassIdNotFound);
+        clazzService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
-        Clazz editedClazz = clazzService.findClassByClassId(clazzId)
-                .orElseThrow(() -> new ResourceNotFoundException(clazzId + " not found!"));
 
-        editedClazz.setClassId(clazzRequest.getClassId());
-        editedClazz.setNumberOfStudent(clazzRequest.getNumberOfStudent());
-        editedClazz.setStartDate(clazzRequest.getStartDate());
-        editedClazz.setEndDate(clazzRequest.getEndDate());
-        editedClazz.setTotalCourseHours(clazzRequest.getTotalCourseHours());
-        editedClazz.setCourseBook(clazzRequest.getCourseBook());
+    // --------- CHECK POSTMAN ---------
+    @PutMapping("/{id}")
+    public ResponseEntity<ClazzDto> update(@PathVariable("id") Integer id,
+                                           @RequestBody ClazzRequest clazzRequest) {
 
-        Clazz updatedClazz = clazzService.addClass(editedClazz);
+        Clazz updatedClazz = clazzService.update(clazzRequest, id);
         return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(updatedClazz));
     }
 }

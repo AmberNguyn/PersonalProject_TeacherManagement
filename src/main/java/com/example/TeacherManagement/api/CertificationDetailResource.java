@@ -1,15 +1,14 @@
 package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.CertificationDetailRequest;
-import com.example.TeacherManagement.entity.Certification;
 import com.example.TeacherManagement.entity.CertificationDetail;
-import com.example.TeacherManagement.entity.Teacher;
-import com.example.TeacherManagement.exception.ResourceNotFoundException;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.service.CertificationDetailService;
 import com.example.TeacherManagement.service.CertificationService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.CertificationDetailDto;
 import com.example.TeacherManagement.service.mapper.CertificationDetailMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(CertificationDetailResource.PATH)
 public class CertificationDetailResource {
@@ -36,92 +36,63 @@ public class CertificationDetailResource {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<List<CertificationDetailDto>> getCertificationDetailListByTeacherCode(@RequestParam("teacherCode") String teacherCode) throws ResourceNotFoundException {
-        List<CertificationDetail> certificationDetails = certificationDetailService.findCertificationDetailListByTeacherCode(teacherCode);
-        if (certificationDetails.size() == 0) throw new ResourceNotFoundException("Certification detail of teacher code: " + teacherCode + " not found!");
+    public ResponseEntity<List<CertificationDetailDto>> getCertificationDetailListByTeacherCode(@RequestParam("teacherCode") String teacherCode) {
+        List<CertificationDetail> certificationDetails = certificationDetailService.findListByTeacherCode(teacherCode);
 
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDtos(certificationDetails));
     }
 
-    @GetMapping("/findCertificationDetails/{id}")
-    public ResponseEntity<CertificationDetailDto> getCertificationDetailById(@PathVariable("id") Integer id) throws ResourceNotFoundException{
-        CertificationDetail certificationDetail = certificationDetailService.findCertificationDetailById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Certification detail id: " + id + " not found"));
+    // --------- CHECK POSTMAN ---------
+    @GetMapping("/find/{id}")
+    public ResponseEntity<CertificationDetailDto> getCertificationDetailById(@PathVariable("id") Integer id){
+        log.info("Searched id: {}", id);
+        CertificationDetail certificationDetail = certificationDetailService.findById(id)
+                .orElseThrow(MyException::CertificateDetailIdNotFound);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDto(certificationDetail));
     }
 
-
-
+    // --------- CHANGE POSTMAN ---------
     @PostMapping
-    public ResponseEntity<CertificationDetailDto> create(@RequestBody CertificationDetailRequest certificationDetailRequest) throws ResourceNotFoundException{
-        Certification certificationRequest = certificationService.findCertificationById(certificationDetailRequest.getCertificationId())
-                .orElseThrow(() -> new ResourceNotFoundException("Certification id: " + certificationDetailRequest.getCertificationId() + " not found"));
-
-        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(certificationDetailRequest.getTeacherCode())
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher code: " + certificationDetailRequest.getTeacherCode() + " not found!"));
-
-        CertificationDetail createdCertificationDetail = certificationDetailService.addCertificationDetail(
-                new CertificationDetail(
-                        null,
-                        certificationDetailRequest.getScore(),
-                        certificationDetailRequest.getIssuedDate(),
-                        certificationDetailRequest.getExpiredDate(),
-                        certificationDetailRequest.getDescription(),
-                        certificationRequest,
-                        teacherRequest
-                )
-        );
+    public ResponseEntity<CertificationDetailDto> create(@RequestBody CertificationDetailRequest certificationDetailRequest) {
+        CertificationDetail createdCertificationDetail = certificationDetailService.create(certificationDetailRequest);
 
         return ResponseEntity.created(URI.create(CertificationDetailResource.PATH + "/" + createdCertificationDetail.getId()))
-                .body(CertificationDetailMapper.INSTANCE.toDto(certificationDetailService.addCertificationDetail(createdCertificationDetail)));
-
+                .body(CertificationDetailMapper.INSTANCE.toDto(certificationDetailService.create(createdCertificationDetail)));
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws ResourceNotFoundException{
-        CertificationDetail certificationDetail = certificationDetailService.findCertificationDetailById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Certification detail id: " + id + " not found!"));
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
+        log.info("Searched id: {}", id);
 
-        certificationDetailService.deleteCertificationDetailById(id);
+        CertificationDetail certificationDetail = certificationDetailService.findById(id)
+                .orElseThrow(MyException::CertificateDetailIdNotFound);
+
+        certificationDetailService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
+
+    // --------- CHANGE POSTMAN PATH ------
     @PutMapping("/{id}")
     public ResponseEntity<CertificationDetailDto> update(@PathVariable("id") Integer id,
-                                                         @RequestBody CertificationDetailRequest certificationDetailRequest) throws ResourceNotFoundException {
-        Certification certificationRequest = certificationService.findCertificationById(certificationDetailRequest.getCertificationId())
-                .orElseThrow(() -> new ResourceNotFoundException("Certification id: " + certificationDetailRequest.getCertificationId() + " not found"));
+                                                         @RequestBody CertificationDetailRequest certificationDetailRequest) {
 
-        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(certificationDetailRequest.getTeacherCode())
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher code: " + certificationDetailRequest.getTeacherCode() + " not found!"));
-
-
-        CertificationDetail editedCertificationDetail = certificationDetailService.findCertificationDetailById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Certification detail id: " + id + " not found"));
-
-        editedCertificationDetail.setScore(certificationDetailRequest.getScore());
-        editedCertificationDetail.setIssuedDate(certificationDetailRequest.getIssuedDate());
-        editedCertificationDetail.setExpiredDate(certificationDetailRequest.getExpiredDate());
-        editedCertificationDetail.setDescription(certificationDetailRequest.getDescription());
-        editedCertificationDetail.setCertification(certificationRequest);
-        editedCertificationDetail.setTeacher(teacherRequest);
-
-        CertificationDetail updatedCertificationDetail = certificationDetailService.addCertificationDetail(editedCertificationDetail);
+        CertificationDetail updatedCertificationDetail = certificationDetailService.update(certificationDetailRequest, id);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDto(updatedCertificationDetail));
     }
 
 
     @GetMapping("/certificate")
-    public ResponseEntity<List<CertificationDetailDto>> findTeachersWhoHaveCertificate(@RequestParam String certificate) throws ResourceNotFoundException {
+    public ResponseEntity<List<CertificationDetailDto>> findTeachersWhoHaveCertificate(@RequestParam String certificate) {
         List<CertificationDetail> teachersWithCertification = certificationDetailService.findTeachersListWhoHaveCertificate(certificate);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDtos(teachersWithCertification));
     }
 
-    // ------------ TEST POSTMAN------------
-    @GetMapping("/certification/score")
+
+    @GetMapping("/certificate-and-score")
     public ResponseEntity<List<CertificationDetailDto>> findTeachersWhoCanTeachIELTS(@RequestParam("certificate") String certificate,
-                                                                                     @RequestParam("score") double score) throws ResourceNotFoundException {
+                                                                                     @RequestParam("score") double score) {
         List<CertificationDetail> teachersWithIELTS = certificationDetailService.findIELTSTeacherListByCertificationNameAndScoreGreaterThan(certificate, score);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDtos(teachersWithIELTS));
 

@@ -2,10 +2,11 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.NationalityRequest;
 import com.example.TeacherManagement.entity.Nationality;
-import com.example.TeacherManagement.exception.ResourceNotFoundException;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.service.NationalityService;
 import com.example.TeacherManagement.service.dto.NationalityDto;
 import com.example.TeacherManagement.service.mapper.NationalityMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(NationalityResource.PATH)
 public class NationalityResource {
@@ -26,56 +28,58 @@ public class NationalityResource {
         return ResponseEntity.ok(NationalityMapper.INSTANCE.toDtos(nationalityService.getAll()));
     }
 
-    @GetMapping("/")
-    public ResponseEntity<NationalityDto> getNationalityByCountryCode(@RequestParam("countryCode") String countryCode) throws ResourceNotFoundException {
-        Nationality nationality = nationalityService.findNationalityByCountryCode(countryCode)
-                .orElseThrow(() -> new ResourceNotFoundException(countryCode + " not found!"));
+    @GetMapping("/find-by-country-code")
+    public ResponseEntity<NationalityDto> getNationalityByCountryCode(@RequestParam("countryCode") String countryCode) {
+        log.info("Searching country code: {}", countryCode);
+        Nationality nationality = nationalityService.findByCountryCode(countryCode)
+                .orElseThrow(MyException::CountryCodeNotFound);
         return ResponseEntity.ok(NationalityMapper.INSTANCE.toDto(nationality));
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<NationalityDto> getNationalityById(@PathVariable("id") Integer id) throws ResourceNotFoundException {
-        Nationality nationality = nationalityService.findNationalityById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id + " not found!"));
+    public ResponseEntity<NationalityDto> getNationalityById(@PathVariable("id") Integer id) {
+        log.info("Searching nationality id: {}", id);
+        Nationality nationality = nationalityService.findById(id)
+                .orElseThrow(MyException::NationalityIdNotFound);
         return ResponseEntity.ok(NationalityMapper.INSTANCE.toDto(nationality));
     }
 
+    // ------ CHECK POSTMAN -----
     @PostMapping
     public ResponseEntity<NationalityDto> create(@RequestBody NationalityRequest nationalityRequest) {
-        Nationality createdNationality = nationalityService.addNationality(
-                new Nationality(
-                        null,
-                        nationalityRequest.getCountry(),
-                        nationalityRequest.getCountryCode(),
-                        nationalityRequest.getNationality()
-                )
-        );
-
+        Nationality createdNationality = nationalityService.create(nationalityRequest);
         return ResponseEntity.created(URI.create(NationalityResource.PATH + "/" + createdNationality.getId()))
-                .body(NationalityMapper.INSTANCE.toDto(nationalityService.addNationality(createdNationality)));
+                .body(NationalityMapper.INSTANCE.toDto(nationalityService.create(createdNationality)));
     }
 
+    // ----- check POSTMAN
     @DeleteMapping
-    public ResponseEntity<Void> delete(@RequestParam("countryCode") String countryCode) throws ResourceNotFoundException{
-        Nationality nationality = nationalityService.findNationalityByCountryCode(countryCode)
-                .orElseThrow(() -> new ResourceNotFoundException(countryCode + " not found!"));
+    public ResponseEntity<Void> deleteByCountryCode(@RequestParam("countryCode") String countryCode) {
+        log.info("Searching country code: {}", countryCode);
+        Nationality nationality = nationalityService.findByCountryCode(countryCode)
+                .orElseThrow(MyException::CountryCodeNotFound);
 
-        nationalityService.findNationalityByCountryCode(countryCode);
+        nationalityService.deleteByCountryCode(countryCode);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping
-    public ResponseEntity<NationalityDto> update(@RequestParam("countryCode") String countryCode,
-                                                 @RequestBody NationalityRequest nationalityRequest) throws ResourceNotFoundException {
-        Nationality editedNationality = nationalityService.findNationalityByCountryCode(countryCode)
-                .orElseThrow(() -> new ResourceNotFoundException(countryCode + " not found"));
+    // --- CHECK POSTMAN ----
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id) {
+        log.info("Searching nationality id: {}", id);
+        Nationality nationality = nationalityService.findById(id)
+                .orElseThrow(MyException::NationalityIdNotFound);
+        nationalityService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
-        editedNationality.setCountryCode(nationalityRequest.getCountryCode());
-        editedNationality.setCountry(nationalityRequest.getCountry());
-        editedNationality.setNationality(nationalityRequest.getNationality());
+    // ----- CHECK POSTMAN ------
+    @PutMapping("/{id}")
+    public ResponseEntity<NationalityDto> update(@PathVariable("id") Integer id,
+                                                 @RequestBody NationalityRequest nationalityRequest) {
 
-        Nationality updatedNationality = nationalityService.addNationality(editedNationality);
+        Nationality updatedNationality = nationalityService.update(nationalityRequest, id);
 
         return ResponseEntity.ok(NationalityMapper.INSTANCE.toDto(updatedNationality));
     }

@@ -1,6 +1,8 @@
 package com.example.TeacherManagement.service.impl;
 
+import com.example.TeacherManagement.api.request.NationalityRequest;
 import com.example.TeacherManagement.entity.Nationality;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.repository.NationalityRepository;
 import com.example.TeacherManagement.service.NationalityService;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +24,50 @@ public class NationalityServiceImpl implements NationalityService {
     }
 
     @Override
-    public Nationality addNationality(Nationality nationality) {
+    public Nationality create(Nationality nationality) {
         return nationalityRepository.save(nationality);
     }
 
     @Override
-    public Optional<Nationality> findNationalityById(Integer id) {
+    public Nationality create(NationalityRequest nationalityRequest) {
+
+        Nationality createdNationality = new Nationality();
+        createdNationality.setCountryCode(nationalityRequest.getCountryCode());
+        createdNationality.setCountry(nationalityRequest.getCountry());
+        createdNationality.setNationality(nationalityRequest.getNationality());
+
+        return nationalityRepository.save(createdNationality);
+    }
+
+    @Override
+    public Nationality update(NationalityRequest nationalityRequest, Integer id) {
+        Nationality editedNationality = nationalityRepository.findById(id)
+                .orElseThrow(MyException::NationalityIdNotFound);
+
+        editedNationality.setCountryCode(nationalityRequest.getCountryCode());
+        editedNationality.setCountry(nationalityRequest.getCountry());
+        editedNationality.setNationality(nationalityRequest.getNationality());
+
+        return nationalityRepository.save(editedNationality);
+    }
+
+    @Override
+    public Optional<Nationality> findById(Integer id) {
         return nationalityRepository.findById(id);
     }
 
     @Override
-    public Optional<Nationality> findNationalityByCountryCode(String countryCode) {
+    public Optional<Nationality> findByCountryCode(String countryCode) {
         return Optional.of(nationalityRepository.findNationalityByCountryCode(countryCode));
     }
 
     @Override
-    public void deleteNationalityById(Integer id) {
+    public void deleteById(Integer id) {
             nationalityRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByCountryCode(String countryCode) {
+        nationalityRepository.delete(nationalityRepository.findNationalityByCountryCode(countryCode));
     }
 }

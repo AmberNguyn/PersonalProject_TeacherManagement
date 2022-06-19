@@ -2,12 +2,12 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.ContractRequest;
 import com.example.TeacherManagement.entity.Contract;
-import com.example.TeacherManagement.entity.Teacher;
-import com.example.TeacherManagement.exception.ResourceNotFoundException;
+import com.example.TeacherManagement.exception.MyException;
 import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.ContractDto;
 import com.example.TeacherManagement.service.mapper.ContractMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @CrossOrigin(maxAge = 3600)
 @RequestMapping(ContractResource.PATH)
@@ -32,86 +33,73 @@ public class ContractResource {
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDtos(contractService.getAll()));
     }
 
-    @GetMapping("/find")
-    public ResponseEntity<List<ContractDto>> getContractBy(@RequestParam("teacherCode") String teacherCode) {
-        List<Contract> contract = contractService.findContractByEmployeeCode(teacherCode);
-        return ResponseEntity.ok(ContractMapper.INSTANCE.toDtos(contract));
-    }
-
-    @GetMapping("/findcontract")
-    public ResponseEntity<ContractDto> getContractById(@RequestParam("contractId") String contractId) throws ResourceNotFoundException{
-        Contract contract = contractService.findContractByContractId(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException(contractId + " not found"));
+    // ------- CHECK POSTMAN ------
+    @GetMapping("/{id}")
+    public ResponseEntity<ContractDto> getById(@PathVariable("id") Integer id){
+        log.info("Searching contract id: {}", id);
+        Contract contract = contractService.findById(id)
+                .orElseThrow(MyException::ContractIdNotFound);
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(contract));
     }
 
+    // ----CHANGE POSTMAN PATH ----
+    @GetMapping("/find-by-contract-id")
+    public ResponseEntity<ContractDto> getByContractId(@RequestParam("contractId") String contractCode){
+        log.info("Searching contract code: {}", contractCode);
+        Contract contract = contractService.findByContractId(contractCode)
+                .orElseThrow(() -> MyException.notFound("ContractCodeNotFound", "Contract Code Not Found"));
+        return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(contract));
+    }
 
-    @PostMapping
-    public ResponseEntity<ContractDto> create(@RequestBody ContractRequest contractRequest) throws ResourceNotFoundException {
-        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(contractRequest.getTeacherCode())
-                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getTeacherCode() + " not found!"));
-
-        //create contract for old teachers only
-        Contract createdContract = contractService.addContract(
-                new Contract(
-                        null,
-                        contractRequest.getContractId(),
-                        contractRequest.getStartDate(),
-                        contractRequest.getEndDate(),
-                        contractRequest.getPayRate(),
-                        contractRequest.getBank(),
-                        contractRequest.getAccountNumber(),
-                        contractRequest.getBranch(),
-                        contractRequest.getAccountName(),
-                        contractRequest.getDescription(),
-                        contractRequest.isSigned(),
-                        teacherRequest
-                )
-        );
-
-        return ResponseEntity.created(URI.create(ContractResource.PATH + "/" + createdContract.getId()))
-                .body(ContractMapper.INSTANCE.toDto(contractService.addContract(createdContract)));
+    @GetMapping("/find-by-teacher-code")
+    public ResponseEntity<List<ContractDto>> getContractByTeacherCode(@RequestParam("teacherCode") String teacherCode) {
+        List<Contract> contract = contractService.findByEmployeeCode(teacherCode);
+        return ResponseEntity.ok(ContractMapper.INSTANCE.toDtos(contract));
     }
 
 
 
-    @DeleteMapping("/")
-    public ResponseEntity<Void> delete(@RequestParam(value = "contractId") String contractId ) throws ResourceNotFoundException {
-        Contract contract = contractService.findContractByContractId(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException(contractId + " not found"));
-        contractService.deleteContractByContractId(contractId);
+    // ---------- CHECK POST-MAN ------
+
+    @PostMapping
+    public ResponseEntity<ContractDto> create(@RequestBody ContractRequest contractRequest) {
+        Contract createdContract = contractService.create(contractRequest);
+
+        return ResponseEntity.created(URI.create(ContractResource.PATH + "/" + createdContract.getId()))
+                .body(ContractMapper.INSTANCE.toDto(contractService.create(createdContract)));
+    }
+
+
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@RequestParam(value = "contractId") String contractId ) {
+        log.info("Searching contract id: {}", contractId);
+        Contract contract = contractService.findByContractId(contractId)
+                .orElseThrow(() -> MyException.notFound("ContractIdNotFound", "Contract Id Not Found"));
+        contractService.deleteByContractId(contractId);
         return ResponseEntity.noContent().build();
 
     }
 
+    // ------ CHECK POSTMAN --------
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id){
+        log.info("Searching id: {}", id);
+        Contract contract = contractService.findById(id)
+                .orElseThrow(MyException::ContractIdNotFound);
+        contractService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
-    @PutMapping("/")
-    public ResponseEntity<?> update(@RequestParam("contractId") String contractId,
-                                              @RequestBody ContractRequest contractRequest) throws ResourceNotFoundException {
-        Teacher teacherRequest = teacherService.findTeacherByEmployeeCode(contractRequest.getTeacherCode())
-                .orElseThrow(() -> new ResourceNotFoundException(contractRequest.getTeacherCode() + " not found!"));
 
-        Contract editedContract = contractService.findContractByContractId(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException(contractId + " not found!"));
+    // ------ CHECK POSTMAN ----
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Integer id,
+                                    @RequestBody ContractRequest contractRequest) {
 
-        if (!editedContract.isSigned()) {
-            editedContract.setContractId(contractRequest.getContractId());
-            editedContract.setStartDate(contractRequest.getStartDate());
-            editedContract.setEndDate(contractRequest.getEndDate());
-            editedContract.setPayRate(contractRequest.getPayRate());
-            editedContract.setBank(contractRequest.getBank());
-            editedContract.setAccountNumber(contractRequest.getAccountNumber());
-            editedContract.setBranch(contractRequest.getBranch());
-            editedContract.setAccountName(contractRequest.getAccountName());
-            editedContract.setDescription(contractRequest.getDescription());
-            editedContract.setSigned(contractRequest.isSigned());
-
-            Contract updatedContract = contractService.addContract(editedContract);
+            Contract updatedContract = contractService.update(contractRequest, id);
             return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(updatedContract));
-        }
-
-        return ResponseEntity.ok("Contract was signed. Cannot update contract " + contractId);
 
     }
 
