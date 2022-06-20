@@ -26,6 +26,10 @@ public class PaymentRequest {
 
     private Boolean isPaid;
 
+    private Boolean isManuallyUpdated;
+
     private Integer assignmentDetailId;
+
+
 
 }

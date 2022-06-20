@@ -2,7 +2,7 @@ package com.example.TeacherManagement.service.impl;
 
 import com.example.TeacherManagement.api.request.ClazzRequest;
 import com.example.TeacherManagement.entity.Clazz;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.ClazzRepository;
 import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.dto.ClazzHaveNotBeenAssignedDto;
@@ -43,12 +43,18 @@ public class ClazzServiceImpl implements ClazzService {
     }
 
     @Override
-    public Clazz update(ClazzRequest clazzRequest, Integer id){
+    public Clazz update(ClazzRequest clazzRequest, Integer id) {
         Clazz editedClazz = clazzRepository.findById(id)
-                .orElseThrow(MyException::ClassIdNotFound);
+                .orElseThrow(BusinessLogicException::ClassIdNotFound);
 
         editedClazz.setClassId(clazzRequest.getClassId());
-        editedClazz.setNumberOfStudent(clazzRequest.getNumberOfStudent());
+
+        if (clazzRequest.getNumberOfStudent() > 25) {
+            throw BusinessLogicException.badRequest("InvalidStudentAmount", "Invalid Student Amount");
+        } else {
+            editedClazz.setNumberOfStudent(clazzRequest.getNumberOfStudent());
+        }
+
         editedClazz.setStartDate(clazzRequest.getStartDate());
         editedClazz.setEndDate(clazzRequest.getEndDate());
         editedClazz.setTotalCourseHours(clazzRequest.getTotalCourseHours());

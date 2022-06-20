@@ -4,7 +4,7 @@ import com.example.TeacherManagement.api.request.TeacherRequest;
 import com.example.TeacherManagement.entity.Nationality;
 import com.example.TeacherManagement.entity.Teacher;
 import com.example.TeacherManagement.entity.TeacherType;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.TeacherRepository;
 import com.example.TeacherManagement.service.NationalityService;
 import com.example.TeacherManagement.service.TeacherService;
@@ -39,8 +39,12 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher create(TeacherRequest teacherRequest){
         Nationality nationalityRequest = nationalityService.findById(teacherRequest.getNationalityId())
-                .orElseThrow(MyException::NationalityIdNotFound);
+                .orElseThrow(BusinessLogicException::NationalityIdNotFound);
         log.info("Searched nationality by id: {}",teacherRequest.getNationalityId());
+
+//        if(teacherRepository.findTeacherByEmployeeCode(teacherRequest.getEmployeeCode()).getEmployeeCode().equals(teacherRequest.getEmployeeCode())) {
+//            throw new MyException::DuplicateId;
+//        }
 
         Teacher createdTeacher = new Teacher();
         createdTeacher.setEmployeeCode(teacherRequest.getEmployeeCode());
@@ -63,11 +67,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher update(TeacherRequest teacherRequest, Integer id) {
         Nationality nationalityRequest = nationalityService.findById(teacherRequest.getNationalityId())
-                .orElseThrow(MyException::NationalityIdNotFound);
+                .orElseThrow(BusinessLogicException::NationalityIdNotFound);
         log.info("Searched nationality id: {}", teacherRequest.getNationalityId());
 
         Teacher editedTeacher = teacherRepository.findById(id)
-                .orElseThrow(MyException::TeacherIdNotFound);
+                .orElseThrow(BusinessLogicException::TeacherIdNotFound);
         log.info("Searched teacher id: {}", id);
 
         editedTeacher.setEmployeeCode(teacherRequest.getEmployeeCode());

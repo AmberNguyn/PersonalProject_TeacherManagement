@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClazzHaveNotBeenAssignedDto {
+    private Integer id;
     private String classId;
     private LocalDate startDate;
 }

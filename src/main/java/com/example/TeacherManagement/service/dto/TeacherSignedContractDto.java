@@ -11,6 +11,5 @@ public class TeacherSignedContractDto {
     private String teacherCode;
     private String firstName;
     private String lastName;
-
     private Boolean isSigned;
 }

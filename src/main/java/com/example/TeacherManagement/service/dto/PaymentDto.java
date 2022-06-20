@@ -11,6 +11,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentDto {
+    //from payment
+    private Integer id;
+    private LocalDate transferredDate;
+    private double transferredAmount;
+    private double incomeTax;
+    private double incomeBeforeTax;
+    private PaymentType paymentType;
+    private Boolean isPaid;
+    private Boolean isManuallyUpdated;
 
     //from teacher
     private String employeeCode;
@@ -25,10 +34,5 @@ public class PaymentDto {
     //from AssignmentDetail
     private double activeHours;
 
-    //from payment
-    private LocalDate transferredDate;
-    private double transferredAmount;
-    private double incomeTax;
-    private double incomeBeforeTax;
-    private PaymentType paymentType;
+
 }

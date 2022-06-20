@@ -4,13 +4,13 @@ import com.example.TeacherManagement.api.request.AssignmentDetailRequest;
 import com.example.TeacherManagement.entity.AssignmentDetail;
 import com.example.TeacherManagement.entity.Clazz;
 import com.example.TeacherManagement.entity.Contract;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.AssignmentDetailRepository;
 import com.example.TeacherManagement.service.AssignmentDetailService;
 import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.dto.TeacherAndTheirNumberOfClassesDto;
-import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHours;
+import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHoursDto;
 import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,6 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     public final ContractService contractService;
 
 
-
     @Override
     public List<AssignmentDetail> getAll() {
         return assignmentDetailRepository.findAll();
@@ -51,45 +50,48 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
 
     @Override
     public AssignmentDetail create(AssignmentDetailRequest assignmentDetailRequest) {
-        log.info("Searching classId: {}",assignmentDetailRequest.getClassId());
+        log.info("Searching classId: {}", assignmentDetailRequest.getClassId());
         Clazz requestClazz = clazzService.findByClassId(assignmentDetailRequest.getClassId())
-                .orElseThrow(() -> MyException.notFound("ClassIdNotFound", "Class Id " + assignmentDetailRequest.getClassId() + " Not Found"));
+                .orElseThrow(() -> BusinessLogicException.notFound("ClassIdNotFound", "Class Id " + assignmentDetailRequest.getClassId() + " Not Found"));
 
         log.info("Searching contractId: {}", assignmentDetailRequest.getContractId());
         Contract requestContract = contractService.findByContractId(assignmentDetailRequest.getContractId())
-                .orElseThrow(() -> MyException.notFound("ContractIdNotFound", "Contract Id " + assignmentDetailRequest.getContractId() + " Not Found"));
-        AssignmentDetail createdAssignmentDetail = new AssignmentDetail();
-        createdAssignmentDetail.setCourseStartDate(assignmentDetailRequest.getCourseStartDate());
-        createdAssignmentDetail.setCourseEndDate(assignmentDetailRequest.getCourseEndDate());
-        createdAssignmentDetail.setActiveHours(assignmentDetailRequest.getActiveHours());
-        createdAssignmentDetail.setLeaveNote(assignmentDetailRequest.getLeaveNote());
-        createdAssignmentDetail.setPayRate(assignmentDetailRequest.getPayRate());
-        createdAssignmentDetail.setExpectedHours(assignmentDetailRequest.getExpectedHours());
-        createdAssignmentDetail.setContract(requestContract);
-        createdAssignmentDetail.setClazz(requestClazz);
+                .orElseThrow(() -> BusinessLogicException.notFound("ContractIdNotFound", "Contract Id " + assignmentDetailRequest.getContractId() + " Not Found"));
 
-        return assignmentDetailRepository.save(createdAssignmentDetail);
+        if (requestContract.getEndDate().isAfter(LocalDate.now())) {
+            AssignmentDetail createdAssignmentDetail = new AssignmentDetail();
+            createdAssignmentDetail.setCourseStartDate(assignmentDetailRequest.getCourseStartDate());
+            createdAssignmentDetail.setCourseEndDate(assignmentDetailRequest.getCourseEndDate());
+            createdAssignmentDetail.setActiveHours(assignmentDetailRequest.getActiveHours());
+            createdAssignmentDetail.setLeaveNote(assignmentDetailRequest.getLeaveNote());
+            createdAssignmentDetail.setPayRate(assignmentDetailRequest.getPayRate());
+            createdAssignmentDetail.setExpectedHours(assignmentDetailRequest.getExpectedHours());
+            createdAssignmentDetail.setContract(requestContract);
+            createdAssignmentDetail.setClazz(requestClazz);
+
+            return assignmentDetailRepository.save(createdAssignmentDetail);
+        } else {
+            throw BusinessLogicException.badRequest("ContractExpired", "Contract Expired");
+        }
 
     }
 
     @Override
-    public AssignmentDetail update(AssignmentDetailRequest assignmentDetailRequest, Integer id){
+    public AssignmentDetail update(AssignmentDetailRequest assignmentDetailRequest, Integer id) {
         log.info("Search assignment detail id: {}", id);
         AssignmentDetail editedAssignmentDetail = assignmentDetailRepository.findById(id)
-                .orElseThrow(() -> MyException.notFound("AssignmentDetailIdNotFound", "Assignment Detail Id Not Found"));
+                .orElseThrow(BusinessLogicException::AssignmentDetailIdNotFound);
 
         log.info("Searched class id: {}", assignmentDetailRequest.getClassId());
         Clazz requestClazz = clazzService.findByClassId(assignmentDetailRequest.getClassId())
-                .orElseThrow(() -> MyException.notFound("ClassIdNotFound", "Class Id Not Found"));
+                .orElseThrow(BusinessLogicException::ClassCodeNotFound);
 
         log.info("Searched contract id: {}", assignmentDetailRequest.getContractId());
         Contract requestContract = contractService.findByContractId(assignmentDetailRequest.getContractId())
-                .orElseThrow(() -> MyException.notFound("ContractIdNotFound", "Contract Id Not Found"));
-
+                .orElseThrow(BusinessLogicException::ContractIdNotFound);
 
         editedAssignmentDetail.setCourseStartDate(assignmentDetailRequest.getCourseStartDate());
         editedAssignmentDetail.setCourseEndDate(assignmentDetailRequest.getCourseEndDate());
-        editedAssignmentDetail.setExpectedHours(assignmentDetailRequest.getExpectedHours());
         editedAssignmentDetail.setActiveHours(assignmentDetailRequest.getActiveHours());
         editedAssignmentDetail.setLeaveNote(assignmentDetailRequest.getLeaveNote());
         editedAssignmentDetail.setPayRate(assignmentDetailRequest.getPayRate());
@@ -116,7 +118,6 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     }
 
 
-
     @Override
     public void deleteById(Integer id) {
         assignmentDetailRepository.deleteById(id);
@@ -124,7 +125,7 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
 
     @Override
     public void deleteAssignmentDetailByEmployeeCodeAndClassId(String teacherCode, String classId) {
-            assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId));
+        assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId));
     }
 
     @Override
@@ -134,26 +135,55 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
 
 
     @Override
-    public List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month){
-        if (month < 0 || month > 12) throw MyException.InvalidMonth();
+    public List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month) {
+        if (month < 0 || month > 12) throw BusinessLogicException.InvalidMonth();
         log.info("Invalid month: {}", month);
         return assignmentDetailRepository.findTeacherAndTheirNumberOfClass(month);
     }
 
     @Override
-    public List<TeacherAndTotalActiveHours> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month){
-        if (month < 0 || month > 12) throw MyException.InvalidMonth();
+    public List<TeacherAndTotalActiveHoursDto> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month) {
+        if (month < 0 || month > 12) throw BusinessLogicException.InvalidMonth();
         log.info("Invalid month: {}", month);
         return assignmentDetailRepository.findTeachersAndTheirTotalActiveHoursInAMonth(month);
     }
 
     @Override
-    public List<String> findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth(String isPaid, Integer month){
-        if (month < 0 || month > 12) throw MyException.InvalidMonth();
+    public List<String> findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth(String isPaid, Integer month) {
+        if (month < 0 || month > 12) throw BusinessLogicException.InvalidMonth();
         log.info("Invalid month: {}", month);
         return assignmentDetailRepository.findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(Boolean.parseBoolean(isPaid), month);
     }
 
+    @Override
+    public Integer findIncomeBeforeTaxByAssignmentDetailIdUsingExpectedHours(Integer id) {
+        return assignmentDetailRepository.findIncomeBeforeTaxByAssignmentDetailIdUsingExpectedHours(id);
+    }
+
+    @Override
+    public Integer findIncomeTaxByAssignmentDetailIdUsingExpectedHours(Integer id) {
+        return assignmentDetailRepository.findIncomeTaxByAssignmentDetailIdUsingExpectedHours(id);
+    }
+
+    @Override
+    public Integer findTransferredAmountByAssignmentDetailIdUsingExpected(Integer id) {
+        return assignmentDetailRepository.findTransferredAmountByAssignmentDetailIdUsingExpectedHours(id);
+    }
+
+    @Override
+    public Integer findIncomeBeforeTaxByAssignmentDetailIdUsingActiveHours(Integer id) {
+        return assignmentDetailRepository.findIncomeBeforeTaxByAssignmentDetailIdUsingActiveHours(id);
+    }
+
+    @Override
+    public Integer findTaxByAssignmentDetailIdUsingActiveHours(Integer id) {
+        return assignmentDetailRepository.findTaxByAssignmentDetailIdUsingActiveHours(id);
+    }
+
+    @Override
+    public Integer findTransferredAmountByAssignmentDetailIdUsingActiveHours(Integer id) {
+        return assignmentDetailRepository.findTransferredAmountByAssignmentDetailIdUsingActiveHours(id);
+    }
 
 
 }

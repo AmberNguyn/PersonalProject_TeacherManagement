@@ -2,7 +2,7 @@ package com.example.TeacherManagement.service.impl;
 
 import com.example.TeacherManagement.api.request.NationalityRequest;
 import com.example.TeacherManagement.entity.Nationality;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.NationalityRepository;
 import com.example.TeacherManagement.service.NationalityService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class NationalityServiceImpl implements NationalityService {
     @Override
     public Nationality update(NationalityRequest nationalityRequest, Integer id) {
         Nationality editedNationality = nationalityRepository.findById(id)
-                .orElseThrow(MyException::NationalityIdNotFound);
+                .orElseThrow(BusinessLogicException::NationalityIdNotFound);
 
         editedNationality.setCountryCode(nationalityRequest.getCountryCode());
         editedNationality.setCountry(nationalityRequest.getCountry());

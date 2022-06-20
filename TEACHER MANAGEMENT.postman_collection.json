@@ -1,0 +1,1582 @@
+{
+	"info": {
+		"_postman_id": "c2299a27-f580-47f5-b179-2eedf83107af",
+		"name": "TEACHER MANAGEMENT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Teacher",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/teachers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"teachers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/teachers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"teachers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeacherByTeacherCode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/teachers/find?teacherCode=ANH.N6",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"teachers",
+								"find"
+							],
+							"query": [
+								{
+									"key": "teacherCode",
+									"value": "ANH.N6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeachersByTeacherType",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/teachers/find-by-teacher-type?teacherType=VIETNAMESE",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"teachers",
+								"find-by-teacher-type"
+							],
+							"query": [
+								{
+									"key": "teacherType",
+									"value": "VIETNAMESE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeacherWhoSignedOrNotSignedContract",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/teachers/find-who-signed?isSigned=FALSE",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"teachers",
+								"find-who-signed"
+							],
+							"query": [
+								{
+									"key": "isSigned",
+									"value": "FALSE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTeacher",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "       { \"employeeCode\" : \"TUNG.B6\",\r\n        \"firstName\": \"Tung\",\r\n        \"middleName\": \"Thanh\",\r\n        \"lastName\": \"Bui\",\r\n        \"gender\": \"MALE\",\r\n        \"dateOfBirth\": \"1994-05-06\",\r\n        \"phoneNumber\": \"0903354124\",\r\n        \"privateEmail\": \"tung.bui@gmail.com\",\r\n        \"schoolEmail\" : \"tung.b6@gmail.com\",\r\n        \"status\": \"AVAILABLE\",\r\n        \"teacherType\": \"VIETNAMESE\",\r\n        \"address\" : \"1563 QL1A, BT district\",\r\n        \"degree\" : \"Bachelor of Art - Language Teaching\",\r\n        \"nationalityId\" : 1\r\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/teachers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"teachers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTeacherByTeacherCode",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/teachers/?teacherCode=ANH.N6",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"teachers",
+								""
+							],
+							"query": [
+								{
+									"key": "teacherCode",
+									"value": "ANH.N6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateById",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n       { \"employeeCode\" : \"AN.B2\",\r\n        \"firstName\": \"An\",\r\n        \"middleName\": \"Hong\",\r\n        \"lastName\": \"Bui\",\r\n        \"gender\": \"FEMALE\",\r\n        \"dateOfBirth\": \"1994-05-06\",\r\n        \"phoneNumber\": \"0903354124\",\r\n        \"privateEmail\": \"an.bui@gmail.com\",\r\n        \"schoolEmail\" : \"an.b2@gmail.com\",\r\n        \"status\": \"AVAILABLE\",\r\n        \"teacherType\": \"VIETNAMESE\",\r\n        \"address\" : \"123 QL1A, BT district\",\r\n        \"degree\" : \"Bachelor of Art - Language Teaching\",\r\n        \"nationalityId\" : 5\r\n        }\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/teachers/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"teachers",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AssignmentDetail",
+			"item": [
+				{
+					"name": "uphappyCase",
+					"item": [
+						{
+							"name": "getTeachersAndTheirNumberOfClassesInMonth",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/assignmentDetails/total-active-hours-in-month/13",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"assignmentDetails",
+										"total-active-hours-in-month",
+										"13"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getById",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAssignmentDetailById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAssignmentDetailByTeacherCodeAndStartDateAfter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/find?teacherCode=GARLEN.S1&startDate=2022-03-15",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"find"
+							],
+							"query": [
+								{
+									"key": "teacherCode",
+									"value": "GARLEN.S1"
+								},
+								{
+									"key": "startDate",
+									"value": "2022-03-15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAssignmentDetailByTeacherCodeAndClassId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/find-class?teacherCode=GARLEN.S1&classId=SKA2-Aa1402",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"find-class"
+							],
+							"query": [
+								{
+									"key": "teacherCode",
+									"value": "GARLEN.S1"
+								},
+								{
+									"key": "classId",
+									"value": "SKA2-Aa1402"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findTeachersWhoDoNotMeetTheRequiredHours",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/activehours",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"activehours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeachersAndTheirNumberOfClasses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/number-of-classes-in-month/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"number-of-classes-in-month",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeachersAndTheirTotalActiveHours",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/total-active-hours-in-month/5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"total-active-hours-in-month",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeachersWhoHaveOrHaveNotBeenPaid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/paid-or-not-paid/7?isPaid=true",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"paid-or-not-paid",
+								"7"
+							],
+							"query": [
+								{
+									"key": "isPaid",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAssignmentDetailByTeacherCodeAndStartDate",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/?teacherCode=GARLEN.S1&classId=SKC1-D1407",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								""
+							],
+							"query": [
+								{
+									"key": "teacherCode",
+									"value": "GARLEN.S1"
+								},
+								{
+									"key": "classId",
+									"value": "SKC1-D1407"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAssignmentDetail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"courseStartDate\": \"2022-04-16\",\r\n        \"courseEndDate\": \"2022-07-16\",\r\n        \"expectedHours\": 30.0,\r\n        \"activeHours\": 30.0,\r\n        \"teacherCode\": \"GARLEN.S1\",\r\n        \"leaveNote\" : null,\r\n        \"payRate\" : 500000,\r\n        \"contractId\" : \"FR1201A\",\r\n        \"classId\": \"SKC1-D1407\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateById",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \"id\": 5,\r\n        \"courseStartDate\": \"2022-03-30\",\r\n        \"courseEndDate\": \"2022-06-30\",\r\n        \"activeHours\": 12.0,\r\n        \"leaveNote\" : \"sick\",\r\n        \"payRate\" : 200000,\r\n        \"classId\" : \"SKB1-Ab1408\",\r\n        \"contractId\" : \"VN1103A\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/assignmentDetails/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"assignmentDetails",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contract",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/contracts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contracts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getContractListByTeacherCode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/contracts/get-by-teacher-code/?teacherCode=ANH.P1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contracts",
+								"get-by-teacher-code",
+								""
+							],
+							"query": [
+								{
+									"key": "teacherCode",
+									"value": "ANH.P1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getContractByContractId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/contracts/get-by-contract-id?contractId=VN1105A",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contracts",
+								"get-by-contract-id"
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "VN1105A"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createContract",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "        {\r\n        \"contractId\": \"VN3333A\",\r\n        \"startDate\": \"2022-04-04\",\r\n        \"endDate\": \"2023-04-04\",\r\n        \"payRate\": 170000,\r\n        \"accountNumber\": \"10004342905\",\r\n        \"bank\": \"Vietcombank\",\r\n        \"branch\" : \"HCM\",\r\n        \"accountName\": \"Anh\",\r\n        \"description\" : null,\r\n        \"nationality\": 2,\r\n        \"signed\": true,\r\n        \"teacherCode\" : \"ANH.N6\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/contracts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contracts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteContractByContractId",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/contracts/?contractId=VN1108B",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contracts",
+								""
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "VN1108B"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/contracts/20",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contracts",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateContract",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "        {\r\n        \"contractId\": \"VN1106B\",\r\n        \"startDate\": \"2022-04-04\",\r\n        \"endDate\": \"2023-04-04\",\r\n        \"payRate\": 900000,\r\n        \"accountNumber\": \"10004342905\",\r\n        \"bank\": \"ACB\",\r\n        \"branch\" : \"HCM\",\r\n        \"accountName\": \"Hung\",\r\n        \"description\" : null,\r\n        \"nationality\": 2,\r\n        \"signed\": false,\r\n        \"teacherCode\" : \"ANH.P1\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/contracts/?contractId=VN1106B",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"contracts",
+								""
+							],
+							"query": [
+								{
+									"key": "contractId",
+									"value": "VN1106B"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clazz",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/classes/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"classes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetClassByClassId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/classes/find?classId=SKA1-Aa1401",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"classes",
+								"find"
+							],
+							"query": [
+								{
+									"key": "classId",
+									"value": "SKA1-Aa1401"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClassById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/classes/find/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"classes",
+								"find",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClassesHaveNotBeenAssigned",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/classes/classes-have-not-been-assigned",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"classes",
+								"classes-have-not-been-assigned"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createClass",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"classId\": \"SKC4-Ab1409\",\r\n        \"numberOfStudent\": 12,\r\n        \"startDate\": \"2022-07-11\",\r\n        \"endDate\" :  \"2022-10-11\",\r\n        \"courseBook\": \"LOOK 6\",\r\n        \"totalCourseHours\" : 48\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/classes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"classes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/classes/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"classes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteClassByClassId",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/classes/?classId=SKC4-Ab1410",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"classes",
+								""
+							],
+							"query": [
+								{
+									"key": "classId",
+									"value": "SKC4-Ab1410"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateClass",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"classId\": \"SKC4-Ab1410\",\r\n        \"numberOfStudent\": 26,\r\n        \"startDate\": \"2022-07-11\",\r\n        \"endDate\" :  \"2022-10-11\",\r\n        \"courseBook\": \"LOOK 6\",\r\n        \"totalCourseHours\" : 48\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/classes/8",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"classes",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Nationality",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/nationalities",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nationalities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getNationalityByCountryCode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/nationalities/find-by-country-code?countryCode=US",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nationalities",
+								"find-by-country-code"
+							],
+							"query": [
+								{
+									"key": "countryCode",
+									"value": "US"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getNationalityById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/nationalities/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nationalities",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createNationality",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"countryCode\": \"SP\",\r\n        \"country\": \"Singapore\",\r\n        \"nationality\": \"Singaporean\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/nationalities",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nationalities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteByCountryCode",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/nationalities/?countryCode=SP",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nationalities",
+								""
+							],
+							"query": [
+								{
+									"key": "countryCode",
+									"value": "SP"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/nationalities/8",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nationalities",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateById",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"countryCode\": \"SP\",\r\n        \"country\": \"North Singapore\",\r\n        \"nationality\": \"Singaporean\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/nationalities/9",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nationalities",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Certificate",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certifications",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCertificationByTeacherCode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certifications/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certifications",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creteCertification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TOEIC\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/certifications",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCertification",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TOEIC+\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/certifications/8",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certifications",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCertification",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certifications/8",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certifications",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/payments",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"payments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPaymentById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/payments/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"payments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createPayment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"assignmentDetailId\" : 5,\r\n        \"paymentType\": \"CREDITCARD\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/payments",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"payments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePayment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"assignmentDetailId\" : 1,\r\n        \"transferredDate\": \"2022-07-12\",\r\n        \"paymentType\": \"CREDITCARD\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/payments/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"payments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCertification",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/payments/5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"payments",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CertificationDetail",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certificationDetails",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certificationDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByTeacherCode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certificationDetails/find?teacherCode=ANH.N6",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certificationDetails",
+								"find"
+							],
+							"query": [
+								{
+									"key": "teacherCode",
+									"value": "ANH.N6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certificationDetails/find/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certificationDetails",
+								"find",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeachersWhoHaveCertificate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certificationDetails/certificate?certificate=IELTS",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certificationDetails",
+								"certificate"
+							],
+							"query": [
+								{
+									"key": "certificate",
+									"value": "IELTS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTeachersWhoCanTeachIELTSAndHaveScoreGreaterThan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certificationDetails/certificate-and-score/?certificate=IELTS&score=7.5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certificationDetails",
+								"certificate-and-score",
+								""
+							],
+							"query": [
+								{
+									"key": "certificate",
+									"value": "IELTS"
+								},
+								{
+									"key": "score",
+									"value": "7.5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCertificationDetails",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"score\": 6.5,\r\n        \"issuedDate\": \"2021-03-21\",\r\n        \"expiredDate\": \"2023-03-21\",\r\n        \"description\" : null,\r\n        \"teacherCode\" : \"KHANH.T2\",\r\n        \"certificationId\" : 1\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/certificationDetails",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certificationDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCertificationDetails",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"score\": 9.0,\r\n        \"issuedDate\": \"2021-03-21\",\r\n        \"expiredDate\": \"2023-03-28\",\r\n        \"description\" : \"GOOD\",\r\n        \"teacherCode\" : \"ANH.N6\",\r\n        \"certificationId\" : 3\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/certificationDetails/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certificationDetails",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/certificationDetails/16",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"certificationDetails",
+								"16"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"anhnguyen\",\r\n    \"password\" : \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/signin",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

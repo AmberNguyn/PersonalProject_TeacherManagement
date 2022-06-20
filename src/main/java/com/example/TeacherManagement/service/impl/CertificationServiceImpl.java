@@ -2,7 +2,7 @@ package com.example.TeacherManagement.service.impl;
 
 import com.example.TeacherManagement.api.request.CertificationRequest;
 import com.example.TeacherManagement.entity.Certification;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.CertificationRepository;
 import com.example.TeacherManagement.service.CertificationService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class CertificationServiceImpl implements CertificationService {
     @Override
     public Certification update(CertificationRequest certificationRequest, Integer id){
         Certification editedCertification = certificationRepository.findById(id)
-                .orElseThrow(MyException::CertificateIdNotFound);
+                .orElseThrow(BusinessLogicException::CertificateIdNotFound);
 
         editedCertification.setName(certificationRequest.getName());
         return certificationRepository.save(editedCertification);

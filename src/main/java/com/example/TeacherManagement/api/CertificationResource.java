@@ -2,7 +2,7 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.CertificationRequest;
 import com.example.TeacherManagement.entity.Certification;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.service.CertificationService;
 import com.example.TeacherManagement.service.dto.CertificationDto;
 import com.example.TeacherManagement.service.mapper.CertificationMapper;
@@ -30,7 +30,7 @@ public class CertificationResource {
     @GetMapping("/{id}")
     public ResponseEntity<CertificationDto> getCertificateById(@PathVariable("id") Integer id){
         Certification certification = certificationService.findById(id)
-                .orElseThrow(MyException::CertificateIdNotFound);
+                .orElseThrow(BusinessLogicException::CertificateIdNotFound);
         return ResponseEntity.ok(CertificationMapper.INSTANCE.toDto(certification));
     }
 
@@ -46,7 +46,7 @@ public class CertificationResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         Certification certification = certificationService.findById(id)
-                .orElseThrow(MyException::CertificateIdNotFound);
+                .orElseThrow(BusinessLogicException::CertificateIdNotFound);
         certificationService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

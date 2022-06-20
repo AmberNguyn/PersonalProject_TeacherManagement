@@ -2,9 +2,7 @@ package com.example.TeacherManagement.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class MyException extends Throwable {
-    private static final String CERTIFICATE_DETAIL_NOT_FOUND_MSG_KEY = "CertificateDetailNotFound";
-    private static final String CERTIFICATE_DETAIL_NOT_FOUND_MSG = "Certificate Detail Not Found";
+public class BusinessLogicException extends Throwable {
 
     private static final String INVALID_MONTH_MSG_KEY = "InvalidMonth";
     private static final String INVALID_MONTH_MSG = "Invalid Month";
@@ -38,6 +36,15 @@ public class MyException extends Throwable {
 
     private static final String TEACHER_ID_NOT_FOUND_MSG_KEY = "TeacherIdNotFound";
     private static final String TEACHER_ID_NOT_FOUND_MSG = "Teacher Id Not Found";
+
+    private static final String DUPLICATE_ID_MSG_KEY = "DuplicateId";
+    private static final String DUPLICATE_ID_MSG = "Duplicate Id";
+
+    private static final String CLASS_ID_OR_TEACHER_CODE_NOT_FOUND_MSG_KEY = "ClassIdOrTeacherCodeNotFound";
+    private static final String CLASs_ID_OR_TEACHER_CODE_NOT_FOUND_MSG = "Class Id or Teacher Code Not Found";
+
+    private static final String CLASS_CODE_NOT_FOUND_MSG_KEY = "ClassCodeNotFound";
+    private static final String CLASS_CODE_NOT_FOUND_MSG = "Class Code Not Found";
 
     public static ResponseException notFound(String messageKey, String message) {
         return new ResponseException(messageKey, message, HttpStatus.NOT_FOUND);
@@ -96,5 +103,16 @@ public class MyException extends Throwable {
         return notFound(PAYMENT_ID_NOT_FOUND_MSG_KEY, PAYMENT_ID_NOT_FOUND_MSG);
     }
 
+    public static ResponseException DuplicateId() {
+        return internalServerError(DUPLICATE_ID_MSG_KEY, DUPLICATE_ID_MSG);
+    }
+
+    public static ResponseException TeacherCodeOrClassIdNotFound() {
+        return internalServerError(CLASS_ID_OR_TEACHER_CODE_NOT_FOUND_MSG_KEY, CLASs_ID_OR_TEACHER_CODE_NOT_FOUND_MSG);
+    }
+
+    public static ResponseException ClassCodeNotFound(){
+        return notFound(CLASS_CODE_NOT_FOUND_MSG_KEY, CLASS_CODE_NOT_FOUND_MSG);
+    }
 
 }

@@ -4,7 +4,7 @@ import com.example.TeacherManagement.api.request.CertificationDetailRequest;
 import com.example.TeacherManagement.entity.Certification;
 import com.example.TeacherManagement.entity.CertificationDetail;
 import com.example.TeacherManagement.entity.Teacher;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.CertificationDetailRepository;
 import com.example.TeacherManagement.service.CertificationDetailService;
 import com.example.TeacherManagement.service.CertificationService;
@@ -42,11 +42,11 @@ public class CertificationDetailServiceImpl implements CertificationDetailServic
     @Override
     public CertificationDetail create(CertificationDetailRequest certificationDetailRequest) {
         Certification certificationRequest = certificationService.findById(certificationDetailRequest.getCertificationId())
-                .orElseThrow(() -> MyException.notFound("CertificationDetailIdNotFound", "Certification Detail Id " + certificationDetailRequest.getCertificationId() + " Not Found"));
+                .orElseThrow(BusinessLogicException::CertificateDetailIdNotFound);
         log.info("Searched certification detail id: {}", certificationDetailRequest.getCertificationId());
 
         Teacher teacherRequest = teacherService.findByEmployeeCode(certificationDetailRequest.getTeacherCode())
-                .orElseThrow(() -> MyException.notFound("EmployeeCodeNotFound", "Employee Code" + certificationDetailRequest.getTeacherCode() + " Not Found"));
+                .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
         log.info("Searched certification detail request: {}", certificationDetailRequest.getTeacherCode());
 
         CertificationDetail createdCertificationDetail = new CertificationDetail();
@@ -73,15 +73,15 @@ public class CertificationDetailServiceImpl implements CertificationDetailServic
     @Override
     public CertificationDetail update(CertificationDetailRequest certificationDetailRequest, Integer id) {
         Certification certificationRequest = certificationService.findById(certificationDetailRequest.getCertificationId())
-                .orElseThrow(MyException::CertificateIdNotFound);
+                .orElseThrow(BusinessLogicException::CertificateIdNotFound);
         log.info("Searched certification detail id: {}", certificationDetailRequest.getCertificationId() );
 
         Teacher teacherRequest = teacherService.findByEmployeeCode(certificationDetailRequest.getTeacherCode())
-                .orElseThrow(() -> MyException.notFound("EmployeeCodeNotFound", "Employee Code " + certificationDetailRequest.getTeacherCode() + " not found"));
+                .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
         log.info("Searched teacher code: {}" + certificationDetailRequest.getTeacherCode());
 
         CertificationDetail editedCertificationDetail = certificationDetailRepository.findById(id)
-                .orElseThrow(MyException::CertificateDetailIdNotFound);
+                .orElseThrow(BusinessLogicException::CertificateDetailIdNotFound);
         log.info("Searched certificate id: {}", certificationDetailRepository.findById(id));
 
         editedCertificationDetail.setScore(certificationDetailRequest.getScore());

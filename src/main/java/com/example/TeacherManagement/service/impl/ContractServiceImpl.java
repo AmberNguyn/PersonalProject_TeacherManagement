@@ -3,7 +3,7 @@ package com.example.TeacherManagement.service.impl;
 import com.example.TeacherManagement.api.request.ContractRequest;
 import com.example.TeacherManagement.entity.Contract;
 import com.example.TeacherManagement.entity.Teacher;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.ContractRepository;
 import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.TeacherService;
@@ -37,7 +37,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract create(ContractRequest contractRequest) {
         Teacher teacherRequest = teacherService.findByEmployeeCode(contractRequest.getTeacherCode())
-                .orElseThrow(MyException::TeacherCodeNotFound);
+                .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
         log.info("Searched teacher code: "+ contractRequest.getTeacherCode());
 
         Contract createdContract = new Contract();
@@ -59,11 +59,11 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract update(ContractRequest contractRequest, Integer id){
         Teacher teacherRequest = teacherService.findByEmployeeCode(contractRequest.getTeacherCode())
-                .orElseThrow(MyException::TeacherCodeNotFound);
+                .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
         log.info("Searched teacher code: {}", contractRequest.getTeacherCode());
 
         Contract editedContract = contractRepository.findById(id)
-                .orElseThrow(MyException::ContractIdNotFound);
+                .orElseThrow(BusinessLogicException::ContractIdNotFound);
         log.info("Searched contract id: {}", id);
 
         if (!editedContract.isSigned()) {

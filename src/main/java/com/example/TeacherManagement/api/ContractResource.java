@@ -2,7 +2,7 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.ContractRequest;
 import com.example.TeacherManagement.entity.Contract;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.ContractDto;
@@ -33,21 +33,19 @@ public class ContractResource {
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDtos(contractService.getAll()));
     }
 
-    // ------- CHECK POSTMAN ------
     @GetMapping("/{id}")
     public ResponseEntity<ContractDto> getById(@PathVariable("id") Integer id){
         log.info("Searching contract id: {}", id);
         Contract contract = contractService.findById(id)
-                .orElseThrow(MyException::ContractIdNotFound);
+                .orElseThrow(BusinessLogicException::ContractIdNotFound);
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(contract));
     }
 
-    // ----CHANGE POSTMAN PATH ----
     @GetMapping("/get-by-contract-id")
     public ResponseEntity<ContractDto> getByContractId(@RequestParam("contractId") String contractCode){
         log.info("Searching contract code: {}", contractCode);
         Contract contract = contractService.findByContractId(contractCode)
-                .orElseThrow(() -> MyException.notFound("ContractCodeNotFound", "Contract Code Not Found"));
+                .orElseThrow(() -> BusinessLogicException.notFound("ContractCodeNotFound", "Contract Code Not Found"));
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(contract));
     }
 
@@ -57,9 +55,6 @@ public class ContractResource {
         return ResponseEntity.ok(ContractMapper.INSTANCE.toDtos(contract));
     }
 
-
-
-    // ---------- CHECK POST-MAN ------
 
     @PostMapping
     public ResponseEntity<ContractDto> create(@RequestBody ContractRequest contractRequest) {
@@ -75,18 +70,18 @@ public class ContractResource {
     public ResponseEntity<Void> delete(@RequestParam(value = "contractId") String contractId ) {
         log.info("Searching contract id: {}", contractId);
         Contract contract = contractService.findByContractId(contractId)
-                .orElseThrow(() -> MyException.notFound("ContractIdNotFound", "Contract Id Not Found"));
+                .orElseThrow(BusinessLogicException::ContractIdNotFound);
         contractService.deleteByContractId(contractId);
         return ResponseEntity.noContent().build();
 
     }
 
-    // ------ CHECK POSTMAN --------
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id){
         log.info("Searching id: {}", id);
         Contract contract = contractService.findById(id)
-                .orElseThrow(MyException::ContractIdNotFound);
+                .orElseThrow(BusinessLogicException::ContractIdNotFound);
         contractService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

@@ -10,6 +10,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CertificationDetailDto {
+    //from certificationDetail
+    private Integer id;
+    private double score;
+    private LocalDate issuedDate;
+    private LocalDate expiredDate;
+
     //from teacher
     private String teacherCode;
     private String fullName;
@@ -18,8 +24,5 @@ public class CertificationDetailDto {
     private String name;
 
 
-    //from certificationDetail
-    private double score;
-    private LocalDate issuedDate;
-    private LocalDate expiredDate;
+
 }

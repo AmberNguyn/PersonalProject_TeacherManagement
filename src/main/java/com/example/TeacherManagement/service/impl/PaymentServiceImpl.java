@@ -3,7 +3,7 @@ package com.example.TeacherManagement.service.impl;
 import com.example.TeacherManagement.api.request.PaymentRequest;
 import com.example.TeacherManagement.entity.AssignmentDetail;
 import com.example.TeacherManagement.entity.Payment;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.PaymentRepository;
 import com.example.TeacherManagement.service.AssignmentDetailService;
 import com.example.TeacherManagement.service.PaymentService;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,43 +35,44 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment create(PaymentRequest paymentRequest) {
         AssignmentDetail assignmentDetailRequest = assignmentDetailService.findById(paymentRequest.getAssignmentDetailId())
-                .orElseThrow(MyException::AssignmentDetailIdNotFound);
+                .orElseThrow(BusinessLogicException::AssignmentDetailIdNotFound);
 
-        if (assignmentDetailRequest.getCourseEndDate().isBefore(LocalDate.now()))
-        {
-            throw MyException.badRequest("InvalidDayForPayment", "Invalid day for payment");
-        }
-        else {
-            Payment createdPayment = new Payment();
-            createdPayment.setPaymentType(paymentRequest.getPaymentType());
-            createdPayment.setTransferredDate(paymentRequest.getTransferredDate());
-            createdPayment.setTransferredAmount(paymentRequest.getTransferredAmount());
-            createdPayment.setIncomeTax(paymentRequest.getIncomeTax());
-            createdPayment.setIncomeBeforeTax(paymentRequest.getIncomeBeforeTax());
-            createdPayment.setIsPaid(paymentRequest.getIsPaid());
-            createdPayment.setAssignmentDetail(assignmentDetailRequest);
+        Payment createdPayment = new Payment();
+        createdPayment.setPaymentType(paymentRequest.getPaymentType());
+        createdPayment.setTransferredDate(assignmentDetailRequest.getCourseEndDate().plusDays(15));
+        createdPayment.setIncomeBeforeTax(assignmentDetailService.findIncomeBeforeTaxByAssignmentDetailIdUsingExpectedHours(assignmentDetailRequest.getId()));
+        createdPayment.setIncomeTax(assignmentDetailService.findIncomeTaxByAssignmentDetailIdUsingExpectedHours(assignmentDetailRequest.getId()));
+        createdPayment.setTransferredAmount(assignmentDetailService.findTransferredAmountByAssignmentDetailIdUsingExpected(assignmentDetailRequest.getId()));
+        createdPayment.setIsPaid(false);
+        createdPayment.setAssignmentDetail(assignmentDetailRequest);
+        createdPayment.setIsManuallyUpdated(false);
 
-            return paymentRepository.save(createdPayment);
-        }
+        return paymentRepository.save(createdPayment);
+
 
     }
 
     @Override
     public Payment update(PaymentRequest paymentRequest, Integer id) {
         AssignmentDetail assignmentDetailRequest = assignmentDetailService.findById(paymentRequest.getAssignmentDetailId())
-                .orElseThrow(MyException::AssignmentDetailIdNotFound);
+                .orElseThrow(BusinessLogicException::AssignmentDetailIdNotFound);
 
         Payment editPayment = paymentRepository.findById(id)
-                .orElseThrow(MyException::PaymentIdNotFound);
+                .orElseThrow(BusinessLogicException::PaymentIdNotFound);
 
-        editPayment.setTransferredAmount(paymentRequest.getTransferredAmount());
-        editPayment.setTransferredDate(paymentRequest.getTransferredDate());
-        editPayment.setPaymentType(paymentRequest.getPaymentType());
-        editPayment.setIncomeTax(paymentRequest.getIncomeTax());
-        editPayment.setIncomeBeforeTax(paymentRequest.getIncomeBeforeTax());
-        editPayment.setAssignmentDetail(assignmentDetailRequest);
+        if (!editPayment.getIsPaid()){
+            editPayment.setTransferredDate(paymentRequest.getTransferredDate());
+            editPayment.setPaymentType(paymentRequest.getPaymentType());
+            editPayment.setIncomeBeforeTax(assignmentDetailService.findIncomeBeforeTaxByAssignmentDetailIdUsingActiveHours(assignmentDetailRequest.getId()));
+            editPayment.setIncomeTax(assignmentDetailService.findTaxByAssignmentDetailIdUsingActiveHours(assignmentDetailRequest.getId()));
+            editPayment.setTransferredAmount(assignmentDetailService.findTransferredAmountByAssignmentDetailIdUsingActiveHours(assignmentDetailRequest.getId()));
+            editPayment.setIsPaid(true);
+            editPayment.setIsManuallyUpdated(true);
+            return paymentRepository.save(editPayment);
+        } else {
+            throw BusinessLogicException.badRequest("ConstraintValidationAlreadyPaid", "Constraint validation. Already paid");
+        }
 
-        return paymentRepository.save(editPayment);
     }
 
     @Override

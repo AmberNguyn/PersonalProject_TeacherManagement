@@ -2,7 +2,7 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.ClazzRequest;
 import com.example.TeacherManagement.entity.Clazz;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.dto.ClazzDto;
 import com.example.TeacherManagement.service.dto.ClazzHaveNotBeenAssignedDto;
@@ -35,14 +35,14 @@ public class ClazzResource {
     public ResponseEntity<ClazzDto> getClassByClassId(@RequestParam("classId") String classId) {
 
         Clazz clazz = clazzService.findByClassId(classId)
-                .orElseThrow(() -> MyException.notFound("ClassCodeNotFound", "Class Code: " + classId + " not found"));
+                .orElseThrow(BusinessLogicException::ClassCodeNotFound);
         return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(clazz));
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<ClazzDto> getClassById(@PathVariable("id") Integer id) {
         Clazz clazz = clazzService.findById(id)
-                .orElseThrow(MyException::ClassIdNotFound);
+                .orElseThrow(BusinessLogicException::ClassIdNotFound);
         return ResponseEntity.ok(ClazzMapper.INSTANCE.toDto(clazz));
     }
 
@@ -52,7 +52,6 @@ public class ClazzResource {
     }
 
 
-    // ---------- CHECK POSTMAN ---------
     @PostMapping
     public ResponseEntity<ClazzDto> create(@RequestBody Clazz clazzRequest) {
         Clazz createdClazz = clazzService.create(clazzRequest);
@@ -65,22 +64,21 @@ public class ClazzResource {
     @DeleteMapping
     public ResponseEntity<Void> deleteByClassCode(@RequestParam("classId") String classCode) {
         Clazz clazz = clazzService.findByClassId(classCode)
-                .orElseThrow(() -> MyException.notFound("ClassCodeNotFound", "Class Code " + classCode + " not found"));
+                .orElseThrow(BusinessLogicException::ClassCodeNotFound);
         clazzService.deleteByClassId(classCode);
         return ResponseEntity.noContent().build();
     }
 
-    //--------- CHECK POSTMAN -----------
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id) {
         Clazz clazz = clazzService.findById(id)
-                .orElseThrow(MyException::ClassIdNotFound);
+                .orElseThrow(BusinessLogicException::ClassIdNotFound);
         clazzService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
 
-    // --------- CHECK POSTMAN ---------
     @PutMapping("/{id}")
     public ResponseEntity<ClazzDto> update(@PathVariable("id") Integer id,
                                            @RequestBody ClazzRequest clazzRequest) {

@@ -13,6 +13,17 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContractDto {
+    //from Contract
+    private Integer id;
+    private String contractId;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Integer payRate;
+    private String accountNumber;
+    private String bank;
+    private String accountName;
+    private boolean isSigned;
+
     //from Teacher
     private String employeeCode;
     private String firstName;
@@ -22,16 +33,6 @@ public class ContractDto {
     private LocalDate dateOfBirth;
     private String address;
     private TeacherType teacherType;
-
-    //from Contract
-    private String contractId;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private Integer payRate;
-    private String accountNumber;
-    private String bank;
-    private String accountName;
-    private boolean isSigned;
 
     //from nationality
     private String nationality;

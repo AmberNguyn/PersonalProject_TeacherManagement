@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeacherAndTotalActiveHours {
+public class TeacherAndTotalActiveHoursDto {
     private String teacherCode;
 
     private double totalNumberOfActiveHours;

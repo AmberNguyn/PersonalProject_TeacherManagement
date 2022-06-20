@@ -2,7 +2,7 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.CertificationDetailRequest;
 import com.example.TeacherManagement.entity.CertificationDetail;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.service.CertificationDetailService;
 import com.example.TeacherManagement.service.CertificationService;
 import com.example.TeacherManagement.service.TeacherService;
@@ -47,7 +47,7 @@ public class CertificationDetailResource {
     public ResponseEntity<CertificationDetailDto> getCertificationDetailById(@PathVariable("id") Integer id){
         log.info("Searched id: {}", id);
         CertificationDetail certificationDetail = certificationDetailService.findById(id)
-                .orElseThrow(MyException::CertificateDetailIdNotFound);
+                .orElseThrow(BusinessLogicException::CertificateDetailIdNotFound);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDto(certificationDetail));
     }
 
@@ -66,7 +66,7 @@ public class CertificationDetailResource {
         log.info("Searched id: {}", id);
 
         CertificationDetail certificationDetail = certificationDetailService.findById(id)
-                .orElseThrow(MyException::CertificateDetailIdNotFound);
+                .orElseThrow(BusinessLogicException::CertificateDetailIdNotFound);
 
         certificationDetailService.deleteById(id);
         return ResponseEntity.noContent().build();

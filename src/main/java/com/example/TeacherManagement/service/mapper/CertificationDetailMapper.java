@@ -26,11 +26,16 @@ public interface CertificationDetailMapper {
     @Mapping(target = "fullName", expression = "java(certificationDetail.getTeacher().getFirstName() + \" \" + certificationDetail.getTeacher().getMiddleName() + \" \" + certificationDetail.getTeacher().getLastName())")
 
     CertificationDetailDto toDto(CertificationDetail certificationDetail);
+
     List<CertificationDetailDto> toDtos(List<CertificationDetail> certificationDetails);
 
-    @AfterMapping
-    default void setFullName(Teacher teacher, @MappingTarget CertificationDetailDto target)
-    {
-        target.setFullName(teacher.getFirstName() + " "  + teacher.getMiddleName() + " " + teacher.getFirstName());
-    }
+//    @AfterMapping
+//    default void setFullName(Teacher teacher, @MappingTarget CertificationDetailDto target) {
+//        if (teacher.getMiddleName().isEmpty()) {
+//            target.setFullName(teacher.getFirstName() + " " + teacher.getFirstName());
+//        } else {
+//            target.setFullName(teacher.getFirstName() + " " + teacher.getMiddleName() + " " + teacher.getFirstName());
+//        }
+//
+//    }
 }

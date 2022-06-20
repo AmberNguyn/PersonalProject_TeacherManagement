@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TeacherAndTheirNumberOfClassesDto {
     private String teacherCode;
-
     private Long numberOfClasses;
 }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClazzDto {
+    private Integer id;
     private String classId;
     private Integer numberOfStudent;
     private LocalDate startDate;

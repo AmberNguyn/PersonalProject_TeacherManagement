@@ -2,7 +2,7 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.NationalityRequest;
 import com.example.TeacherManagement.entity.Nationality;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.service.NationalityService;
 import com.example.TeacherManagement.service.dto.NationalityDto;
 import com.example.TeacherManagement.service.mapper.NationalityMapper;
@@ -32,7 +32,7 @@ public class NationalityResource {
     public ResponseEntity<NationalityDto> getNationalityByCountryCode(@RequestParam("countryCode") String countryCode) {
         log.info("Searching country code: {}", countryCode);
         Nationality nationality = nationalityService.findByCountryCode(countryCode)
-                .orElseThrow(MyException::CountryCodeNotFound);
+                .orElseThrow(BusinessLogicException::CountryCodeNotFound);
         return ResponseEntity.ok(NationalityMapper.INSTANCE.toDto(nationality));
     }
 
@@ -41,7 +41,7 @@ public class NationalityResource {
     public ResponseEntity<NationalityDto> getNationalityById(@PathVariable("id") Integer id) {
         log.info("Searching nationality id: {}", id);
         Nationality nationality = nationalityService.findById(id)
-                .orElseThrow(MyException::NationalityIdNotFound);
+                .orElseThrow(BusinessLogicException::NationalityIdNotFound);
         return ResponseEntity.ok(NationalityMapper.INSTANCE.toDto(nationality));
     }
 
@@ -58,23 +58,22 @@ public class NationalityResource {
     public ResponseEntity<Void> deleteByCountryCode(@RequestParam("countryCode") String countryCode) {
         log.info("Searching country code: {}", countryCode);
         Nationality nationality = nationalityService.findByCountryCode(countryCode)
-                .orElseThrow(MyException::CountryCodeNotFound);
+                .orElseThrow(BusinessLogicException::CountryCodeNotFound);
 
         nationalityService.deleteByCountryCode(countryCode);
         return ResponseEntity.noContent().build();
     }
 
-    // --- CHECK POSTMAN ----
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id) {
         log.info("Searching nationality id: {}", id);
         Nationality nationality = nationalityService.findById(id)
-                .orElseThrow(MyException::NationalityIdNotFound);
+                .orElseThrow(BusinessLogicException::NationalityIdNotFound);
         nationalityService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    // ----- CHECK POSTMAN ------
+
     @PutMapping("/{id}")
     public ResponseEntity<NationalityDto> update(@PathVariable("id") Integer id,
                                                  @RequestBody NationalityRequest nationalityRequest) {

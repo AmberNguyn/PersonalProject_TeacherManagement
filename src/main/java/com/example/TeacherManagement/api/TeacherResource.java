@@ -2,7 +2,7 @@ package com.example.TeacherManagement.api;
 
 import com.example.TeacherManagement.api.request.TeacherRequest;
 import com.example.TeacherManagement.entity.Teacher;
-import com.example.TeacherManagement.exception.MyException;
+import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.service.NationalityService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.TeacherDto;
@@ -33,12 +33,11 @@ public class TeacherResource {
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDtos(teacherService.getAll()));
     }
 
-    // ------ CHECK POSTMAN ------
     @GetMapping("/{id}")
     public ResponseEntity<TeacherDto> getById(@PathVariable("id") Integer id) {
         log.info("Searching id: {}", id);
         Teacher teacher = teacherService.findById(id)
-                .orElseThrow(MyException::TeacherIdNotFound);
+                .orElseThrow(BusinessLogicException::TeacherIdNotFound);
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(teacher));
     }
 
@@ -47,7 +46,7 @@ public class TeacherResource {
     public ResponseEntity<TeacherDto> getTeacherByTeacherCode(@RequestParam("teacherCode") String teacherCode) {
         log.info("Searching teacher code: {}", teacherCode);
         Teacher teacher = teacherService.findByEmployeeCode(teacherCode)
-                .orElseThrow(MyException::TeacherCodeNotFound);
+                .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(teacher));
     }
 
@@ -66,7 +65,7 @@ public class TeacherResource {
     public ResponseEntity<Void> delete(@RequestParam("teacherCode") String teacherCode) {
         log.info("Searching teacher code: {}", teacherCode);
         Teacher teacher = teacherService.findByEmployeeCode(teacherCode)
-                .orElseThrow(MyException::TeacherCodeNotFound);
+                .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
         teacherService.deleteByEmployeeCode(teacherCode);
         return ResponseEntity.noContent().build();
     }

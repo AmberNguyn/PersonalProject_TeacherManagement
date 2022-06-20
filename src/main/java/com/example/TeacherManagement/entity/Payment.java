@@ -26,6 +26,8 @@ public class Payment {
 
     private Boolean isPaid;
 
+    private Boolean isManuallyUpdated;
+
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
