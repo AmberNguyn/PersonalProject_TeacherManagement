@@ -2,6 +2,7 @@ package com.example.TeacherManagement.service;
 
 import com.example.TeacherManagement.api.request.ContractRequest;
 import com.example.TeacherManagement.entity.Contract;
+import com.example.TeacherManagement.service.dto.TeachersAndExpiredContractsDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,4 +24,6 @@ public interface ContractService {
     void deleteByContractId(String contractId);
 
     void deleteById(Integer id);
+
+    List<TeachersAndExpiredContractsDto> findTeachersAndTheirExpiredContractInYear(Integer year);
 }

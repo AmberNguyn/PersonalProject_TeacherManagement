@@ -40,13 +40,13 @@ public class AssignmentDetailResource {
 
     public static final String PATH = "/api/assignmentDetails";
 
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<AssignmentDetailDto>> getAll() {
         return ResponseEntity.ok(AssignmentDetailMapper.INSTANCE.toDtos(assignmentDetailService.getAll()));
     }
 
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
     public ResponseEntity<AssignmentDetailDto> getById(@PathVariable("id") Integer id) {
         log.info("Searched id: {}", id);
@@ -59,7 +59,7 @@ public class AssignmentDetailResource {
 
     }
 
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/find")
     public ResponseEntity<List<AssignmentDetailDto>> getAssignmentDetailByTeacherCodeAndStartDate(@RequestParam("teacherCode") String teacherCode,
                                                                                                   @RequestParam("startDate") String startDate) {

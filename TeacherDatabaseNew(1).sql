@@ -76,8 +76,8 @@ VALUES
 
 ('FR1203', '2022-03-17', '2023-03-17', 420000, '100054355535', 'Vietcombank', 'HCM', 'Sean Pratt', '1 year contract for kid and young learn, adult, ielts classes', true, 7),
 
-('FR1204', '2021-06-19', '2021-06-19', 480000, '100045357886', 'Vietcombank', 'HCM', 'Toni Strictland', '1 year contract for kid and young learn, adult, ielts classes', true, 8),
-('FR1205', '2022-06-21', '2022-06-21', 480000, '100045357886', 'Vietcombank', 'HCM', 'Toni Strictland', '1 year contract for kid and young learn, adult, ielts classes', false, 8),
+('FR1204', '2021-06-19', '2022-06-19', 480000, '100045357886', 'Vietcombank', 'HCM', 'Toni Strictland', '1 year contract for kid and young learn, adult, ielts classes', true, 8),
+('FR1205', '2022-06-21', '2023-06-21', 480000, '100045357886', 'Vietcombank', 'HCM', 'Toni Strictland', '1 year contract for kid and young learn, adult, ielts classes', false, 8),
 
 
 ('VN1107A', '2022-01-03', '2023-01-03', 180000, '10004324534', 'Vietcombank', 'HCM', 'Phan Phuc Hung', '1 year contract for kid and young learner classes', true, 9),

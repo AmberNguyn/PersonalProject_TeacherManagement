@@ -4,6 +4,7 @@ import com.example.TeacherManagement.api.request.AssignmentDetailRequest;
 import com.example.TeacherManagement.entity.AssignmentDetail;
 import com.example.TeacherManagement.entity.Clazz;
 import com.example.TeacherManagement.entity.Contract;
+import com.example.TeacherManagement.entity.Teacher;
 import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.AssignmentDetailRepository;
 import com.example.TeacherManagement.service.AssignmentDetailService;
@@ -52,11 +53,11 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     public AssignmentDetail create(AssignmentDetailRequest assignmentDetailRequest) {
         log.info("Searching classId: {}", assignmentDetailRequest.getClassId());
         Clazz requestClazz = clazzService.findByClassId(assignmentDetailRequest.getClassId())
-                .orElseThrow(() -> BusinessLogicException.notFound("ClassIdNotFound", "Class Id " + assignmentDetailRequest.getClassId() + " Not Found"));
+                .orElseThrow(BusinessLogicException::ClassCodeNotFound);
 
         log.info("Searching contractId: {}", assignmentDetailRequest.getContractId());
         Contract requestContract = contractService.findByContractId(assignmentDetailRequest.getContractId())
-                .orElseThrow(() -> BusinessLogicException.notFound("ContractIdNotFound", "Contract Id " + assignmentDetailRequest.getContractId() + " Not Found"));
+                .orElseThrow(BusinessLogicException::ContractIdNotFound);
 
         if (requestContract.getEndDate().isAfter(LocalDate.now())) {
             AssignmentDetail createdAssignmentDetail = new AssignmentDetail();

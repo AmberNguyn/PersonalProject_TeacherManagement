@@ -7,6 +7,7 @@ import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.repository.ContractRepository;
 import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.TeacherService;
+import com.example.TeacherManagement.service.dto.TeachersAndExpiredContractsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,8 @@ public class ContractServiceImpl implements ContractService {
             editedContract.setDescription(contractRequest.getDescription());
             editedContract.setSigned(contractRequest.isSigned());
             editedContract.setTeacher(teacherRequest);
+        } else {
+            throw BusinessLogicException.badRequest("ContractSigned", "Contract signed. Cannot update");
         }
         return contractRepository.save(editedContract);
     }
@@ -105,6 +108,11 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void deleteById(Integer id) {
         contractRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TeachersAndExpiredContractsDto> findTeachersAndTheirExpiredContractInYear(Integer year) {
+        return contractRepository.findTeachersAndTheirExpiredContractInYear(year);
     }
 
 

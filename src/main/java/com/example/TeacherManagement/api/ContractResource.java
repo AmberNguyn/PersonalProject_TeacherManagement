@@ -6,6 +6,7 @@ import com.example.TeacherManagement.exception.BusinessLogicException;
 import com.example.TeacherManagement.service.ContractService;
 import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.ContractDto;
+import com.example.TeacherManagement.service.dto.TeachersAndExpiredContractsDto;
 import com.example.TeacherManagement.service.mapper.ContractMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,15 +88,17 @@ public class ContractResource {
     }
 
 
-
-    // ------ CHECK POSTMAN ----
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Integer id,
                                     @RequestBody ContractRequest contractRequest) {
 
             Contract updatedContract = contractService.update(contractRequest, id);
             return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(updatedContract));
+    }
 
+    @GetMapping("/expire-in-year/{year}")
+    public ResponseEntity<List<TeachersAndExpiredContractsDto>> findTeachersAndTheirExpiredContractsInYear(@PathVariable("year") Integer year){
+        return ResponseEntity.ok(contractService.findTeachersAndTheirExpiredContractInYear(year));
     }
 
 }

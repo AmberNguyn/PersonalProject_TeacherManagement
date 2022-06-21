@@ -83,7 +83,7 @@ public interface AssignmentDetailRepository extends JpaRepository<AssignmentDeta
             "WHERE ad.id = ?1")
     Integer findTransferredAmountByAssignmentDetailIdUsingActiveHours(Integer id);
 
-
+    //find teachers and their number of classes, total active hours
 
 
 

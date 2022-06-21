@@ -21,7 +21,7 @@ class AssignmentDetailServiceImplTest {
     @Test
     void findTeacherListWhoHaveLeaveNotAndNotMeetRequireHours_shouldReturnAListOf4Teachers()
     {
-        assertEquals(4, assignmentDetailService.findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours().size());
+        assertEquals(5, assignmentDetailService.findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours().size());
     }
 
     @Test
@@ -34,9 +34,5 @@ class AssignmentDetailServiceImplTest {
         assertEquals(6, assignmentDetailService.findTeachersAndTheirTotalActiveHoursInAMonth(6).size());
     }
 
-    @Test
-    void findTeachersWhoHaveBeenPaidOrHaveNotBeenPaidInMonth_shouldReturnAListOf6Teachers_whenFound() {
-        assertEquals(6, assignmentDetailService.findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth("true", 7).size());
-    }
 
 }
