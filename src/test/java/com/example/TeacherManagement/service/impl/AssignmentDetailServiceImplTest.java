@@ -17,11 +17,11 @@ class AssignmentDetailServiceImplTest {
     @Autowired
     private AssignmentDetailService assignmentDetailService;
 
-    //list of teachers who have leave not and not meet required hours
+
     @Test
     void findTeacherListWhoHaveLeaveNotAndNotMeetRequireHours_shouldReturnAListOf4Teachers()
     {
-        assertEquals(5, assignmentDetailService.findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours().size());
+        assertEquals(4, assignmentDetailService.findTeacherListsWhoHaveLeaveNoteAndNoMeetRequiredHours().size());
     }
 
     @Test
@@ -35,4 +35,23 @@ class AssignmentDetailServiceImplTest {
     }
 
 
+    @Test
+    void findTransferredAmountByAssignmentDetailIdUsingExpected() {
+        assertEquals(4536000, assignmentDetailService.findTransferredAmountByAssignmentDetailIdUsingExpected(5));
+    }
+
+    @Test
+    void findIncomeBeforeTaxByAssignmentDetailIdUsingActiveHours() {
+        assertEquals(5040000, assignmentDetailService.findIncomeBeforeTaxByAssignmentDetailIdUsingActiveHours(5));
+    }
+
+    @Test
+    void findTaxByAssignmentDetailIdUsingActiveHours() {
+        assertEquals(504000, assignmentDetailService.findTaxByAssignmentDetailIdUsingActiveHours(5));
+    }
+
+    @Test
+    void findTransferredAmountByAssignmentDetailIdUsingActiveHours() {
+        assertEquals(4536000,assignmentDetailService.findTransferredAmountByAssignmentDetailIdUsingActiveHours(5));
+    }
 }
