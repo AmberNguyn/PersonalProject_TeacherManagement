@@ -65,7 +65,7 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Override
     public Optional<Clazz> findByClassId(String classId) {
-        return Optional.of(clazzRepository.findClassByClassId(classId));
+        return clazzRepository.findClassByClassId(classId);
     }
 
     @Override
@@ -75,7 +75,9 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Override
     public void deleteByClassId(String classId) {
-        clazzRepository.delete(clazzRepository.findClassByClassId(classId));
+        if (clazzRepository.findClassByClassId(classId).isPresent()){
+            clazzRepository.delete(clazzRepository.findClassByClassId(classId).get());
+        }
     }
 
     @Override

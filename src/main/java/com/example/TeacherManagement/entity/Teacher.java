@@ -3,8 +3,10 @@ package com.example.TeacherManagement.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -32,14 +34,17 @@ public class Teacher {
     @NotNull
     private String lastName;
 
+    @DateTimeFormat
     private LocalDate dateOfBirth;
 
     private String phoneNumber;
 
     private String address;
 
+    @Email
     private String privateEmail;
 
+    @Email
     private String schoolEmail;
 
     @Enumerated(EnumType.STRING)

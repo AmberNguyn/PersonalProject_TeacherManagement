@@ -4,8 +4,10 @@ import com.example.TeacherManagement.entity.Nationality;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface NationalityRepository extends JpaRepository<Nationality, Integer> {
-    Nationality findNationalityByCountryCode(String countryCode);
+    Optional<Nationality> findNationalityByCountryCode(String countryCode);
 
 }

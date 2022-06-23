@@ -1,13 +1,10 @@
 package com.example.TeacherManagement.api.request;
 
-import com.example.TeacherManagement.entity.Certification;
-import com.example.TeacherManagement.entity.Teacher;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Data
@@ -16,8 +13,10 @@ import java.time.LocalDate;
 public class CertificationDetailRequest {
     private double score;
 
+    @DateTimeFormat
     private LocalDate issuedDate;
 
+    @DateTimeFormat
     private LocalDate expiredDate;
 
     private String description;

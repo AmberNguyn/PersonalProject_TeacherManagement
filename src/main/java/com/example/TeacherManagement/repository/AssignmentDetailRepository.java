@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AssignmentDetailRepository extends JpaRepository<AssignmentDetail, Integer> {
@@ -17,7 +18,7 @@ public interface AssignmentDetailRepository extends JpaRepository<AssignmentDeta
     List<AssignmentDetail> findAssignmentDetailByCourseStartDateAfterAndContractTeacherEmployeeCodeContaining(LocalDate startDate, String teacherCode);
 
     //find teacher assignment detail by code and the class they are in charge - for deleting and updating
-    AssignmentDetail findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(String teacherCode, String classId);
+    Optional<AssignmentDetail> findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(String teacherCode, String classId);
 
     //find a list of teachers with their leave note and active hours
     @Query(value = "SELECT new com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto(tc.employeeCode, tc.firstName, tc.lastName, ad.leaveNote, ad.activeHours, ad.expectedHours) " +

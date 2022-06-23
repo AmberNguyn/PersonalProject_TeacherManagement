@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClazzRepository extends JpaRepository<Clazz, Integer> {
-    Clazz findClassByClassId(String classId);
+    Optional<Clazz> findClassByClassId(String classId);
 
     // find classId that haven't been assigned
 

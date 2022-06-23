@@ -21,6 +21,7 @@ import java.time.LocalTime;
                 @ConstructorResult(
                         targetClass = com.example.TeacherManagement.service.dto.ClazzHaveNotBeenAssignedDto.class,
                         columns = {
+                                @ColumnResult(name = "id", type = Integer.class),
                                 @ColumnResult(name = "classId", type = String.class),
                                 @ColumnResult(name = "startDate", type = LocalDate.class)
                         }
@@ -30,7 +31,7 @@ import java.time.LocalTime;
 
 @NamedNativeQuery(
         name = Clazz.FIND_CLASSES_THAT_HAVE_NOT_BEEN_ASSIGNED,
-        query = "SELECT c.class_id as classId, c.start_date as startDate FROM Clazz c " +
+        query = "SELECT c.id as id, c.class_id as classId, c.start_date as startDate FROM Clazz c " +
                 "WHERE c.id NOT IN " +
                 "(SELECT clazz_id FROM assignment_detail)",
         resultSetMapping = "ClassesThatHaveNotBeenAssigned"

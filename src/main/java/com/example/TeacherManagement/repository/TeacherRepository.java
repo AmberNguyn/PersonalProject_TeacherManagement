@@ -9,10 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
-    Teacher findTeacherByEmployeeCode(String teacherCode);
+    Optional<Teacher> findTeacherByEmployeeCode(String teacherCode);
 
     //find a list of teachers based on teacher type: vietnamese or expatriate
     List<Teacher> findTeacherByTeacherType(TeacherType teacherType);

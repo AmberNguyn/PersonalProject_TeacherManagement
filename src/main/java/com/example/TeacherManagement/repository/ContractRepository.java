@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ContractRepository extends JpaRepository<Contract, Integer> {
     List<Contract> findContractByTeacherEmployeeCodeIgnoreCase(String employeeCode);
 
-    Contract findContractByContractId(String contractId);
+    Optional<Contract> findContractByContractId(String contractId);
 
     //find teachers whose contracts are about to expire
 

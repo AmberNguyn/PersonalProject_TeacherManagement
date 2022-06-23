@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class ContractResource {
 
 
     @PostMapping
-    public ResponseEntity<ContractDto> create(@RequestBody ContractRequest contractRequest) {
+    public ResponseEntity<ContractDto> create(@RequestBody @Valid ContractRequest contractRequest) {
         Contract createdContract = contractService.create(contractRequest);
 
         return ResponseEntity.created(URI.create(ContractResource.PATH + "/" + createdContract.getId()))
@@ -90,7 +91,7 @@ public class ContractResource {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Integer id,
-                                    @RequestBody ContractRequest contractRequest) {
+                                    @RequestBody @Valid ContractRequest contractRequest) {
 
             Contract updatedContract = contractService.update(contractRequest, id);
             return ResponseEntity.ok(ContractMapper.INSTANCE.toDto(updatedContract));

@@ -58,16 +58,18 @@ public class NationalityServiceImpl implements NationalityService {
 
     @Override
     public Optional<Nationality> findByCountryCode(String countryCode) {
-        return Optional.of(nationalityRepository.findNationalityByCountryCode(countryCode));
+        return nationalityRepository.findNationalityByCountryCode(countryCode);
     }
 
     @Override
     public void deleteById(Integer id) {
-            nationalityRepository.deleteById(id);
+        nationalityRepository.deleteById(id);
     }
 
     @Override
     public void deleteByCountryCode(String countryCode) {
-        nationalityRepository.delete(nationalityRepository.findNationalityByCountryCode(countryCode));
+        if (nationalityRepository.findNationalityByCountryCode(countryCode).isPresent()) {
+            nationalityRepository.delete(nationalityRepository.findNationalityByCountryCode(countryCode).get());
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.example.TeacherManagement.repository.AssignmentDetailRepository;
 import com.example.TeacherManagement.service.AssignmentDetailService;
 import com.example.TeacherManagement.service.ClazzService;
 import com.example.TeacherManagement.service.ContractService;
+import com.example.TeacherManagement.service.TeacherService;
 import com.example.TeacherManagement.service.dto.TeacherAndTheirNumberOfClassesDto;
 import com.example.TeacherManagement.service.dto.TeacherAndTotalActiveHoursDto;
 import com.example.TeacherManagement.service.dto.TeacherLeaveNoteAndActiveHoursDto;
@@ -19,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +35,8 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
     public final ClazzService clazzService;
     @Autowired
     public final ContractService contractService;
+    @Autowired
+    public final TeacherService teacherService;
 
 
     @Override
@@ -110,7 +115,10 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
 
     @Override
     public Optional<AssignmentDetail> findAssignmentDetailByTeacherCodeAndClassId(String teacherCode, String classId) {
-        return Optional.of(assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId));
+            teacherService.findByEmployeeCode(teacherCode).orElseThrow(BusinessLogicException::TeacherCodeNotFound);
+            clazzService.findByClassId(classId).orElseThrow(BusinessLogicException::ClassCodeNotFound);
+            return assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId);
+
     }
 
     @Override
@@ -126,7 +134,11 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
 
     @Override
     public void deleteAssignmentDetailByEmployeeCodeAndClassId(String teacherCode, String classId) {
-        assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId));
+        if (assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId).isPresent())
+        {
+            assignmentDetailRepository.delete(assignmentDetailRepository.findAssignmentDetailByContractTeacherEmployeeCodeContainingAndClazzClassIdContaining(teacherCode, classId).get());
+        }
+
     }
 
     @Override
@@ -137,22 +149,20 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
 
     @Override
     public List<TeacherAndTheirNumberOfClassesDto> findTeacherAndTheirNumberOfClassInAMonth(Integer month) {
-        if (month < 0 || month > 12) throw BusinessLogicException.InvalidMonth();
         log.info("Invalid month: {}", month);
         return assignmentDetailRepository.findTeacherAndTheirNumberOfClass(month);
     }
 
     @Override
     public List<TeacherAndTotalActiveHoursDto> findTeachersAndTheirTotalActiveHoursInAMonth(Integer month) {
-        if (month < 0 || month > 12) throw BusinessLogicException.InvalidMonth();
         log.info("Invalid month: {}", month);
         return assignmentDetailRepository.findTeachersAndTheirTotalActiveHoursInAMonth(month);
     }
 
     @Override
     public List<String> findTeacherListWhoHaveBeenPaidOrHaveNotBeenPaidInMonth(String isPaid, Integer month) {
-        if (month < 0 || month > 12) throw BusinessLogicException.InvalidMonth();
         log.info("Invalid month: {}", month);
+
         return assignmentDetailRepository.findTeacherListWhoHaveBeenPairOrHaveNotBeenPaidInMonth(Boolean.parseBoolean(isPaid), month);
     }
 

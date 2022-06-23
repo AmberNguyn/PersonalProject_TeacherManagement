@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class CertificationDetailResource {
 
     // --------- CHANGE POSTMAN ---------
     @PostMapping
-    public ResponseEntity<CertificationDetailDto> create(@RequestBody CertificationDetailRequest certificationDetailRequest) {
+    public ResponseEntity<CertificationDetailDto> create(@RequestBody @Valid CertificationDetailRequest certificationDetailRequest) {
         CertificationDetail createdCertificationDetail = certificationDetailService.create(certificationDetailRequest);
 
         return ResponseEntity.created(URI.create(CertificationDetailResource.PATH + "/" + createdCertificationDetail.getId()))
@@ -76,7 +77,7 @@ public class CertificationDetailResource {
     // --------- CHANGE POSTMAN PATH ------
     @PutMapping("/{id}")
     public ResponseEntity<CertificationDetailDto> update(@PathVariable("id") Integer id,
-                                                         @RequestBody CertificationDetailRequest certificationDetailRequest) {
+                                                         @RequestBody @Valid CertificationDetailRequest certificationDetailRequest) {
 
         CertificationDetail updatedCertificationDetail = certificationDetailService.update(certificationDetailRequest, id);
         return ResponseEntity.ok(CertificationDetailMapper.INSTANCE.toDto(updatedCertificationDetail));

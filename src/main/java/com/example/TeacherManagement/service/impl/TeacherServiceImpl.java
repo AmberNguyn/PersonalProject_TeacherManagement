@@ -92,8 +92,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Optional<Teacher> findByEmployeeCode(String teacherCode) {
-        return Optional.of(teacherRepository.findTeacherByEmployeeCode(teacherCode));
+    public Optional<Teacher> findByEmployeeCode(String teacherCode){
+        return teacherRepository.findTeacherByEmployeeCode(teacherCode);
     }
 
     @Override
@@ -108,7 +108,8 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void deleteByEmployeeCode(String teacherCode) {
-        teacherRepository.delete(teacherRepository.findTeacherByEmployeeCode(teacherCode));
+        if(teacherRepository.findTeacherByEmployeeCode(teacherCode).isPresent())
+            teacherRepository.delete(teacherRepository.findTeacherByEmployeeCode(teacherCode).get());
     }
 
     //find a list of teachers based on teacher type: vietnamese or expatriate

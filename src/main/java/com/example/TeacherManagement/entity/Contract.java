@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 @Data
@@ -26,10 +28,13 @@ public class Contract {
     @NotNull
     private String contractId;
 
+    @DateTimeFormat
     private LocalDate startDate;
 
+    @DateTimeFormat
     private LocalDate endDate;
 
+    @PositiveOrZero
     private Integer payRate;
 
     private String bank;
@@ -42,6 +47,7 @@ public class Contract {
 
     private String description;
 
+    @NotNull
     private boolean isSigned;
 
 

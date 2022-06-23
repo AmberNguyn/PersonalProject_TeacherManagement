@@ -39,7 +39,7 @@ public class ContractServiceImpl implements ContractService {
     public Contract create(ContractRequest contractRequest) {
         Teacher teacherRequest = teacherService.findByEmployeeCode(contractRequest.getTeacherCode())
                 .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
-        log.info("Searched teacher code: "+ contractRequest.getTeacherCode());
+        log.info("Searched teacher code: " + contractRequest.getTeacherCode());
 
         Contract createdContract = new Contract();
         createdContract.setContractId(contractRequest.getContractId());
@@ -58,7 +58,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Contract update(ContractRequest contractRequest, Integer id){
+    public Contract update(ContractRequest contractRequest, Integer id) {
         Teacher teacherRequest = teacherService.findByEmployeeCode(contractRequest.getTeacherCode())
                 .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
         log.info("Searched teacher code: {}", contractRequest.getTeacherCode());
@@ -92,7 +92,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public Optional<Contract> findByContractId(String contractId) {
-        return Optional.of(contractRepository.findContractByContractId(contractId));
+        return contractRepository.findContractByContractId(contractId);
     }
 
     @Override
@@ -102,7 +102,9 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public void deleteByContractId(String contractId) {
-        contractRepository.delete(contractRepository.findContractByContractId(contractId));
+        if (contractRepository.findContractByContractId(contractId).isPresent()) {
+            contractRepository.delete(contractRepository.findContractByContractId(contractId).get());
+        }
     }
 
     @Override
@@ -114,6 +116,5 @@ public class ContractServiceImpl implements ContractService {
     public List<TeachersAndExpiredContractsDto> findTeachersAndTheirExpiredContractInYear(Integer year) {
         return contractRepository.findTeachersAndTheirExpiredContractInYear(year);
     }
-
 
 }

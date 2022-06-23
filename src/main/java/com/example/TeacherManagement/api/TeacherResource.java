@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -45,15 +47,15 @@ public class TeacherResource {
     @GetMapping("/find")
     public ResponseEntity<TeacherDto> getTeacherByTeacherCode(@RequestParam("teacherCode") String teacherCode) {
         log.info("Searching teacher code: {}", teacherCode);
-        Teacher teacher = teacherService.findByEmployeeCode(teacherCode)
-                .orElseThrow(BusinessLogicException::TeacherCodeNotFound);
+
+        Teacher teacher = teacherService.findByEmployeeCode(teacherCode).orElseThrow(BusinessLogicException::TeacherCodeNotFound);
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(teacher));
     }
 
 
     // ---- check postman ----
     @PostMapping
-    public ResponseEntity<TeacherDto> create(@RequestBody TeacherRequest teacherRequest){
+    public ResponseEntity<TeacherDto> create(@RequestBody @Valid TeacherRequest teacherRequest){
         Teacher createdTeacher = teacherService.create(teacherRequest);
 
         return ResponseEntity.created(URI.create(TeacherResource.PATH + "/" + createdTeacher.getId()))
@@ -74,7 +76,7 @@ public class TeacherResource {
     // ---- check postman ---
     @PutMapping("/{id}")
     public ResponseEntity<TeacherDto> update(@PathVariable("id") Integer id,
-                                             @RequestBody TeacherRequest teacherRequest) {
+                                             @RequestBody @Valid TeacherRequest teacherRequest) {
         Teacher updatedTeacher = teacherService.update(teacherRequest, id);
         return ResponseEntity.ok(TeacherMapper.INSTANCE.toDto(updatedTeacher));
 
